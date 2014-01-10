@@ -218,3 +218,9 @@ pvsbin/
 /src/jessie/tests/basic/result/*.log
 /src/jessie/tests/demo/result/*.log
 /trash
+
+# Eclipse OcaIDE auxiliary files
+.paths
+.project
+.settings/
+OCamlMakefile
