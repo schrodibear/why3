@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2013   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -163,7 +163,7 @@ type module_uc = {
 
 let empty_module env n p = {
   muc_theory = create_theory ~path:p n;
-  muc_name   = Ident.preid_name n;
+  muc_name   = n.Ident.pre_name;
   muc_path   = p;
   muc_decls  = [];
   muc_prefix = [];
@@ -175,14 +175,19 @@ let empty_module env n p = {
   muc_env    = env;
 }
 
-let close_module uc =
-  let th = close_theory uc.muc_theory in (* catches errors *)
-  { mod_theory = th;
-    mod_decls  = List.rev uc.muc_decls;
-    mod_export = List.hd uc.muc_export;
-    mod_known  = uc.muc_known;
-    mod_local  = uc.muc_local;
-    mod_used   = uc.muc_used; }
+let close_module, restore_module =
+  let h = Hid.create 17 in
+  (fun uc ->
+     let th = close_theory uc.muc_theory in (* catches errors *)
+     let m = { mod_theory = th;
+               mod_decls  = List.rev uc.muc_decls;
+               mod_export = List.hd uc.muc_export;
+               mod_known  = uc.muc_known;
+               mod_local  = uc.muc_local;
+               mod_used   = uc.muc_used; } in
+     Hid.add h th.th_name m;
+     m),
+  (fun th -> Hid.find h th.th_name)
 
 let get_theory uc = uc.muc_theory
 let get_namespace uc = List.hd uc.muc_import
@@ -236,7 +241,7 @@ let use_export uc m =
 
 let add_to_theory f uc x = { uc with muc_theory = f uc.muc_theory x }
 
-let store_path, restore_path =
+let store_path, store_module, restore_path =
   let id_to_path = Wid.create 17 in
   let store_path uc path id =
     (* this symbol already belongs to some theory *)
@@ -244,8 +249,18 @@ let store_path, restore_path =
     let prefix = List.rev (id.id_string :: path @ uc.muc_prefix) in
     Wid.set id_to_path id (uc.muc_path, uc.muc_name, prefix)
   in
+  let store_module m =
+    let id = m.mod_theory.th_name in
+    (* this symbol is already a module *)
+    if Wid.mem id_to_path id then () else
+    Wid.set id_to_path id (m.mod_theory.th_path, id.id_string, []) in
   let restore_path id = Wid.find id_to_path id in
-  store_path, restore_path
+  store_path, store_module, restore_path
+
+let close_module uc =
+  let m = close_module uc in
+  store_module m;
+  m
 
 let add_symbol add id v uc =
   store_path uc [] id;
@@ -386,6 +401,7 @@ let mod_prelude env =
   let pd_exit = create_exn_decl xs_exit in
   let pd_old = create_val_decl (LetV Mlw_wp.pv_old) in
   let uc = empty_module env (id_fresh "Prelude") ["why3"] in
+  let uc = add_decl uc (Decl.create_ty_decl Mlw_wp.ts_mark) in
   let uc = add_pdecl ~wp:false uc pd_old in
   let uc = add_pdecl ~wp:false uc pd_exit in
   close_module uc
@@ -495,7 +511,9 @@ let clone_export uc m inst =
         add_pdecl uc (create_val_decl (LetV npv))
     | PDval (LetA ps) ->
         let aty = conv_aty !mvs ps.ps_aty in
-        let nps = create_psymbol (id_clone ps.ps_name) ~ghost:ps.ps_ghost aty in
+        let nps =
+          Mlw_expr.create_psymbol (id_clone ps.ps_name) ~ghost:ps.ps_ghost aty
+        in
         Hid.add psh ps.ps_name (PS nps);
         add_pdecl uc (create_val_decl (LetA nps))
     | PDrec fdl ->
@@ -507,7 +525,7 @@ let clone_export uc m inst =
           (* we save all external pvsymbols to preserve the effects *)
           let spec = { aty.aty_spec with c_variant = vari } in
           let aty = vty_arrow ~spec aty.aty_args aty.aty_result in
-          let nps = create_psymbol id ~ghost:ps.ps_ghost aty in
+          let nps = Mlw_expr.create_psymbol id ~ghost:ps.ps_ghost aty in
           Hid.add psh ps.ps_name (PS nps);
           add_pdecl uc (create_val_decl (LetA nps)) in
         List.fold_left conv_fd uc fdl

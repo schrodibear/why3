@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2013   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -114,7 +114,7 @@ let get_to_prover pk session config =
 exception NoAlt
 
 let run_one ~action env config filters pk fname =
-  let env_session,_ =
+  let env_session,_,_ =
     read_update_session ~allow_obsolete:!opt_force_obsolete env config fname in
   let to_prover = get_to_prover pk env_session.session config in
   let s = Stack.create () in

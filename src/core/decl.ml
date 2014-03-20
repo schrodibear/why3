@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2013   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -671,9 +671,9 @@ let find_prop_decl kn pr =
 let check_match kn d =
   let rec check () t = match t.t_node with
     | Tcase (t1,bl) ->
-        let find ts = List.map fst (find_constructors kn ts) in
-        let bl = List.map (fun b -> let p,t = t_open_branch b in [p],t) bl in
-        ignore (Loc.try3 ?loc:t.t_loc Pattern.CompileTerm.compile find [t1] bl);
+        let get_constructors ts = List.map fst (find_constructors kn ts) in
+        let pl = List.map (fun b -> let p,_ = t_open_branch b in [p]) bl in
+        Loc.try2 ?loc:t.t_loc (Pattern.check_compile ~get_constructors) [t1] pl;
         t_fold check () t
     | _ -> t_fold check () t
   in

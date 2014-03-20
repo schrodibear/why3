@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2013   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -23,16 +23,15 @@ let check_expl lab acc =
   then Some (Str.matched_group 1 lab)
   else acc
 
-let check_expl lab =
-  if Ident.Slab.mem Split_goal.stop_split lab then None
-  else Ident.Slab.fold check_expl lab None
+let check_expl lab = Ident.Slab.fold check_expl lab None
 
 let rec get_expl_fmla acc f =
   if f.t_ty <> None then acc else
+  if Ident.Slab.mem Split_goal.stop_split f.Term.t_label then acc else
   let res = check_expl f.Term.t_label in
   if res = None then match f.t_node with
     | Term.Ttrue | Term.Tfalse | Term.Tapp _ -> acc
-    | Term.Tbinop(Term.Timplies,_,f) -> get_expl_fmla acc f
+    | Term.Tbinop (Term.Timplies,_,f) -> get_expl_fmla acc f
     | Term.Tlet _ | Term.Tcase _ | Term.Tquant (Term.Tforall, _) ->
         Term.t_fold get_expl_fmla acc f
     | _ -> raise Exit

@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2013   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -43,6 +43,7 @@ type mo_rule =
   | MRtheory    of th_rule
   | MRexception of qualid * string
   | MRval       of qualid * string
+  | MRconverter of qualid * string
 
 type module_rules = {
   mor_name  : qualid;

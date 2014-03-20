@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2013   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -58,7 +58,7 @@ type modul = private {
   mod_theory: theory;			(* pure theory *)
   mod_decls : pdecl list;		(* module declarations *)
   mod_export: namespace;		(* exported namespace *)
-  mod_known : known_map;		(* known identifiers *)
+  mod_known : Mlw_decl.known_map;	(* known identifiers *)
   mod_local : Sid.t;			(* locally declared idents *)
   mod_used  : Sid.t;			(* used modules *)
 }
@@ -75,14 +75,19 @@ val close_namespace : module_uc -> bool -> module_uc
 
 val get_theory : module_uc -> theory_uc
 val get_namespace : module_uc -> namespace
-val get_known : module_uc -> known_map
+val get_known : module_uc -> Mlw_decl.known_map
 
 val restore_path : ident -> string list * string * string list
 (** [restore_path id] returns the triple (library path, module,
    qualified symbol name) if the ident was ever introduced in
    a module declaration. If the ident was declared in several
    different modules, the first association is retained.
-   Raises Not_found if the ident was never declared in a module. *)
+   If [id] is a module name, the third component is an empty list.
+   Raises Not_found if the ident was never declared in/as a module. *)
+
+val restore_module : theory -> modul
+(** retrieves a module from its underlying theory
+    raises [Not_found] if no such module exists *)
 
 (** {2 Use and clone} *)
 

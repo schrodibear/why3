@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2013   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -23,9 +23,8 @@ val ts_mark : Ty.tysymbol
 val ty_mark : Ty.ty
 
 val fs_at  : Term.lsymbol
-(* unused
 val fs_old : Term.lsymbol
-*)
+
 val t_at_old : Term.term -> Term.term
 
 val th_mark_at  : Theory.theory

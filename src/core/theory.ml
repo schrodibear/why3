@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2013   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -346,7 +346,7 @@ let add_tdecl uc td = match td.td_node with
 
 (** Declarations *)
 
-let store_path, restore_path =
+let store_path, store_theory, restore_path =
   let id_to_path = Wid.create 17 in
   let store_path uc path id =
     (* this symbol already belongs to some theory *)
@@ -354,8 +354,18 @@ let store_path, restore_path =
     let prefix = List.rev (id.id_string :: path @ uc.uc_prefix) in
     Wid.set id_to_path id (uc.uc_path, uc.uc_name.id_string, prefix)
   in
+  let store_theory th =
+    let id = th.th_name in
+    (* this symbol is already a theory *)
+    if Wid.mem id_to_path id then () else
+    Wid.set id_to_path id (th.th_path, id.id_string, []) in
   let restore_path id = Wid.find id_to_path id in
-  store_path, restore_path
+  store_path, store_theory, restore_path
+
+let close_theory uc =
+  let th = close_theory uc in
+  store_theory th;
+  th
 
 let add_symbol add id v uc =
   store_path uc [] id;
@@ -836,10 +846,10 @@ let bool_theory =
 
 let highord_theory =
   let uc = empty_theory (id_fresh "HighOrd") ["why3"] in
+  let uc = use_export uc bool_theory in
   let uc = add_ty_decl uc ts_func in
   let uc = add_ty_decl uc ts_pred in
   let uc = add_param_decl uc fs_func_app in
-  let uc = add_param_decl uc ps_pred_app in
   close_theory uc
 
 let tuple_theory = Hint.memo 17 (fun n ->
@@ -907,10 +917,11 @@ let () = Exn_printer.register
       Format.fprintf fmt "Metaproperty %s is already registered with \
         a conflicting signature" m.meta_name
   | BadMetaArity (m,n) ->
-      Format.fprintf fmt "Metaproperty %s requires %d arguments but \
-        is applied to %d" m.meta_name (List.length m.meta_type) n
+      let i = List.length m.meta_type in
+      Format.fprintf fmt "Metaproperty %s expects %d argument%s but \
+        is applied to %d" m.meta_name i (if i = 1 then "" else "s") n
   | MetaTypeMismatch (m,t1,t2) ->
-      Format.fprintf fmt "Metaproperty %s expects %a argument but \
+      Format.fprintf fmt "Metaproperty %s expects a %a argument but \
         is applied to %a"
         m.meta_name print_meta_arg_type t1 print_meta_arg_type t2
   | _ -> raise exn

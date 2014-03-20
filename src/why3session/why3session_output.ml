@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2013   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -53,7 +53,7 @@ let keygen ?parent:_ _ = ()
 let fname_printer = Ident.create_ident_printer []
 
 let run_one env config filters dir fname =
-  let env_session,_ =
+  let env_session,_,_ =
     read_update_session ~allow_obsolete:!opt_force_obsolete env config fname in
   iter_session (fun file ->
     let fname = Filename.basename file.file_name in

@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2013   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -38,7 +38,7 @@ val int_const_bin : string -> integer_constant
     InvalidConstantLiteral(base,s) is raised if [s] contains invalid
     characters for the given base. *)
 
-val compute_int : integer_constant -> Big_int.big_int
+val compute_int : integer_constant -> BigInt.t
 
 val real_const_dec : string -> string -> string option -> real_constant
 val real_const_hex : string -> string -> string option -> real_constant

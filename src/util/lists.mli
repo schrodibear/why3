@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2013   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -16,6 +16,9 @@ val rev_map_fold_left :
 
 val map_fold_left :
   ('acc -> 'a -> 'acc * 'b) -> 'acc -> 'a list -> 'acc * 'b list
+
+val map_fold_right :
+  ('a -> 'acc -> 'b * 'acc) -> 'a list -> 'acc -> 'b list * 'acc
 
 val equal : ('a -> 'b -> bool) -> 'a list -> 'b list -> bool
 

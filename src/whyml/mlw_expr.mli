@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2013   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -234,6 +234,8 @@ val e_const : Number.constant -> expr
 val e_lazy_and : expr -> expr -> expr
 val e_lazy_or : expr -> expr -> expr
 val e_not : expr -> expr
+val e_true : expr
+val e_false : expr
 
 val e_raise : xsymbol -> expr -> ity -> expr
 val e_try : expr -> (xsymbol * pvsymbol * expr) list -> expr
@@ -244,7 +246,7 @@ val e_for :
   pvsymbol -> expr -> for_direction -> expr -> invariant -> expr -> expr
 
 val e_abstract : expr -> spec -> expr
-val e_any : spec -> vty -> expr
+val e_any : spec option -> vty -> expr
 
 val e_assert : assertion_kind -> term -> expr
 val e_absurd : ity -> expr
@@ -254,5 +256,7 @@ val e_absurd : ity -> expr
 val e_fold : ('a -> expr -> 'a) -> 'a -> expr -> 'a
 
 val e_find : (expr -> bool) -> expr -> expr
+(** [e_find pr e] returns a sub-expression of [e] satisfying [pr].
+    raises [Not_found] if no sub-expression satisfies [pr]. *)
 
 val e_purify : expr -> term option

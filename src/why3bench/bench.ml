@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2013   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -112,11 +112,13 @@ struct
       Mutex.lock queue_lock
     done
 
+(* dead code
   let yield () =
     Thread.yield ();
     Mutex.lock queue_lock;
     treat_result ();
     Mutex.unlock queue_lock
+*)
 
   (** Wait for the last remaining tasks *)
   let wait_remaining_task () =
@@ -465,7 +467,7 @@ let empty_tool_res =
       match r with
         | Done (_,t) -> max acc t
         | InternalFailure _ -> acc ) 0. l
-  open Format
+
 (**
 answer output time
 

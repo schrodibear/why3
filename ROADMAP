@@ -109,10 +109,137 @@
 ** support de Yices 2 ? interesserait Cesar
 
 
+==================== Roadmap for next releases ========================
+
+HighOrd: Coq output and OCaml extraction should produce lambda's from lambda's
+and no epsilon
+
+* terminaison
+** generer une obligation de preuve de well-foundedness quand on utilise
+   un variant avec "with R" (une seule fois pour chaque R !)
+** quand une definition logique recursive ne peut pas etre verifiee
+   bien-fondee statiquement, generer une obligation de preuve
+   (feature wish de F Besson)
+
+* Coq tactic
+** ajout de bases de hint
+
+* replayer
+** deplacer option -bench dans une commande de why3session
+
+* IDE
+** todo: run detection immediately at start up if conf file absent or
+    outdated. should become doable with the new Session module
+** "detect provers" menu
+
+* Contre-exemples de Alt-Ergo
+
+* detect editors
+*** check if coqide and also emacs/proof-general is installed
+
+
+
 ==================== Roadmap for release 0.83 ========================
 
 == New Features to announce ==
 
+See CHANGES
+
+== Final preparation ==
+
+* inform Jerry James <loganjerry@gmail.com> so that he can test the
+  Fedora package
+* faire une passe sur le BTS
+* do "make update-coq" and "make", fix Coq realizations if needed
+* check that nightly bench is OK
+* check that "make xml-validate-local" is OK
+  (see below : copy the dtd on the web)
+* put 0.84 in file Version
+* check/update the content of the About dialog in src/ide/gconfig.ml
+  around lines 550-600
+* check headers
+* check the file CHANGES, add the release date
+* manual in PDF: check that macro \todo is commented out
+    in ./macros.tex, and then "make doc"
+  (check that manual in HTML is also generated, doc/html/index.html)
+* do "make dist"
+* test distrib/why3-0.84.tar.gz
+* install web page for why2 which includes an updated page for the
+  quick migration guide. (sources are in CVS repository
+  ~filliatr/ARCHIVE/www/why). 
+* put on the web page
+ - why3-0.84.tar.gz
+   cp distrib/why3-0.84.tar.gz /users/www-perso/projets/why3/download
+
+ - the manual in PDF
+   cp doc/manual.pdf /users/www-perso/projets/why3/download/manual-0.84.pdf
+
+ - the HTML version of the manual (content of doc/html)
+   cp -r doc/html /users/www-perso/projets/why3/doc-0.84
+
+ - why3session.dtd
+   cp share/why3session.dtd /users/www-perso/projets/why3/
+
+ - standard library online, using why3doc, to http://why3.lri.fr/stdlib/
+   make stdlibdoc
+   cp -r doc/stdlibdoc /users/www-perso/projets/why3/stdlib-0.84
+   rm /users/www-perso/projets/why3/stdlib
+   ln -s /users/www-perso/projets/why3/stdlib-0.84 \
+            /users/www-perso/projets/why3/stdlib
+ - API doc, produced using ocamldoc, to http://why3.lri.fr/api/
+    make apidoc
+    cp -r doc/apidoc /users/www-perso/projets/why3/api-0.84
+    rm /users/www-perso/projets/why3/api
+    ln -s /users/www-perso/projets/why3/api-0.84 \
+      /users/www-perso/projets/why3/api
+   (PROBLEME avec style.css ? Ou est le probleme ?)
+
+ - update the main HTML page (sources are in repository why3-www)
+   edit index.html
+   make export
+
+ - add links to extra resources like
+   http://why3.lri.fr/jfla-2012/, http://www.lri.fr/~marche/MPRI-2-36-1/,
+   page du cours de l'X (in french ? using Krakatoa/why3 bridge)
+
+ - make everything writeable for the group
+   chmod -R g+w /users/www-perso/projets/why3
+
+* make a last commit:
+ - git commit -m "release 0.84"
+ - add tag 0.84 to the git repository, using
+   git tag 0.84
+ - do not forget to push it using
+   git push
+   git push --tags
+
+* add a new version to the bugtracker:
+  https://gforge.inria.fr/tracker/admin/?group_id=2990&atid=10293&add_extrafield=1
+
+* produce the Why3 part of Toccata gallery
+  -> add also a tar.gz and a ZIP file of it (this is done by doing
+  "make gallery-files" in the sources of the Toccata web pages)
+* Announce the distrib
+ - What to put in the announcement: see New Features above
+* The next commit : add +git to the version in file Version
+
+
+== TODOs ==
+
+* documentation des nouvelles features higher-order
+
+* eliminate_match:
+** faire un cas particulier pour "bool", le match pouvant se traduire
+   vers ite qui est supporté par pas mal de prouveurs
+** introduire des symboles _match non polymorphes differents pour
+   chaque instance necessaires. plutot qu'un seul symbole _match
+   polymorphe.
+
+==================== Roadmap for release 0.83 ========================
+
+== New Features to announce ==
+
+See CHANGES
 
 == Final preparation ==
 
@@ -135,7 +262,7 @@
 * test distrib/why3-0.83.tar.gz
 * install web page for why2 which includes an updated page for the
   quick migration guide. (sources are in CVS repository
-  ~filliatr/ARCHIVE/www/why)
+  ~filliatr/ARCHIVE/www/why). ADD a colon on new syntax for 0.83. Change Proval into Toccata
 * put on the web page
  - why3-0.83.tar.gz
    cp distrib/why3-0.83.tar.gz /users/www-perso/projets/why3/download
@@ -162,6 +289,7 @@
     ln -s /users/www-perso/projets/why3/api-0.83 \
       /users/www-perso/projets/why3/api
    (PROBLEME avec style.css ? Ou est le probleme ?)
+
  - update the main HTML page (sources are in repository why3-www)
    edit index.html
    make export
@@ -194,40 +322,16 @@
 
 == TODOs ==
 
-* eliminate_match:
-** faire un cas particulier pour "bool", le match pouvant se traduire
-   vers ite qui est supporté par pas mal de prouveurs
-** introduire des symboles _match non polymorphes differents pour
-   chaque instance necessaires. plutot qu'un seul symbole _match
-   poymorphe.
+* DONE replayer: replay should be considered failed if new goals appeared.
+
+* DONE ? fix problems with installed scripts that are missing a proper executable right (mails Frederic Boulanger)
+
+* Isabelle Support:
+** DONE ? fix the problem with why3_jedit script missing executable bit
+** DONE add a documentation: start "isabelle why3_jedit" before why3ide, use "Close C-w" to signal the end of edit to why3"
 
 * extraction vers Caml
-** utiliser ZArith
-
-* replayer
-** deplacer option -bench dans une commande de why3session
-
-* terminaison
-** generer une obligation de preuve de well-foundedness quand on utilise
-   un variant avec "with R" (une seule fois pour chaque R !)
-** quand une definition logique recursive ne peut pas etre verifiee
-   bien-fondee statiquement, generer une obligation de preuve
-   (feature wish de F Besson)
-
-* Coq tactic
-** ajout de bases de hint
-
-* IDE
-** todo: run detection immediately at start up if conf file absent or
-    outdated. should become doable with the new Session module
-** "detect provers" menu
-
-* Contre-exemples de Alt-Ergo
-
-* detect editors
-*** check if coqide and also emacs/proof-general is installed
-
-* bug #15629
+** DONE utiliser ZArith
 
 ==================== Roadmap for release 0.82 ========================
 

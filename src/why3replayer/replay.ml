@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2013   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -82,13 +82,13 @@ let spec = Arg.align [
    " same as -C") ;
   ("--extra-config", Arg.String (fun s -> opt_extra := !opt_extra @ [s]),
    "<file> Read additional configuration from <file>") ;
-  ("-force",
+  ("--force",
    Arg.Set opt_force,
    " enforce saving the session after replay") ;
-  ("-obsolete-only",
+  ("--obsolete-only",
    Arg.Set opt_obsolete_only,
    " replay only if session is obsolete") ;
-  ("-smoke-detector",
+  ("--smoke-detector",
    Arg.Symbol (["none";"top";"deep"],set_opt_smoke),
    " try to detect if the context is self-contradicting") ;
   ("--bench",
@@ -326,7 +326,7 @@ let same_result r1 r2 =
     | Call_provers.Failure _, Call_provers.Failure _-> true
     | _ -> false
 
-let add_to_check_no_smoke config found_obs env_session sched =
+let add_to_check_no_smoke config some_merge_miss found_obs env_session sched =
   let session = env_session.S.session in
   let callback report =
     Debug.dprintf debug "@.";
@@ -347,7 +347,7 @@ let add_to_check_no_smoke config found_obs env_session sched =
       S.save_session config session;
       Debug.dprintf debug " done@." in
     printf " %d/%d " n m;
-    if report = [] then
+    if report = [] && not some_merge_miss then
       begin
         printf "(replay OK%s%s)@."
           (if found_obs then ", obsolete session" else "")
@@ -360,7 +360,8 @@ let add_to_check_no_smoke config found_obs env_session sched =
     else
       let report = List.rev report in
       begin
-        printf "(replay failed)@.";
+        printf "(replay failed%s)@."
+          (if some_merge_miss then ", with some merge miss" else "");
         List.iter print_report report;
         eprintf "Replay failed.@.";
         if !opt_force then save ();
@@ -400,10 +401,13 @@ let add_to_check_smoke env_session sched =
   in
   M.check_all ~release:true ~callback env_session sched
 
-let add_to_check config found_obs =
+let add_to_check config some_merge_miss found_obs =
   match !opt_smoke with
-    | SD_None -> add_to_check_no_smoke config found_obs;
-    | _ -> assert (not found_obs); add_to_check_smoke
+    | SD_None -> add_to_check_no_smoke config some_merge_miss found_obs;
+    | _ -> 
+      assert (not some_merge_miss);
+      assert (not found_obs); 
+      add_to_check_smoke
 
 let transform_smoke env_session =
   let trans tr_name s =
@@ -447,13 +451,12 @@ let () =
   try
     Debug.dprintf debug "Opening session...@?";
     O.verbose := Debug.test_flag debug;
-    let env_session,found_obs =
+    let env_session,found_obs,some_merge_miss =
       let session = S.read_session project_dir in
       M.update_session ~allow_obsolete:true session env config
     in
     Debug.dprintf debug " done.@.";
     if !opt_obsolete_only && not found_obs 
-      (* useless since too early: && not found_uninstalled_prover *)
     then
       begin
         eprintf "Session is not obsolete, hence not replayed@.";
@@ -466,7 +469,8 @@ let () =
       M.init (Whyconf.running_provers_max (Whyconf.get_main config))
     in
     if found_obs then eprintf "[Warning] session is obsolete@.";
-    add_to_check config found_obs env_session sched;
+    if some_merge_miss then eprintf "[Warning] some goals were missed during merge@.";
+    add_to_check config some_merge_miss found_obs env_session sched;
     main_loop ();
     eprintf "main replayer loop exited unexpectedly@.";
     exit 1

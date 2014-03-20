@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2013   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -188,9 +188,11 @@ let call_on_file ~command ?(timelimit=0) ?(memlimit=0)
 
       fun () ->
         if Debug.test_noflag debug then begin
-          if cleanup then Sys.remove fin;
-          if inplace then Sys.rename (save fin) fin;
-          if redirect then Sys.remove fout
+          let swallow f x =
+            try f x with Sys_error s -> eprintf "Call_provers: %s@." s in
+          if cleanup then swallow Sys.remove fin;
+          if inplace then swallow (Sys.rename (save fin)) fin;
+          if redirect then swallow Sys.remove fout
         end;
         let ans = match ret with
           | Unix.WSTOPPED n ->

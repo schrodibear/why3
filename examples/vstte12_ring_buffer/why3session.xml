@@ -28,7 +28,7 @@
     locfile="../vstte12_ring_buffer.mlw"
     loclnum="42" loccnumb="6" loccnume="12"
     expl="VC for create"
-    sum="28c4c89e682d5498f79cb6fa3532f861"
+    sum="76c52effd7502c93ef16c942a8d890cf"
     proved="true"
     expanded="false"
     shape="ainfix =anthV2aNilaSomeagetaconstV1ainfix -ainfix +c0V2V0Iainfix &lt;=c0ainfix -ainfix +c0V2V0Aainfix =anthV2aNilaSomeagetaconstV1ainfix +c0V2Iainfix &lt;ainfix +c0V2V0Iainfix &lt;V2c0Aainfix &lt;=c0V2FAainfix =c0alengthaNilAainfix &lt;=c0V0Aainfix &lt;=c0c0Aainfix &lt;c0V0Aainfix &lt;=c0c0Iainfix &lt;=c0V0Aainfix &gt;=V0c0Iainfix &gt;V0c0F">
@@ -48,7 +48,7 @@
     locfile="../vstte12_ring_buffer.mlw"
     loclnum="48" loccnumb="6" loccnume="12"
     expl="VC for length"
-    sum="4c36366569d73b3ea6ab19ddcdfb1fd5"
+    sum="67750778c3513944af1bd400799b704a"
     proved="true"
     expanded="false"
     shape="t">
@@ -68,7 +68,7 @@
     locfile="../vstte12_ring_buffer.mlw"
     loclnum="52" loccnumb="6" loccnume="11"
     expl="VC for clear"
-    sum="dd9fc685c061f56610ecf5fa0dbe11f6"
+    sum="204d58efcc0e4003b68539ab1ba5ad37"
     proved="true"
     expanded="false"
     shape="ainfix =V5aNilAainfix =V6c0Aainfix =anthV7V5aSomeagetV3ainfix -ainfix +V0V7V2Iainfix &lt;=c0ainfix -ainfix +V0V7V2Aainfix =anthV7V5aSomeagetV3ainfix +V0V7Iainfix &lt;ainfix +V0V7V2Iainfix &lt;V7V6Aainfix &lt;=c0V7FAainfix =V6alengthV5Aainfix &lt;=V6V2Aainfix &lt;=c0V6Aainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V6c0FIainfix =V5aNilFIainfix &lt;=c0V2Aainfix =anthV8V4aSomeagetV3ainfix -ainfix +V0V8V2Iainfix &lt;=c0ainfix -ainfix +V0V8V2Aainfix =anthV8V4aSomeagetV3ainfix +V0V8Iainfix &lt;ainfix +V0V8V2Iainfix &lt;V8V1Aainfix &lt;=c0V8FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -88,7 +88,7 @@
     locfile="../vstte12_ring_buffer.mlw"
     loclnum="59" loccnumb="6" loccnume="10"
     expl="VC for push"
-    sum="9bf4b6ada672361c1418f55b420df1ab"
+    sum="d6c7452df210bc926d8a1b67992306f0"
     proved="true"
     expanded="false"
     shape="ainfix =V6ainfix ++V4aConsV5aNilAainfix =V9ainfix +V1c1Aainfix &lt;=c0V2Aainfix =anthV10V6aSomeagetV8ainfix -ainfix +V0V10V2Iainfix &lt;=c0ainfix -ainfix +V0V10V2Aainfix =anthV10V6aSomeagetV8ainfix +V0V10Iainfix &lt;ainfix +V0V10V2Iainfix &lt;V10V9Aainfix &lt;=c0V10FAainfix =V9alengthV6Aainfix &lt;=V9V2Aainfix &lt;=c0V9Aainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V9ainfix +V1c1FIainfix =V8asetV3iV7ainfix -V7V2ainfix &gt;=V7V2V5Aainfix &lt;=c0V2FAainfix &lt;iV7ainfix -V7V2ainfix &gt;=V7V2V2Aainfix &lt;=c0iV7ainfix -V7V2ainfix &gt;=V7V2Lainfix +V0V1Iainfix =V6ainfix ++V4aConsV5aNilFIainfix &lt;V1V2Aainfix &lt;=c0V2Aainfix =anthV11V4aSomeagetV3ainfix -ainfix +V0V11V2Iainfix &lt;=c0ainfix -ainfix +V0V11V2Aainfix =anthV11V4aSomeagetV3ainfix +V0V11Iainfix &lt;ainfix +V0V11V2Iainfix &lt;V11V1Aainfix &lt;=c0V11FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -102,11 +102,11 @@
       name="WP_parameter push.1"
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="59" loccnumb="6" loccnume="10"
-      expl="1. precondition"
-      sum="8251296a7d5e67b05ba36d434c74c05a"
+      expl="1. index in array bounds"
+      sum="d6ff8f3767348dab85fdb016d1150395"
       proved="true"
       expanded="false"
-      shape="preconditionainfix &lt;iV7ainfix -V7V2ainfix &gt;=V7V2V2Aainfix &lt;=c0iV7ainfix -V7V2ainfix &gt;=V7V2Lainfix +V0V1Iainfix =V6ainfix ++V4aConsV5aNilFIainfix &lt;V1V2Aainfix &lt;=c0V2Aainfix =anthV8V4aSomeagetV3ainfix -ainfix +V0V8V2Iainfix &lt;=c0ainfix -ainfix +V0V8V2Aainfix =anthV8V4aSomeagetV3ainfix +V0V8Iainfix &lt;ainfix +V0V8V2Iainfix &lt;V8V1Aainfix &lt;=c0V8FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
+      shape="index in array boundsainfix &lt;iV7ainfix -V7V2ainfix &gt;=V7V2V2Aainfix &lt;=c0iV7ainfix -V7V2ainfix &gt;=V7V2Lainfix +V0V1Iainfix =V6ainfix ++V4aConsV5aNilFIainfix &lt;V1V2Aainfix &lt;=c0V2Aainfix =anthV8V4aSomeagetV3ainfix -ainfix +V0V8V2Iainfix &lt;=c0ainfix -ainfix +V0V8V2Aainfix =anthV8V4aSomeagetV3ainfix +V0V8Iainfix &lt;ainfix +V0V8V2Iainfix &lt;V8V1Aainfix &lt;=c0V8FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
       <label
        name="expl:VC for push"/>
       <proof
@@ -123,7 +123,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="59" loccnumb="6" loccnume="10"
       expl="2. type invariant"
-      sum="8037c2417b83be770ce08a822a1c829a"
+      sum="5420c951f319f19121d9541b7441e4ec"
       proved="true"
       expanded="false"
       shape="type invariantainfix =anthV10V6aSomeagetV8ainfix -ainfix +V0V10V2Iainfix &lt;=c0ainfix -ainfix +V0V10V2Aainfix =anthV10V6aSomeagetV8ainfix +V0V10Iainfix &lt;ainfix +V0V10V2Iainfix &lt;V10V9Aainfix &lt;=c0V10FAainfix =V9alengthV6Aainfix &lt;=V9V2Aainfix &lt;=c0V9Aainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V9ainfix +V1c1FIainfix =V8asetV3iV7ainfix -V7V2ainfix &gt;=V7V2V5Aainfix &lt;=c0V2FIainfix &lt;iV7ainfix -V7V2ainfix &gt;=V7V2V2Aainfix &lt;=c0iV7ainfix -V7V2ainfix &gt;=V7V2Lainfix +V0V1Iainfix =V6ainfix ++V4aConsV5aNilFIainfix &lt;V1V2Aainfix &lt;=c0V2Aainfix =anthV11V4aSomeagetV3ainfix -ainfix +V0V11V2Iainfix &lt;=c0ainfix -ainfix +V0V11V2Aainfix =anthV11V4aSomeagetV3ainfix +V0V11Iainfix &lt;ainfix +V0V11V2Iainfix &lt;V11V1Aainfix &lt;=c0V11FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -138,7 +138,7 @@
         locfile="../vstte12_ring_buffer.mlw"
         loclnum="59" loccnumb="6" loccnume="10"
         expl="1. type invariant"
-        sum="766e79fef53400256d6f1296975bbf38"
+        sum="2c03114ec9de45177c0ddd03e8ee9c68"
         proved="true"
         expanded="false"
         shape="type invariantainfix =anthV10V6aSomeagetV8ainfix -ainfix +V0V10V2Iainfix =c0ainfix -ainfix +V0V10V2Oainfix &lt;c0ainfix -ainfix +V0V10V2Aainfix =anthV10V6aSomeagetV8ainfix +V0V10Iainfix &lt;ainfix +V0V10V2Iainfix &lt;V10V9Aainfix =c0V10Oainfix &lt;c0V10FAainfix =V9alengthV6Aainfix =V9V2Oainfix &lt;V9V2Aainfix =c0V9Oainfix &lt;c0V9Aainfix &lt;V0V2Aainfix =c0V0Oainfix &lt;c0V0Iainfix =V9ainfix +V1c1FIainfix =V8asetV3iV7ainfix -V7V2ainfix &gt;=V7V2V5Aainfix =c0V2Oainfix &lt;c0V2FIainfix &lt;iV7ainfix -V7V2ainfix &gt;=V7V2V2Aainfix =c0iV7ainfix -V7V2ainfix &gt;=V7V2Oainfix &lt;c0iV7ainfix -V7V2ainfix &gt;=V7V2Lainfix +V0V1Iainfix =V6ainfix ++V4aConsV5aNilFIainfix &lt;V1V2Aainfix =c0V2Oainfix &lt;c0V2Aainfix =anthV11V4aSomeagetV3ainfix -ainfix +V0V11V2Iainfix =c0ainfix -ainfix +V0V11V2Oainfix &lt;c0ainfix -ainfix +V0V11V2Aainfix =anthV11V4aSomeagetV3ainfix +V0V11Iainfix &lt;ainfix +V0V11V2Iainfix &lt;V11V1Aainfix =c0V11Oainfix &lt;c0V11FAainfix =V1alengthV4Aainfix =V1V2Oainfix &lt;V1V2Aainfix =c0V1Oainfix &lt;c0V1Aainfix &lt;V0V2Aainfix =c0V0Oainfix &lt;c0V0F">
@@ -153,7 +153,7 @@
           locfile="../vstte12_ring_buffer.mlw"
           loclnum="59" loccnumb="6" loccnume="10"
           expl="1."
-          sum="7433d2129e5fb147e217510b7f6d2682"
+          sum="26e16b4396e1e0dc97fe65c9fa9945e3"
           proved="true"
           expanded="false"
           shape="ainfix =c0V0Oainfix &lt;c0V0Iainfix =V9ainfix +V1c1FIainfix =V8asetV3iV7ainfix -V7V2ainfix &gt;=V7V2V5Aainfix =c0V2Oainfix &lt;c0V2FIainfix &lt;iV7ainfix -V7V2ainfix &gt;=V7V2V2Aainfix =c0iV7ainfix -V7V2ainfix &gt;=V7V2Oainfix &lt;c0iV7ainfix -V7V2ainfix &gt;=V7V2Lainfix +V0V1Iainfix =V6ainfix ++V4aConsV5aNilFIainfix &lt;V1V2Aainfix =c0V2Oainfix &lt;c0V2Aainfix =anthV10V4aSomeagetV3ainfix -ainfix +V0V10V2Iainfix =c0ainfix -ainfix +V0V10V2Oainfix &lt;c0ainfix -ainfix +V0V10V2Aainfix =anthV10V4aSomeagetV3ainfix +V0V10Iainfix &lt;ainfix +V0V10V2Iainfix &lt;V10V1Aainfix =c0V10Oainfix &lt;c0V10FAainfix =V1alengthV4Aainfix =V1V2Oainfix &lt;V1V2Aainfix =c0V1Oainfix &lt;c0V1Aainfix &lt;V0V2Aainfix =c0V0Oainfix &lt;c0V0F">
@@ -173,7 +173,7 @@
           locfile="../vstte12_ring_buffer.mlw"
           loclnum="59" loccnumb="6" loccnume="10"
           expl="2."
-          sum="27c7a9debeb7f88432098d33418b9e6c"
+          sum="9584be4056eefbc51ccfe1b457ec5a1b"
           proved="true"
           expanded="false"
           shape="ainfix &lt;V0V2Iainfix =V9ainfix +V1c1FIainfix =V8asetV3iV7ainfix -V7V2ainfix &gt;=V7V2V5Aainfix =c0V2Oainfix &lt;c0V2FIainfix &lt;iV7ainfix -V7V2ainfix &gt;=V7V2V2Aainfix =c0iV7ainfix -V7V2ainfix &gt;=V7V2Oainfix &lt;c0iV7ainfix -V7V2ainfix &gt;=V7V2Lainfix +V0V1Iainfix =V6ainfix ++V4aConsV5aNilFIainfix &lt;V1V2Aainfix =c0V2Oainfix &lt;c0V2Aainfix =anthV10V4aSomeagetV3ainfix -ainfix +V0V10V2Iainfix =c0ainfix -ainfix +V0V10V2Oainfix &lt;c0ainfix -ainfix +V0V10V2Aainfix =anthV10V4aSomeagetV3ainfix +V0V10Iainfix &lt;ainfix +V0V10V2Iainfix &lt;V10V1Aainfix =c0V10Oainfix &lt;c0V10FAainfix =V1alengthV4Aainfix =V1V2Oainfix &lt;V1V2Aainfix =c0V1Oainfix &lt;c0V1Aainfix &lt;V0V2Aainfix =c0V0Oainfix &lt;c0V0F">
@@ -193,7 +193,7 @@
           locfile="../vstte12_ring_buffer.mlw"
           loclnum="59" loccnumb="6" loccnume="10"
           expl="3."
-          sum="a8e9bf97d26526802638492997ebab42"
+          sum="a4d201ad6b94d4af1c87e9ebd7f30305"
           proved="true"
           expanded="false"
           shape="ainfix =c0V9Oainfix &lt;c0V9Iainfix =V9ainfix +V1c1FIainfix =V8asetV3iV7ainfix -V7V2ainfix &gt;=V7V2V5Aainfix =c0V2Oainfix &lt;c0V2FIainfix &lt;iV7ainfix -V7V2ainfix &gt;=V7V2V2Aainfix =c0iV7ainfix -V7V2ainfix &gt;=V7V2Oainfix &lt;c0iV7ainfix -V7V2ainfix &gt;=V7V2Lainfix +V0V1Iainfix =V6ainfix ++V4aConsV5aNilFIainfix &lt;V1V2Aainfix =c0V2Oainfix &lt;c0V2Aainfix =anthV10V4aSomeagetV3ainfix -ainfix +V0V10V2Iainfix =c0ainfix -ainfix +V0V10V2Oainfix &lt;c0ainfix -ainfix +V0V10V2Aainfix =anthV10V4aSomeagetV3ainfix +V0V10Iainfix &lt;ainfix +V0V10V2Iainfix &lt;V10V1Aainfix =c0V10Oainfix &lt;c0V10FAainfix =V1alengthV4Aainfix =V1V2Oainfix &lt;V1V2Aainfix =c0V1Oainfix &lt;c0V1Aainfix &lt;V0V2Aainfix =c0V0Oainfix &lt;c0V0F">
@@ -213,7 +213,7 @@
           locfile="../vstte12_ring_buffer.mlw"
           loclnum="59" loccnumb="6" loccnume="10"
           expl="4."
-          sum="e4ea7a628c2142beae302dbe56894654"
+          sum="fa1f63708f2952042696821313e27002"
           proved="true"
           expanded="false"
           shape="ainfix =V9V2Oainfix &lt;V9V2Iainfix =V9ainfix +V1c1FIainfix =V8asetV3iV7ainfix -V7V2ainfix &gt;=V7V2V5Aainfix =c0V2Oainfix &lt;c0V2FIainfix &lt;iV7ainfix -V7V2ainfix &gt;=V7V2V2Aainfix =c0iV7ainfix -V7V2ainfix &gt;=V7V2Oainfix &lt;c0iV7ainfix -V7V2ainfix &gt;=V7V2Lainfix +V0V1Iainfix =V6ainfix ++V4aConsV5aNilFIainfix &lt;V1V2Aainfix =c0V2Oainfix &lt;c0V2Aainfix =anthV10V4aSomeagetV3ainfix -ainfix +V0V10V2Iainfix =c0ainfix -ainfix +V0V10V2Oainfix &lt;c0ainfix -ainfix +V0V10V2Aainfix =anthV10V4aSomeagetV3ainfix +V0V10Iainfix &lt;ainfix +V0V10V2Iainfix &lt;V10V1Aainfix =c0V10Oainfix &lt;c0V10FAainfix =V1alengthV4Aainfix =V1V2Oainfix &lt;V1V2Aainfix =c0V1Oainfix &lt;c0V1Aainfix &lt;V0V2Aainfix =c0V0Oainfix &lt;c0V0F">
@@ -233,7 +233,7 @@
           locfile="../vstte12_ring_buffer.mlw"
           loclnum="59" loccnumb="6" loccnume="10"
           expl="5."
-          sum="4631b6de21b285ee1e4c0f51592de805"
+          sum="8d33e1608058ad8334cb079069aff2e6"
           proved="true"
           expanded="false"
           shape="ainfix =V9alengthV6Iainfix =V9ainfix +V1c1FIainfix =V8asetV3iV7ainfix -V7V2ainfix &gt;=V7V2V5Aainfix =c0V2Oainfix &lt;c0V2FIainfix &lt;iV7ainfix -V7V2ainfix &gt;=V7V2V2Aainfix =c0iV7ainfix -V7V2ainfix &gt;=V7V2Oainfix &lt;c0iV7ainfix -V7V2ainfix &gt;=V7V2Lainfix +V0V1Iainfix =V6ainfix ++V4aConsV5aNilFIainfix &lt;V1V2Aainfix =c0V2Oainfix &lt;c0V2Aainfix =anthV10V4aSomeagetV3ainfix -ainfix +V0V10V2Iainfix =c0ainfix -ainfix +V0V10V2Oainfix &lt;c0ainfix -ainfix +V0V10V2Aainfix =anthV10V4aSomeagetV3ainfix +V0V10Iainfix &lt;ainfix +V0V10V2Iainfix &lt;V10V1Aainfix =c0V10Oainfix &lt;c0V10FAainfix =V1alengthV4Aainfix =V1V2Oainfix &lt;V1V2Aainfix =c0V1Oainfix &lt;c0V1Aainfix &lt;V0V2Aainfix =c0V0Oainfix &lt;c0V0F">
@@ -253,7 +253,7 @@
           locfile="../vstte12_ring_buffer.mlw"
           loclnum="59" loccnumb="6" loccnume="10"
           expl="6."
-          sum="288d89011c2eb02c823f03b66b819cca"
+          sum="aee2abc73b6c4a12f682d9cb818158f1"
           proved="true"
           expanded="false"
           shape="ainfix =anthV10V6aSomeagetV8ainfix +V0V10Iainfix &lt;ainfix +V0V10V2Iainfix &lt;V10V9Aainfix =c0V10Oainfix &lt;c0V10FIainfix =V9ainfix +V1c1FIainfix =V8asetV3iV7ainfix -V7V2ainfix &gt;=V7V2V5Aainfix =c0V2Oainfix &lt;c0V2FIainfix &lt;iV7ainfix -V7V2ainfix &gt;=V7V2V2Aainfix =c0iV7ainfix -V7V2ainfix &gt;=V7V2Oainfix &lt;c0iV7ainfix -V7V2ainfix &gt;=V7V2Lainfix +V0V1Iainfix =V6ainfix ++V4aConsV5aNilFIainfix &lt;V1V2Aainfix =c0V2Oainfix &lt;c0V2Aainfix =anthV11V4aSomeagetV3ainfix -ainfix +V0V11V2Iainfix =c0ainfix -ainfix +V0V11V2Oainfix &lt;c0ainfix -ainfix +V0V11V2Aainfix =anthV11V4aSomeagetV3ainfix +V0V11Iainfix &lt;ainfix +V0V11V2Iainfix &lt;V11V1Aainfix =c0V11Oainfix &lt;c0V11FAainfix =V1alengthV4Aainfix =V1V2Oainfix &lt;V1V2Aainfix =c0V1Oainfix &lt;c0V1Aainfix &lt;V0V2Aainfix =c0V0Oainfix &lt;c0V0F">
@@ -273,7 +273,7 @@
           locfile="../vstte12_ring_buffer.mlw"
           loclnum="59" loccnumb="6" loccnume="10"
           expl="7."
-          sum="bc5c1b8f3d9ed37376883126ff399a97"
+          sum="d96e38daa2e0de6631a925030619392a"
           proved="true"
           expanded="false"
           shape="ainfix =anthV10V6aSomeagetV8ainfix -ainfix +V0V10V2Iainfix =c0ainfix -ainfix +V0V10V2Oainfix &lt;c0ainfix -ainfix +V0V10V2Iainfix &lt;V10V9Aainfix =c0V10Oainfix &lt;c0V10FIainfix =V9ainfix +V1c1FIainfix =V8asetV3iV7ainfix -V7V2ainfix &gt;=V7V2V5Aainfix =c0V2Oainfix &lt;c0V2FIainfix &lt;iV7ainfix -V7V2ainfix &gt;=V7V2V2Aainfix =c0iV7ainfix -V7V2ainfix &gt;=V7V2Oainfix &lt;c0iV7ainfix -V7V2ainfix &gt;=V7V2Lainfix +V0V1Iainfix =V6ainfix ++V4aConsV5aNilFIainfix &lt;V1V2Aainfix =c0V2Oainfix &lt;c0V2Aainfix =anthV11V4aSomeagetV3ainfix -ainfix +V0V11V2Iainfix =c0ainfix -ainfix +V0V11V2Oainfix &lt;c0ainfix -ainfix +V0V11V2Aainfix =anthV11V4aSomeagetV3ainfix +V0V11Iainfix &lt;ainfix +V0V11V2Iainfix &lt;V11V1Aainfix =c0V11Oainfix &lt;c0V11FAainfix =V1alengthV4Aainfix =V1V2Oainfix &lt;V1V2Aainfix =c0V1Oainfix &lt;c0V1Aainfix &lt;V0V2Aainfix =c0V0Oainfix &lt;c0V0F">
@@ -297,7 +297,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="59" loccnumb="6" loccnume="10"
       expl="3. type invariant"
-      sum="b8ca61e49bd4b37bc466b460762bb675"
+      sum="6f338fdfa2619269ace144f013bb6b89"
       proved="true"
       expanded="false"
       shape="type invariantainfix &lt;=c0V2Iainfix =V9ainfix +V1c1FIainfix =V8asetV3iV7ainfix -V7V2ainfix &gt;=V7V2V5Aainfix &lt;=c0V2FIainfix &lt;iV7ainfix -V7V2ainfix &gt;=V7V2V2Aainfix &lt;=c0iV7ainfix -V7V2ainfix &gt;=V7V2Lainfix +V0V1Iainfix =V6ainfix ++V4aConsV5aNilFIainfix &lt;V1V2Aainfix &lt;=c0V2Aainfix =anthV10V4aSomeagetV3ainfix -ainfix +V0V10V2Iainfix &lt;=c0ainfix -ainfix +V0V10V2Aainfix =anthV10V4aSomeagetV3ainfix +V0V10Iainfix &lt;ainfix +V0V10V2Iainfix &lt;V10V1Aainfix &lt;=c0V10FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -317,7 +317,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="59" loccnumb="6" loccnume="10"
       expl="4. postcondition"
-      sum="a9eaf48514a472cd77d020908ce1c9f0"
+      sum="b3ff2bf6b973715d279a8e103e4ae215"
       proved="true"
       expanded="false"
       shape="postconditionainfix =V9ainfix +V1c1Iainfix &lt;=c0V2Aainfix =anthV10V6aSomeagetV8ainfix -ainfix +V0V10V2Iainfix &lt;=c0ainfix -ainfix +V0V10V2Aainfix =anthV10V6aSomeagetV8ainfix +V0V10Iainfix &lt;ainfix +V0V10V2Iainfix &lt;V10V9Aainfix &lt;=c0V10FAainfix =V9alengthV6Aainfix &lt;=V9V2Aainfix &lt;=c0V9Aainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V9ainfix +V1c1FIainfix =V8asetV3iV7ainfix -V7V2ainfix &gt;=V7V2V5Aainfix &lt;=c0V2FIainfix &lt;iV7ainfix -V7V2ainfix &gt;=V7V2V2Aainfix &lt;=c0iV7ainfix -V7V2ainfix &gt;=V7V2Lainfix +V0V1Iainfix =V6ainfix ++V4aConsV5aNilFIainfix &lt;V1V2Aainfix &lt;=c0V2Aainfix =anthV11V4aSomeagetV3ainfix -ainfix +V0V11V2Iainfix &lt;=c0ainfix -ainfix +V0V11V2Aainfix =anthV11V4aSomeagetV3ainfix +V0V11Iainfix &lt;ainfix +V0V11V2Iainfix &lt;V11V1Aainfix &lt;=c0V11FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -337,7 +337,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="59" loccnumb="6" loccnume="10"
       expl="5. postcondition"
-      sum="388203e6f2582164ad8a2bcca101dd30"
+      sum="b0e723cb7d18399137553d54aa117a34"
       proved="true"
       expanded="false"
       shape="postconditionainfix =V6ainfix ++V4aConsV5aNilIainfix &lt;=c0V2Aainfix =anthV10V6aSomeagetV8ainfix -ainfix +V0V10V2Iainfix &lt;=c0ainfix -ainfix +V0V10V2Aainfix =anthV10V6aSomeagetV8ainfix +V0V10Iainfix &lt;ainfix +V0V10V2Iainfix &lt;V10V9Aainfix &lt;=c0V10FAainfix =V9alengthV6Aainfix &lt;=V9V2Aainfix &lt;=c0V9Aainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V9ainfix +V1c1FIainfix =V8asetV3iV7ainfix -V7V2ainfix &gt;=V7V2V5Aainfix &lt;=c0V2FIainfix &lt;iV7ainfix -V7V2ainfix &gt;=V7V2V2Aainfix &lt;=c0iV7ainfix -V7V2ainfix &gt;=V7V2Lainfix +V0V1Iainfix =V6ainfix ++V4aConsV5aNilFIainfix &lt;V1V2Aainfix &lt;=c0V2Aainfix =anthV11V4aSomeagetV3ainfix -ainfix +V0V11V2Iainfix &lt;=c0ainfix -ainfix +V0V11V2Aainfix =anthV11V4aSomeagetV3ainfix +V0V11Iainfix &lt;ainfix +V0V11V2Iainfix &lt;V11V1Aainfix &lt;=c0V11FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -359,7 +359,7 @@
     locfile="../vstte12_ring_buffer.mlw"
     loclnum="70" loccnumb="6" loccnume="10"
     expl="VC for head"
-    sum="c13d9743d1596b8a2a9e9a4088725888"
+    sum="31c7e63f855b204bbb44f571637d441f"
     proved="true"
     expanded="false"
     shape="CfaNilainfix =agetV3V0V5aConsVwV4Aainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV6V4aSomeagetV3ainfix -ainfix +V0V6V2Iainfix &lt;=c0ainfix -ainfix +V0V6V2Aainfix =anthV6V4aSomeagetV3ainfix +V0V6Iainfix &lt;ainfix +V0V6V2Iainfix &lt;V6V1Aainfix &lt;=c0V6FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -373,11 +373,11 @@
       name="WP_parameter head.1"
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="70" loccnumb="6" loccnume="10"
-      expl="1. precondition"
-      sum="bc18a11ff5565a7b37d1000637876184"
+      expl="1. index in array bounds"
+      sum="f50ff8abd546d248d8447b3f72e86508"
       proved="true"
       expanded="false"
-      shape="preconditionainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV5V4aSomeagetV3ainfix -ainfix +V0V5V2Iainfix &lt;=c0ainfix -ainfix +V0V5V2Aainfix =anthV5V4aSomeagetV3ainfix +V0V5Iainfix &lt;ainfix +V0V5V2Iainfix &lt;V5V1Aainfix &lt;=c0V5FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
+      shape="index in array boundsainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV5V4aSomeagetV3ainfix -ainfix +V0V5V2Iainfix &lt;=c0ainfix -ainfix +V0V5V2Aainfix =anthV5V4aSomeagetV3ainfix +V0V5Iainfix &lt;ainfix +V0V5V2Iainfix &lt;V5V1Aainfix &lt;=c0V5FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
       <label
        name="expl:VC for head"/>
       <proof
@@ -394,7 +394,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="70" loccnumb="6" loccnume="10"
       expl="2. postcondition"
-      sum="5eb04f53e2b1a18d8ab19ff663359e34"
+      sum="be23381648cff66765cd13b711f470ac"
       proved="true"
       expanded="false"
       shape="postconditionCfaNilainfix =agetV3V0V5aConsVwV4Iainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV6V4aSomeagetV3ainfix -ainfix +V0V6V2Iainfix &lt;=c0ainfix -ainfix +V0V6V2Aainfix =anthV6V4aSomeagetV3ainfix +V0V6Iainfix &lt;ainfix +V0V6V2Iainfix &lt;V6V1Aainfix &lt;=c0V6FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -417,7 +417,7 @@
     locfile="../vstte12_ring_buffer.mlw"
     loclnum="75" loccnumb="6" loccnume="9"
     expl="VC for pop"
-    sum="6a5391d456bbf8626fa68fec00d89d18"
+    sum="929139b7c3bc7e6732d14e573869f03c"
     proved="true"
     expanded="false"
     shape="CfaNiliCfaNilainfix =V6V11Aainfix =V7V10aConsVVV4Aainfix =V8ainfix -V1c1Aainfix =anthV12V6aSomeagetV3ainfix -ainfix +V9V12V2Iainfix &lt;=c0ainfix -ainfix +V9V12V2Aainfix =anthV12V6aSomeagetV3ainfix +V9V12Iainfix &lt;ainfix +V9V12V2Iainfix &lt;V12V8Aainfix &lt;=c0V12FAainfix =V8alengthV6Aainfix &lt;=V8V2Aainfix &lt;=c0V8Aainfix &lt;V9V2Aainfix &lt;=c0V9CfaNilainfix =V6V15Aainfix =V7V14aConsVVV4Aainfix =V8ainfix -V1c1Aainfix =anthV16V6aSomeagetV3ainfix -ainfix +V13V16V2Iainfix &lt;=c0ainfix -ainfix +V13V16V2Aainfix =anthV16V6aSomeagetV3ainfix +V13V16Iainfix &lt;ainfix +V13V16V2Iainfix &lt;V16V8Aainfix &lt;=c0V16FAainfix =V8alengthV6Aainfix &lt;=V8V2Aainfix &lt;=c0V8Aainfix &lt;V13V2Aainfix &lt;=c0V13Iainfix =V13c0Fainfix =V9V2Iainfix =V9ainfix +V0c1FIainfix =V8ainfix -V1c1FLagetV3V0Aainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V6V5FaConswVV4Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV17V4aSomeagetV3ainfix -ainfix +V0V17V2Iainfix &lt;=c0ainfix -ainfix +V0V17V2Aainfix =anthV17V4aSomeagetV3ainfix +V0V17Iainfix &lt;ainfix +V0V17V2Iainfix &lt;V17V1Aainfix &lt;=c0V17FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -432,7 +432,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="75" loccnumb="6" loccnume="9"
       expl="1. unreachable point"
-      sum="3ec9b26ad289e76c548089c754eb47c3"
+      sum="5a28d6fbadb4c987b2c0981121004c90"
       proved="true"
       expanded="false"
       shape="unreachable pointCfaNiltaConswVV4Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV6V4aSomeagetV3ainfix -ainfix +V0V6V2Iainfix &lt;=c0ainfix -ainfix +V0V6V2Aainfix =anthV6V4aSomeagetV3ainfix +V0V6Iainfix &lt;ainfix +V0V6V2Iainfix &lt;V6V1Aainfix &lt;=c0V6FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -451,11 +451,11 @@
       name="WP_parameter pop.2"
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="75" loccnumb="6" loccnume="9"
-      expl="2. precondition"
-      sum="19e61d0cb7e14f39336cd9f3f948d1ac"
+      expl="2. index in array bounds"
+      sum="75cbbe3902c49b553e390a4404848285"
       proved="true"
       expanded="false"
-      shape="preconditionCtaNilainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V6V5FaConswVV4Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV7V4aSomeagetV3ainfix -ainfix +V0V7V2Iainfix &lt;=c0ainfix -ainfix +V0V7V2Aainfix =anthV7V4aSomeagetV3ainfix +V0V7Iainfix &lt;ainfix +V0V7V2Iainfix &lt;V7V1Aainfix &lt;=c0V7FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
+      shape="index in array boundsCtaNilainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V6V5FaConswVV4Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV7V4aSomeagetV3ainfix -ainfix +V0V7V2Iainfix &lt;=c0ainfix -ainfix +V0V7V2Aainfix =anthV7V4aSomeagetV3ainfix +V0V7Iainfix &lt;ainfix +V0V7V2Iainfix &lt;V7V1Aainfix &lt;=c0V7FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
       <label
        name="expl:VC for pop"/>
       <proof
@@ -472,7 +472,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="75" loccnumb="6" loccnume="9"
       expl="3. type invariant"
-      sum="8d0c4f3518153864a9e7aafac9c3d79e"
+      sum="5f67dcfac4f165317b98cb81ed96e677"
       proved="true"
       expanded="false"
       shape="type invariantCtaNilainfix =anthV11V6aSomeagetV3ainfix -ainfix +V10V11V2Iainfix &lt;=c0ainfix -ainfix +V10V11V2Aainfix =anthV11V6aSomeagetV3ainfix +V10V11Iainfix &lt;ainfix +V10V11V2Iainfix &lt;V11V8Aainfix &lt;=c0V11FAainfix =V8alengthV6Aainfix &lt;=V8V2Aainfix &lt;=c0V8Aainfix &lt;V10V2Aainfix &lt;=c0V10Iainfix =V10c0FIainfix =V9V2Iainfix =V9ainfix +V0c1FIainfix =V8ainfix -V1c1FLagetV3V0Iainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V6V5FaConswVV4Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV12V4aSomeagetV3ainfix -ainfix +V0V12V2Iainfix &lt;=c0ainfix -ainfix +V0V12V2Aainfix =anthV12V4aSomeagetV3ainfix +V0V12Iainfix &lt;ainfix +V0V12V2Iainfix &lt;V12V1Aainfix &lt;=c0V12FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -487,7 +487,7 @@
         locfile="../vstte12_ring_buffer.mlw"
         loclnum="75" loccnumb="6" loccnume="9"
         expl="1."
-        sum="9918159ba325a4b8604f7c7f0414e81f"
+        sum="9562d044b71fe6844dda6d2044ace1d1"
         proved="true"
         expanded="false"
         shape="CtaNilainfix &lt;=c0V10Iainfix =V10c0FIainfix =V9V2Iainfix =V9ainfix +V0c1FIainfix =V8ainfix -V1c1FLagetV3V0Iainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V6V5FaConswVV4Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV11V4aSomeagetV3ainfix -ainfix +V0V11V2Iainfix &lt;=c0ainfix -ainfix +V0V11V2Aainfix =anthV11V4aSomeagetV3ainfix +V0V11Iainfix &lt;ainfix +V0V11V2Iainfix &lt;V11V1Aainfix &lt;=c0V11FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -507,7 +507,7 @@
         locfile="../vstte12_ring_buffer.mlw"
         loclnum="75" loccnumb="6" loccnume="9"
         expl="2."
-        sum="c8428de4c25ed64a5bf962beda11e7b3"
+        sum="748ed63ab2cf6376af10e9168b175374"
         proved="true"
         expanded="false"
         shape="CtaNilainfix &lt;V10V2Iainfix =V10c0FIainfix =V9V2Iainfix =V9ainfix +V0c1FIainfix =V8ainfix -V1c1FLagetV3V0Iainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V6V5FaConswVV4Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV11V4aSomeagetV3ainfix -ainfix +V0V11V2Iainfix &lt;=c0ainfix -ainfix +V0V11V2Aainfix =anthV11V4aSomeagetV3ainfix +V0V11Iainfix &lt;ainfix +V0V11V2Iainfix &lt;V11V1Aainfix &lt;=c0V11FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -527,7 +527,7 @@
         locfile="../vstte12_ring_buffer.mlw"
         loclnum="75" loccnumb="6" loccnume="9"
         expl="3."
-        sum="dbc3e691c7b17f1772d1a5e954bd8a4d"
+        sum="fea8402efc6a9537485347dd1eaa03ae"
         proved="true"
         expanded="false"
         shape="CtaNilainfix &lt;=c0V8Iainfix =V10c0FIainfix =V9V2Iainfix =V9ainfix +V0c1FIainfix =V8ainfix -V1c1FLagetV3V0Iainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V6V5FaConswVV4Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV11V4aSomeagetV3ainfix -ainfix +V0V11V2Iainfix &lt;=c0ainfix -ainfix +V0V11V2Aainfix =anthV11V4aSomeagetV3ainfix +V0V11Iainfix &lt;ainfix +V0V11V2Iainfix &lt;V11V1Aainfix &lt;=c0V11FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -547,7 +547,7 @@
         locfile="../vstte12_ring_buffer.mlw"
         loclnum="75" loccnumb="6" loccnume="9"
         expl="4."
-        sum="4cf20d3b62d7bb09f17453bca7750695"
+        sum="cdc487940e06a8da81cf94110cdbf221"
         proved="true"
         expanded="false"
         shape="CtaNilainfix &lt;=V8V2Iainfix =V10c0FIainfix =V9V2Iainfix =V9ainfix +V0c1FIainfix =V8ainfix -V1c1FLagetV3V0Iainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V6V5FaConswVV4Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV11V4aSomeagetV3ainfix -ainfix +V0V11V2Iainfix &lt;=c0ainfix -ainfix +V0V11V2Aainfix =anthV11V4aSomeagetV3ainfix +V0V11Iainfix &lt;ainfix +V0V11V2Iainfix &lt;V11V1Aainfix &lt;=c0V11FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -575,7 +575,7 @@
         locfile="../vstte12_ring_buffer.mlw"
         loclnum="75" loccnumb="6" loccnume="9"
         expl="5."
-        sum="d163bc03a43323c8f0c0f6697cc00700"
+        sum="3d1e86f4ba34ae804f9bc29b79e5e881"
         proved="true"
         expanded="false"
         shape="CtaNilainfix =V8alengthV6Iainfix =V10c0FIainfix =V9V2Iainfix =V9ainfix +V0c1FIainfix =V8ainfix -V1c1FLagetV3V0Iainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V6V5FaConswVV4Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV11V4aSomeagetV3ainfix -ainfix +V0V11V2Iainfix &lt;=c0ainfix -ainfix +V0V11V2Aainfix =anthV11V4aSomeagetV3ainfix +V0V11Iainfix &lt;ainfix +V0V11V2Iainfix &lt;V11V1Aainfix &lt;=c0V11FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -595,7 +595,7 @@
         locfile="../vstte12_ring_buffer.mlw"
         loclnum="75" loccnumb="6" loccnume="9"
         expl="6."
-        sum="ceb7c8b56b054ae25348daadc1b303c4"
+        sum="cbcfde01b6290956c5d2d44db3a446cc"
         proved="true"
         expanded="false"
         shape="CtaNilainfix =anthV11V6aSomeagetV3ainfix +V10V11Iainfix &lt;ainfix +V10V11V2Iainfix &lt;V11V8Aainfix &lt;=c0V11FIainfix =V10c0FIainfix =V9V2Iainfix =V9ainfix +V0c1FIainfix =V8ainfix -V1c1FLagetV3V0Iainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V6V5FaConswVV4Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV12V4aSomeagetV3ainfix -ainfix +V0V12V2Iainfix &lt;=c0ainfix -ainfix +V0V12V2Aainfix =anthV12V4aSomeagetV3ainfix +V0V12Iainfix &lt;ainfix +V0V12V2Iainfix &lt;V12V1Aainfix &lt;=c0V12FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -615,7 +615,7 @@
         locfile="../vstte12_ring_buffer.mlw"
         loclnum="75" loccnumb="6" loccnume="9"
         expl="7."
-        sum="8757f66ed27f13319f6167ef4e83a404"
+        sum="fb3f055f030f5a76412e85976135400f"
         proved="true"
         expanded="false"
         shape="CtaNilainfix =anthV11V6aSomeagetV3ainfix -ainfix +V10V11V2Iainfix &lt;=c0ainfix -ainfix +V10V11V2Iainfix &lt;V11V8Aainfix &lt;=c0V11FIainfix =V10c0FIainfix =V9V2Iainfix =V9ainfix +V0c1FIainfix =V8ainfix -V1c1FLagetV3V0Iainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V6V5FaConswVV4Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV12V4aSomeagetV3ainfix -ainfix +V0V12V2Iainfix &lt;=c0ainfix -ainfix +V0V12V2Aainfix =anthV12V4aSomeagetV3ainfix +V0V12Iainfix &lt;ainfix +V0V12V2Iainfix &lt;V12V1Aainfix &lt;=c0V12FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -637,7 +637,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="75" loccnumb="6" loccnume="9"
       expl="4. postcondition"
-      sum="c8e9c6ec9b32619b8e3cc2f4c169fff7"
+      sum="a820b0bc47dcee4f5a3afc3859b8b1c3"
       proved="true"
       expanded="false"
       shape="postconditionCtaNilainfix =V8ainfix -V1c1Iainfix =anthV11V6aSomeagetV3ainfix -ainfix +V10V11V2Iainfix &lt;=c0ainfix -ainfix +V10V11V2Aainfix =anthV11V6aSomeagetV3ainfix +V10V11Iainfix &lt;ainfix +V10V11V2Iainfix &lt;V11V8Aainfix &lt;=c0V11FAainfix =V8alengthV6Aainfix &lt;=V8V2Aainfix &lt;=c0V8Aainfix &lt;V10V2Aainfix &lt;=c0V10Iainfix =V10c0FIainfix =V9V2Iainfix =V9ainfix +V0c1FIainfix =V8ainfix -V1c1FLagetV3V0Iainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V6V5FaConswVV4Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV12V4aSomeagetV3ainfix -ainfix +V0V12V2Iainfix &lt;=c0ainfix -ainfix +V0V12V2Aainfix =anthV12V4aSomeagetV3ainfix +V0V12Iainfix &lt;ainfix +V0V12V2Iainfix &lt;V12V1Aainfix &lt;=c0V12FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -657,7 +657,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="75" loccnumb="6" loccnume="9"
       expl="5. postcondition"
-      sum="e6c2a1d64cb12ac50cc3aa5bfa99ac6f"
+      sum="072e11a8ea5a557d9abfa1e6d5bd1e2b"
       proved="true"
       expanded="false"
       shape="postconditionCtaNilCfaNilainfix =V6V12Aainfix =V7V11aConsVVV4Iainfix =anthV13V6aSomeagetV3ainfix -ainfix +V10V13V2Iainfix &lt;=c0ainfix -ainfix +V10V13V2Aainfix =anthV13V6aSomeagetV3ainfix +V10V13Iainfix &lt;ainfix +V10V13V2Iainfix &lt;V13V8Aainfix &lt;=c0V13FAainfix =V8alengthV6Aainfix &lt;=V8V2Aainfix &lt;=c0V8Aainfix &lt;V10V2Aainfix &lt;=c0V10Iainfix =V10c0FIainfix =V9V2Iainfix =V9ainfix +V0c1FIainfix =V8ainfix -V1c1FLagetV3V0Iainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V6V5FaConswVV4Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV14V4aSomeagetV3ainfix -ainfix +V0V14V2Iainfix &lt;=c0ainfix -ainfix +V0V14V2Aainfix =anthV14V4aSomeagetV3ainfix +V0V14Iainfix &lt;ainfix +V0V14V2Iainfix &lt;V14V1Aainfix &lt;=c0V14FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -672,7 +672,7 @@
         locfile="../vstte12_ring_buffer.mlw"
         loclnum="75" loccnumb="6" loccnume="9"
         expl="1. postcondition"
-        sum="26abb3c62b838e6a582a94cb89e11e8a"
+        sum="fc9392cc9efcce8708b6e3590e59f9b6"
         proved="true"
         expanded="false"
         shape="postconditionCtaNilCfaNiltaConsVVV4Iainfix =anthV13V6aSomeagetV3ainfix -ainfix +V10V13V2Iainfix &lt;=c0ainfix -ainfix +V10V13V2Aainfix =anthV13V6aSomeagetV3ainfix +V10V13Iainfix &lt;ainfix +V10V13V2Iainfix &lt;V13V8Aainfix &lt;=c0V13FAainfix =V8alengthV6Aainfix &lt;=V8V2Aainfix &lt;=c0V8Aainfix &lt;V10V2Aainfix &lt;=c0V10Iainfix =V10c0FIainfix =V9V2Iainfix =V9ainfix +V0c1FIainfix =V8ainfix -V1c1FLagetV3V0Iainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V6V5FaConswVV4Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV14V4aSomeagetV3ainfix -ainfix +V0V14V2Iainfix &lt;=c0ainfix -ainfix +V0V14V2Aainfix =anthV14V4aSomeagetV3ainfix +V0V14Iainfix &lt;ainfix +V0V14V2Iainfix &lt;V14V1Aainfix &lt;=c0V14FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -692,7 +692,7 @@
         locfile="../vstte12_ring_buffer.mlw"
         loclnum="75" loccnumb="6" loccnume="9"
         expl="2. postcondition"
-        sum="1f0dbbf7129964e4e68c3ef85535ccd7"
+        sum="38b5a1a68e21130d430533b52e8b6617"
         proved="true"
         expanded="false"
         shape="postconditionCtaNilCtaNilainfix =V7V11aConsVVV4Iainfix =anthV13V6aSomeagetV3ainfix -ainfix +V10V13V2Iainfix &lt;=c0ainfix -ainfix +V10V13V2Aainfix =anthV13V6aSomeagetV3ainfix +V10V13Iainfix &lt;ainfix +V10V13V2Iainfix &lt;V13V8Aainfix &lt;=c0V13FAainfix =V8alengthV6Aainfix &lt;=V8V2Aainfix &lt;=c0V8Aainfix &lt;V10V2Aainfix &lt;=c0V10Iainfix =V10c0FIainfix =V9V2Iainfix =V9ainfix +V0c1FIainfix =V8ainfix -V1c1FLagetV3V0Iainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V6V5FaConswVV4Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV14V4aSomeagetV3ainfix -ainfix +V0V14V2Iainfix &lt;=c0ainfix -ainfix +V0V14V2Aainfix =anthV14V4aSomeagetV3ainfix +V0V14Iainfix &lt;ainfix +V0V14V2Iainfix &lt;V14V1Aainfix &lt;=c0V14FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -713,7 +713,7 @@
         locfile="../vstte12_ring_buffer.mlw"
         loclnum="75" loccnumb="6" loccnume="9"
         expl="3. postcondition"
-        sum="5ddb79503f5ea012d992180bd778a98d"
+        sum="f49afd93cef17bd85be7dd08816c1c81"
         proved="true"
         expanded="false"
         shape="postconditionCtaNilCtaNilainfix =V6V12aConsVVV4Iainfix =anthV13V6aSomeagetV3ainfix -ainfix +V10V13V2Iainfix &lt;=c0ainfix -ainfix +V10V13V2Aainfix =anthV13V6aSomeagetV3ainfix +V10V13Iainfix &lt;ainfix +V10V13V2Iainfix &lt;V13V8Aainfix &lt;=c0V13FAainfix =V8alengthV6Aainfix &lt;=V8V2Aainfix &lt;=c0V8Aainfix &lt;V10V2Aainfix &lt;=c0V10Iainfix =V10c0FIainfix =V9V2Iainfix =V9ainfix +V0c1FIainfix =V8ainfix -V1c1FLagetV3V0Iainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V6V5FaConswVV4Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV14V4aSomeagetV3ainfix -ainfix +V0V14V2Iainfix &lt;=c0ainfix -ainfix +V0V14V2Aainfix =anthV14V4aSomeagetV3ainfix +V0V14Iainfix &lt;ainfix +V0V14V2Iainfix &lt;V14V1Aainfix &lt;=c0V14FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -735,7 +735,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="75" loccnumb="6" loccnume="9"
       expl="6. type invariant"
-      sum="8fbf5a967ec41db5dc1da8d8d59adf55"
+      sum="c0d75f64e5995b254d35979f8038d15c"
       proved="true"
       expanded="false"
       shape="type invariantCtaNilainfix =anthV10V6aSomeagetV3ainfix -ainfix +V9V10V2Iainfix &lt;=c0ainfix -ainfix +V9V10V2Aainfix =anthV10V6aSomeagetV3ainfix +V9V10Iainfix &lt;ainfix +V9V10V2Iainfix &lt;V10V8Aainfix &lt;=c0V10FAainfix =V8alengthV6Aainfix &lt;=V8V2Aainfix &lt;=c0V8Aainfix &lt;V9V2Aainfix &lt;=c0V9INainfix =V9V2Iainfix =V9ainfix +V0c1FIainfix =V8ainfix -V1c1FLagetV3V0Iainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V6V5FaConswVV4Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV11V4aSomeagetV3ainfix -ainfix +V0V11V2Iainfix &lt;=c0ainfix -ainfix +V0V11V2Aainfix =anthV11V4aSomeagetV3ainfix +V0V11Iainfix &lt;ainfix +V0V11V2Iainfix &lt;V11V1Aainfix &lt;=c0V11FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -750,7 +750,7 @@
         locfile="../vstte12_ring_buffer.mlw"
         loclnum="75" loccnumb="6" loccnume="9"
         expl="1."
-        sum="b60fa28be501f34bf6ac9b73ba6430f5"
+        sum="d497658bca8d29b51e02d4adcdd605f0"
         proved="true"
         expanded="false"
         shape="CtaNilainfix &lt;=c0V9INainfix =V9V2Iainfix =V9ainfix +V0c1FIainfix =V8ainfix -V1c1FLagetV3V0Iainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V6V5FaConswVV4Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV10V4aSomeagetV3ainfix -ainfix +V0V10V2Iainfix &lt;=c0ainfix -ainfix +V0V10V2Aainfix =anthV10V4aSomeagetV3ainfix +V0V10Iainfix &lt;ainfix +V0V10V2Iainfix &lt;V10V1Aainfix &lt;=c0V10FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -770,7 +770,7 @@
         locfile="../vstte12_ring_buffer.mlw"
         loclnum="75" loccnumb="6" loccnume="9"
         expl="2."
-        sum="44e3f39f02d5c1edf07a26a8a6d19f9a"
+        sum="49ec075a6c092a7f3024d6232be2cea2"
         proved="true"
         expanded="false"
         shape="CtaNilainfix &lt;V9V2INainfix =V9V2Iainfix =V9ainfix +V0c1FIainfix =V8ainfix -V1c1FLagetV3V0Iainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V6V5FaConswVV4Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV10V4aSomeagetV3ainfix -ainfix +V0V10V2Iainfix &lt;=c0ainfix -ainfix +V0V10V2Aainfix =anthV10V4aSomeagetV3ainfix +V0V10Iainfix &lt;ainfix +V0V10V2Iainfix &lt;V10V1Aainfix &lt;=c0V10FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -790,7 +790,7 @@
         locfile="../vstte12_ring_buffer.mlw"
         loclnum="75" loccnumb="6" loccnume="9"
         expl="3."
-        sum="e7aa1e7a0ff28fa3fd8fde57afeed94b"
+        sum="e871bf9c147ba0a7b3246a17ae80ad90"
         proved="true"
         expanded="false"
         shape="CtaNilainfix &lt;=c0V8INainfix =V9V2Iainfix =V9ainfix +V0c1FIainfix =V8ainfix -V1c1FLagetV3V0Iainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V6V5FaConswVV4Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV10V4aSomeagetV3ainfix -ainfix +V0V10V2Iainfix &lt;=c0ainfix -ainfix +V0V10V2Aainfix =anthV10V4aSomeagetV3ainfix +V0V10Iainfix &lt;ainfix +V0V10V2Iainfix &lt;V10V1Aainfix &lt;=c0V10FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -810,7 +810,7 @@
         locfile="../vstte12_ring_buffer.mlw"
         loclnum="75" loccnumb="6" loccnume="9"
         expl="4."
-        sum="22b6f260f4fb5716243ed54a877692f6"
+        sum="f2f633b4746c520d5cfc37de3b1bd0e8"
         proved="true"
         expanded="false"
         shape="CtaNilainfix &lt;=V8V2INainfix =V9V2Iainfix =V9ainfix +V0c1FIainfix =V8ainfix -V1c1FLagetV3V0Iainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V6V5FaConswVV4Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV10V4aSomeagetV3ainfix -ainfix +V0V10V2Iainfix &lt;=c0ainfix -ainfix +V0V10V2Aainfix =anthV10V4aSomeagetV3ainfix +V0V10Iainfix &lt;ainfix +V0V10V2Iainfix &lt;V10V1Aainfix &lt;=c0V10FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -838,7 +838,7 @@
         locfile="../vstte12_ring_buffer.mlw"
         loclnum="75" loccnumb="6" loccnume="9"
         expl="5."
-        sum="a22f95d581e7f99d7b12759daaf4ff34"
+        sum="20913d9acedcd151f512e1b66026ed6e"
         proved="true"
         expanded="false"
         shape="CtaNilainfix =V8alengthV6INainfix =V9V2Iainfix =V9ainfix +V0c1FIainfix =V8ainfix -V1c1FLagetV3V0Iainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V6V5FaConswVV4Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV10V4aSomeagetV3ainfix -ainfix +V0V10V2Iainfix &lt;=c0ainfix -ainfix +V0V10V2Aainfix =anthV10V4aSomeagetV3ainfix +V0V10Iainfix &lt;ainfix +V0V10V2Iainfix &lt;V10V1Aainfix &lt;=c0V10FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -858,7 +858,7 @@
         locfile="../vstte12_ring_buffer.mlw"
         loclnum="75" loccnumb="6" loccnume="9"
         expl="6."
-        sum="e2f46ba1d12128531914b2795a965061"
+        sum="04c2ba3b54daccf56fe26e323a7c30f0"
         proved="true"
         expanded="false"
         shape="CtaNilainfix =anthV10V6aSomeagetV3ainfix +V9V10Iainfix &lt;ainfix +V9V10V2Iainfix &lt;V10V8Aainfix &lt;=c0V10FINainfix =V9V2Iainfix =V9ainfix +V0c1FIainfix =V8ainfix -V1c1FLagetV3V0Iainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V6V5FaConswVV4Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV11V4aSomeagetV3ainfix -ainfix +V0V11V2Iainfix &lt;=c0ainfix -ainfix +V0V11V2Aainfix =anthV11V4aSomeagetV3ainfix +V0V11Iainfix &lt;ainfix +V0V11V2Iainfix &lt;V11V1Aainfix &lt;=c0V11FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -878,7 +878,7 @@
         locfile="../vstte12_ring_buffer.mlw"
         loclnum="75" loccnumb="6" loccnume="9"
         expl="7."
-        sum="eb380b93ee10bb0a0a91528e3b6f4010"
+        sum="409102575379e9632176bb9d27c958d4"
         proved="true"
         expanded="false"
         shape="CtaNilainfix =anthV10V6aSomeagetV3ainfix -ainfix +V9V10V2Iainfix &lt;=c0ainfix -ainfix +V9V10V2Iainfix &lt;V10V8Aainfix &lt;=c0V10FINainfix =V9V2Iainfix =V9ainfix +V0c1FIainfix =V8ainfix -V1c1FLagetV3V0Iainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V6V5FaConswVV4Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV11V4aSomeagetV3ainfix -ainfix +V0V11V2Iainfix &lt;=c0ainfix -ainfix +V0V11V2Aainfix =anthV11V4aSomeagetV3ainfix +V0V11Iainfix &lt;ainfix +V0V11V2Iainfix &lt;V11V1Aainfix &lt;=c0V11FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -901,7 +901,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="75" loccnumb="6" loccnume="9"
       expl="7. postcondition"
-      sum="e829927479b3085223b49fc90e31b09c"
+      sum="b51c84b82baf9a9e6cb07c42b5bfd348"
       proved="true"
       expanded="false"
       shape="postconditionCtaNilainfix =V8ainfix -V1c1Iainfix =anthV10V6aSomeagetV3ainfix -ainfix +V9V10V2Iainfix &lt;=c0ainfix -ainfix +V9V10V2Aainfix =anthV10V6aSomeagetV3ainfix +V9V10Iainfix &lt;ainfix +V9V10V2Iainfix &lt;V10V8Aainfix &lt;=c0V10FAainfix =V8alengthV6Aainfix &lt;=V8V2Aainfix &lt;=c0V8Aainfix &lt;V9V2Aainfix &lt;=c0V9INainfix =V9V2Iainfix =V9ainfix +V0c1FIainfix =V8ainfix -V1c1FLagetV3V0Iainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V6V5FaConswVV4Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV11V4aSomeagetV3ainfix -ainfix +V0V11V2Iainfix &lt;=c0ainfix -ainfix +V0V11V2Aainfix =anthV11V4aSomeagetV3ainfix +V0V11Iainfix &lt;ainfix +V0V11V2Iainfix &lt;V11V1Aainfix &lt;=c0V11FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -921,7 +921,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="75" loccnumb="6" loccnume="9"
       expl="8. postcondition"
-      sum="43b319e6a650487bfe43737d8b4d515c"
+      sum="d4023c20a52ab4f0229ace0740af5235"
       proved="true"
       expanded="false"
       shape="postconditionCtaNilCfaNilainfix =V6V11Aainfix =V7V10aConsVVV4Iainfix =anthV12V6aSomeagetV3ainfix -ainfix +V9V12V2Iainfix &lt;=c0ainfix -ainfix +V9V12V2Aainfix =anthV12V6aSomeagetV3ainfix +V9V12Iainfix &lt;ainfix +V9V12V2Iainfix &lt;V12V8Aainfix &lt;=c0V12FAainfix =V8alengthV6Aainfix &lt;=V8V2Aainfix &lt;=c0V8Aainfix &lt;V9V2Aainfix &lt;=c0V9INainfix =V9V2Iainfix =V9ainfix +V0c1FIainfix =V8ainfix -V1c1FLagetV3V0Iainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V6V5FaConswVV4Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV13V4aSomeagetV3ainfix -ainfix +V0V13V2Iainfix &lt;=c0ainfix -ainfix +V0V13V2Aainfix =anthV13V4aSomeagetV3ainfix +V0V13Iainfix &lt;ainfix +V0V13V2Iainfix &lt;V13V1Aainfix &lt;=c0V13FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -936,7 +936,7 @@
         locfile="../vstte12_ring_buffer.mlw"
         loclnum="75" loccnumb="6" loccnume="9"
         expl="1. postcondition"
-        sum="0fe18dd9a18795bd6a5c193a665fe194"
+        sum="11ada76622d3dee3b8b5c9bfbfcb8703"
         proved="true"
         expanded="false"
         shape="postconditionCtaNilCfaNiltaConsVVV4Iainfix =anthV12V6aSomeagetV3ainfix -ainfix +V9V12V2Iainfix &lt;=c0ainfix -ainfix +V9V12V2Aainfix =anthV12V6aSomeagetV3ainfix +V9V12Iainfix &lt;ainfix +V9V12V2Iainfix &lt;V12V8Aainfix &lt;=c0V12FAainfix =V8alengthV6Aainfix &lt;=V8V2Aainfix &lt;=c0V8Aainfix &lt;V9V2Aainfix &lt;=c0V9INainfix =V9V2Iainfix =V9ainfix +V0c1FIainfix =V8ainfix -V1c1FLagetV3V0Iainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V6V5FaConswVV4Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV13V4aSomeagetV3ainfix -ainfix +V0V13V2Iainfix &lt;=c0ainfix -ainfix +V0V13V2Aainfix =anthV13V4aSomeagetV3ainfix +V0V13Iainfix &lt;ainfix +V0V13V2Iainfix &lt;V13V1Aainfix &lt;=c0V13FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -956,7 +956,7 @@
         locfile="../vstte12_ring_buffer.mlw"
         loclnum="75" loccnumb="6" loccnume="9"
         expl="2. postcondition"
-        sum="e91823776b6e34312fbe86800d215dfc"
+        sum="d67d437b3e4ed0f0f2374dd53b54672e"
         proved="true"
         expanded="false"
         shape="postconditionCtaNilCtaNilainfix =V7V10aConsVVV4Iainfix =anthV12V6aSomeagetV3ainfix -ainfix +V9V12V2Iainfix &lt;=c0ainfix -ainfix +V9V12V2Aainfix =anthV12V6aSomeagetV3ainfix +V9V12Iainfix &lt;ainfix +V9V12V2Iainfix &lt;V12V8Aainfix &lt;=c0V12FAainfix =V8alengthV6Aainfix &lt;=V8V2Aainfix &lt;=c0V8Aainfix &lt;V9V2Aainfix &lt;=c0V9INainfix =V9V2Iainfix =V9ainfix +V0c1FIainfix =V8ainfix -V1c1FLagetV3V0Iainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V6V5FaConswVV4Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV13V4aSomeagetV3ainfix -ainfix +V0V13V2Iainfix &lt;=c0ainfix -ainfix +V0V13V2Aainfix =anthV13V4aSomeagetV3ainfix +V0V13Iainfix &lt;ainfix +V0V13V2Iainfix &lt;V13V1Aainfix &lt;=c0V13FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -977,7 +977,7 @@
         locfile="../vstte12_ring_buffer.mlw"
         loclnum="75" loccnumb="6" loccnume="9"
         expl="3. postcondition"
-        sum="6a2b3fd03c12923dee554095a4622e5f"
+        sum="d3881f4e67a7d144743a65387d91a085"
         proved="true"
         expanded="false"
         shape="postconditionCtaNilCtaNilainfix =V6V11aConsVVV4Iainfix =anthV12V6aSomeagetV3ainfix -ainfix +V9V12V2Iainfix &lt;=c0ainfix -ainfix +V9V12V2Aainfix =anthV12V6aSomeagetV3ainfix +V9V12Iainfix &lt;ainfix +V9V12V2Iainfix &lt;V12V8Aainfix &lt;=c0V12FAainfix =V8alengthV6Aainfix &lt;=V8V2Aainfix &lt;=c0V8Aainfix &lt;V9V2Aainfix &lt;=c0V9INainfix =V9V2Iainfix =V9ainfix +V0c1FIainfix =V8ainfix -V1c1FLagetV3V0Iainfix &lt;V0V2Aainfix &lt;=c0V0Iainfix =V6V5FaConswVV4Iainfix &gt;V1c0Aainfix &lt;=c0V2Aainfix =anthV13V4aSomeagetV3ainfix -ainfix +V0V13V2Iainfix &lt;=c0ainfix -ainfix +V0V13V2Aainfix =anthV13V4aSomeagetV3ainfix +V0V13Iainfix &lt;ainfix +V0V13V2Iainfix &lt;V13V1Aainfix &lt;=c0V13FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0F">
@@ -1008,7 +1008,7 @@
     locfile="../vstte12_ring_buffer.mlw"
     loclnum="96" loccnumb="6" loccnume="13"
     expl="VC for harness"
-    sum="c51e93d9d2a0541e1a5a157b349912f8"
+    sum="1116c19f7e62ebb87325cdb96dd26113"
     proved="true"
     expanded="false"
     shape="ainfix =V25c3ICfaNilainfix =V22V27Aainfix =V25V26aConsVVV18Aainfix =V23ainfix -V19c1Aainfix =anthV28V22aSomeagetV12ainfix -ainfix +V24V28V2Iainfix &lt;=c0ainfix -ainfix +V24V28V2Aainfix =anthV28V22aSomeagetV12ainfix +V24V28Iainfix &lt;ainfix +V24V28V2Iainfix &lt;V28V23Aainfix &lt;=c0V28FAainfix =V23alengthV22Aainfix &lt;=V23V2Aainfix &lt;=c0V23Aainfix &lt;V24V2Aainfix &lt;=c0V24FFAainfix &gt;V19c0Aainfix =V21c2ICfaNilainfix =V18V30Aainfix =V21V29aConsVVV14Aainfix =V19ainfix -V15c1Aainfix =anthV31V18aSomeagetV12ainfix -ainfix +V20V31V2Iainfix &lt;=c0ainfix -ainfix +V20V31V2Aainfix =anthV31V18aSomeagetV12ainfix +V20V31Iainfix &lt;ainfix +V20V31V2Iainfix &lt;V31V19Aainfix &lt;=c0V31FAainfix =V19alengthV18Aainfix &lt;=V19V2Aainfix &lt;=c0V19Aainfix &lt;V20V2Aainfix &lt;=c0V20FFAainfix &gt;V15c0Aainfix =V17c1ICfaNilainfix =V14V33Aainfix =V17V32aConsVVV11Aainfix =V15ainfix -V13c1Aainfix =anthV34V14aSomeagetV12ainfix -ainfix +V16V34V2Iainfix &lt;=c0ainfix -ainfix +V16V34V2Aainfix =anthV34V14aSomeagetV12ainfix +V16V34Iainfix &lt;ainfix +V16V34V2Iainfix &lt;V34V15Aainfix &lt;=c0V34FAainfix =V15alengthV14Aainfix &lt;=V15V2Aainfix &lt;=c0V15Aainfix &lt;V16V2Aainfix &lt;=c0V16FFAainfix &gt;V13c0Iainfix =V11ainfix ++V8aConsc3aNilAainfix =V13ainfix +V10c1Aainfix &lt;=c0V2Aainfix =anthV35V11aSomeagetV12ainfix -ainfix +V0V35V2Iainfix &lt;=c0ainfix -ainfix +V0V35V2Aainfix =anthV35V11aSomeagetV12ainfix +V0V35Iainfix &lt;ainfix +V0V35V2Iainfix &lt;V35V13Aainfix &lt;=c0V35FAainfix =V13alengthV11Aainfix &lt;=V13V2Aainfix &lt;=c0V13Aainfix &lt;V0V2Aainfix &lt;=c0V0FAainfix &lt;V10V2Iainfix =V8ainfix ++V5aConsc2aNilAainfix =V10ainfix +V7c1Aainfix &lt;=c0V2Aainfix =anthV36V8aSomeagetV9ainfix -ainfix +V0V36V2Iainfix &lt;=c0ainfix -ainfix +V0V36V2Aainfix =anthV36V8aSomeagetV9ainfix +V0V36Iainfix &lt;ainfix +V0V36V2Iainfix &lt;V36V10Aainfix &lt;=c0V36FAainfix =V10alengthV8Aainfix &lt;=V10V2Aainfix &lt;=c0V10Aainfix &lt;V0V2Aainfix &lt;=c0V0FAainfix &lt;V7V2Iainfix =V5ainfix ++V4aConsc1aNilAainfix =V7ainfix +V1c1Aainfix &lt;=c0V2Aainfix =anthV37V5aSomeagetV6ainfix -ainfix +V0V37V2Iainfix &lt;=c0ainfix -ainfix +V0V37V2Aainfix =anthV37V5aSomeagetV6ainfix +V0V37Iainfix &lt;ainfix +V0V37V2Iainfix &lt;V37V7Aainfix &lt;=c0V37FAainfix =V7alengthV5Aainfix &lt;=V7V2Aainfix &lt;=c0V7Aainfix &lt;V0V2Aainfix &lt;=c0V0FAainfix &lt;V1V2Iainfix =V4aNilAainfix =V2c10Aainfix &lt;=c0V2Aainfix =anthV38V4aSomeagetV3ainfix -ainfix +V0V38V2Iainfix &lt;=c0ainfix -ainfix +V0V38V2Aainfix =anthV38V4aSomeagetV3ainfix +V0V38Iainfix &lt;ainfix +V0V38V2Iainfix &lt;V38V1Aainfix &lt;=c0V38FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0FAainfix &gt;c10c0">
@@ -1023,7 +1023,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="96" loccnumb="6" loccnume="13"
       expl="1. precondition"
-      sum="77c611dcffc348a2fa5d83f6f3c5ab71"
+      sum="33bbafab17e71e7dc25f26efc1c7f577"
       proved="true"
       expanded="false"
       shape="preconditionainfix &gt;c10c0">
@@ -1043,7 +1043,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="96" loccnumb="6" loccnume="13"
       expl="2. precondition"
-      sum="691fa1ba4bd2b097a899bd55c70e9640"
+      sum="015e9ebfcbff689a6724c35e1653cd73"
       proved="true"
       expanded="false"
       shape="preconditionainfix &lt;V1V2Iainfix =V4aNilAainfix =V2c10Aainfix &lt;=c0V2Aainfix =anthV5V4aSomeagetV3ainfix -ainfix +V0V5V2Iainfix &lt;=c0ainfix -ainfix +V0V5V2Aainfix =anthV5V4aSomeagetV3ainfix +V0V5Iainfix &lt;ainfix +V0V5V2Iainfix &lt;V5V1Aainfix &lt;=c0V5FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &gt;c10c0">
@@ -1063,7 +1063,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="96" loccnumb="6" loccnume="13"
       expl="3. precondition"
-      sum="3db71186fa69e4ecbcf6adcc43c76baf"
+      sum="7b6623e2ba85726b2c042a3a55663683"
       proved="true"
       expanded="false"
       shape="preconditionainfix &lt;V7V2Iainfix =V5ainfix ++V4aConsc1aNilAainfix =V7ainfix +V1c1Aainfix &lt;=c0V2Aainfix =anthV8V5aSomeagetV6ainfix -ainfix +V0V8V2Iainfix &lt;=c0ainfix -ainfix +V0V8V2Aainfix =anthV8V5aSomeagetV6ainfix +V0V8Iainfix &lt;ainfix +V0V8V2Iainfix &lt;V8V7Aainfix &lt;=c0V8FAainfix =V7alengthV5Aainfix &lt;=V7V2Aainfix &lt;=c0V7Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V1V2Iainfix =V4aNilAainfix =V2c10Aainfix &lt;=c0V2Aainfix =anthV9V4aSomeagetV3ainfix -ainfix +V0V9V2Iainfix &lt;=c0ainfix -ainfix +V0V9V2Aainfix =anthV9V4aSomeagetV3ainfix +V0V9Iainfix &lt;ainfix +V0V9V2Iainfix &lt;V9V1Aainfix &lt;=c0V9FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &gt;c10c0">
@@ -1091,7 +1091,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="96" loccnumb="6" loccnume="13"
       expl="4. precondition"
-      sum="bf15dc60cfcdb413e824537ae6fc7ceb"
+      sum="e44dbe0f37e29b4d41f99af5a2a713ea"
       proved="true"
       expanded="false"
       shape="preconditionainfix &lt;V10V2Iainfix =V8ainfix ++V5aConsc2aNilAainfix =V10ainfix +V7c1Aainfix &lt;=c0V2Aainfix =anthV11V8aSomeagetV9ainfix -ainfix +V0V11V2Iainfix &lt;=c0ainfix -ainfix +V0V11V2Aainfix =anthV11V8aSomeagetV9ainfix +V0V11Iainfix &lt;ainfix +V0V11V2Iainfix &lt;V11V10Aainfix &lt;=c0V11FAainfix =V10alengthV8Aainfix &lt;=V10V2Aainfix &lt;=c0V10Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V7V2Iainfix =V5ainfix ++V4aConsc1aNilAainfix =V7ainfix +V1c1Aainfix &lt;=c0V2Aainfix =anthV12V5aSomeagetV6ainfix -ainfix +V0V12V2Iainfix &lt;=c0ainfix -ainfix +V0V12V2Aainfix =anthV12V5aSomeagetV6ainfix +V0V12Iainfix &lt;ainfix +V0V12V2Iainfix &lt;V12V7Aainfix &lt;=c0V12FAainfix =V7alengthV5Aainfix &lt;=V7V2Aainfix &lt;=c0V7Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V1V2Iainfix =V4aNilAainfix =V2c10Aainfix &lt;=c0V2Aainfix =anthV13V4aSomeagetV3ainfix -ainfix +V0V13V2Iainfix &lt;=c0ainfix -ainfix +V0V13V2Aainfix =anthV13V4aSomeagetV3ainfix +V0V13Iainfix &lt;ainfix +V0V13V2Iainfix &lt;V13V1Aainfix &lt;=c0V13FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &gt;c10c0">
@@ -1111,7 +1111,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="96" loccnumb="6" loccnume="13"
       expl="5. precondition"
-      sum="23b527edb193ff9f31db749707409bc7"
+      sum="6a888139a0798fc2b394ddd252b44a5f"
       proved="true"
       expanded="false"
       shape="preconditionainfix &gt;V13c0Iainfix =V11ainfix ++V8aConsc3aNilAainfix =V13ainfix +V10c1Aainfix &lt;=c0V2Aainfix =anthV14V11aSomeagetV12ainfix -ainfix +V0V14V2Iainfix &lt;=c0ainfix -ainfix +V0V14V2Aainfix =anthV14V11aSomeagetV12ainfix +V0V14Iainfix &lt;ainfix +V0V14V2Iainfix &lt;V14V13Aainfix &lt;=c0V14FAainfix =V13alengthV11Aainfix &lt;=V13V2Aainfix &lt;=c0V13Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V10V2Iainfix =V8ainfix ++V5aConsc2aNilAainfix =V10ainfix +V7c1Aainfix &lt;=c0V2Aainfix =anthV15V8aSomeagetV9ainfix -ainfix +V0V15V2Iainfix &lt;=c0ainfix -ainfix +V0V15V2Aainfix =anthV15V8aSomeagetV9ainfix +V0V15Iainfix &lt;ainfix +V0V15V2Iainfix &lt;V15V10Aainfix &lt;=c0V15FAainfix =V10alengthV8Aainfix &lt;=V10V2Aainfix &lt;=c0V10Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V7V2Iainfix =V5ainfix ++V4aConsc1aNilAainfix =V7ainfix +V1c1Aainfix &lt;=c0V2Aainfix =anthV16V5aSomeagetV6ainfix -ainfix +V0V16V2Iainfix &lt;=c0ainfix -ainfix +V0V16V2Aainfix =anthV16V5aSomeagetV6ainfix +V0V16Iainfix &lt;ainfix +V0V16V2Iainfix &lt;V16V7Aainfix &lt;=c0V16FAainfix =V7alengthV5Aainfix &lt;=V7V2Aainfix &lt;=c0V7Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V1V2Iainfix =V4aNilAainfix =V2c10Aainfix &lt;=c0V2Aainfix =anthV17V4aSomeagetV3ainfix -ainfix +V0V17V2Iainfix &lt;=c0ainfix -ainfix +V0V17V2Aainfix =anthV17V4aSomeagetV3ainfix +V0V17Iainfix &lt;ainfix +V0V17V2Iainfix &lt;V17V1Aainfix &lt;=c0V17FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &gt;c10c0">
@@ -1131,7 +1131,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="96" loccnumb="6" loccnume="13"
       expl="6. assertion"
-      sum="c7cf6f79b49dc5940cf9c2454c1a4124"
+      sum="fa6844fd72070f76d127347601dd549d"
       proved="true"
       expanded="false"
       shape="assertionainfix =V17c1ICfaNilainfix =V14V19Aainfix =V17V18aConsVVV11Aainfix =V15ainfix -V13c1Aainfix =anthV20V14aSomeagetV12ainfix -ainfix +V16V20V2Iainfix &lt;=c0ainfix -ainfix +V16V20V2Aainfix =anthV20V14aSomeagetV12ainfix +V16V20Iainfix &lt;ainfix +V16V20V2Iainfix &lt;V20V15Aainfix &lt;=c0V20FAainfix =V15alengthV14Aainfix &lt;=V15V2Aainfix &lt;=c0V15Aainfix &lt;V16V2Aainfix &lt;=c0V16FFIainfix &gt;V13c0Iainfix =V11ainfix ++V8aConsc3aNilAainfix =V13ainfix +V10c1Aainfix &lt;=c0V2Aainfix =anthV21V11aSomeagetV12ainfix -ainfix +V0V21V2Iainfix &lt;=c0ainfix -ainfix +V0V21V2Aainfix =anthV21V11aSomeagetV12ainfix +V0V21Iainfix &lt;ainfix +V0V21V2Iainfix &lt;V21V13Aainfix &lt;=c0V21FAainfix =V13alengthV11Aainfix &lt;=V13V2Aainfix &lt;=c0V13Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V10V2Iainfix =V8ainfix ++V5aConsc2aNilAainfix =V10ainfix +V7c1Aainfix &lt;=c0V2Aainfix =anthV22V8aSomeagetV9ainfix -ainfix +V0V22V2Iainfix &lt;=c0ainfix -ainfix +V0V22V2Aainfix =anthV22V8aSomeagetV9ainfix +V0V22Iainfix &lt;ainfix +V0V22V2Iainfix &lt;V22V10Aainfix &lt;=c0V22FAainfix =V10alengthV8Aainfix &lt;=V10V2Aainfix &lt;=c0V10Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V7V2Iainfix =V5ainfix ++V4aConsc1aNilAainfix =V7ainfix +V1c1Aainfix &lt;=c0V2Aainfix =anthV23V5aSomeagetV6ainfix -ainfix +V0V23V2Iainfix &lt;=c0ainfix -ainfix +V0V23V2Aainfix =anthV23V5aSomeagetV6ainfix +V0V23Iainfix &lt;ainfix +V0V23V2Iainfix &lt;V23V7Aainfix &lt;=c0V23FAainfix =V7alengthV5Aainfix &lt;=V7V2Aainfix &lt;=c0V7Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V1V2Iainfix =V4aNilAainfix =V2c10Aainfix &lt;=c0V2Aainfix =anthV24V4aSomeagetV3ainfix -ainfix +V0V24V2Iainfix &lt;=c0ainfix -ainfix +V0V24V2Aainfix =anthV24V4aSomeagetV3ainfix +V0V24Iainfix &lt;ainfix +V0V24V2Iainfix &lt;V24V1Aainfix &lt;=c0V24FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &gt;c10c0">
@@ -1151,7 +1151,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="96" loccnumb="6" loccnume="13"
       expl="7. precondition"
-      sum="46d56eb694b2d42cbf7e276fe24479e8"
+      sum="79c3b09e119a23009eb7d7719f6ffa61"
       proved="true"
       expanded="false"
       shape="preconditionainfix &gt;V15c0Iainfix =V17c1ICfaNilainfix =V14V19Aainfix =V17V18aConsVVV11Aainfix =V15ainfix -V13c1Aainfix =anthV20V14aSomeagetV12ainfix -ainfix +V16V20V2Iainfix &lt;=c0ainfix -ainfix +V16V20V2Aainfix =anthV20V14aSomeagetV12ainfix +V16V20Iainfix &lt;ainfix +V16V20V2Iainfix &lt;V20V15Aainfix &lt;=c0V20FAainfix =V15alengthV14Aainfix &lt;=V15V2Aainfix &lt;=c0V15Aainfix &lt;V16V2Aainfix &lt;=c0V16FFIainfix &gt;V13c0Iainfix =V11ainfix ++V8aConsc3aNilAainfix =V13ainfix +V10c1Aainfix &lt;=c0V2Aainfix =anthV21V11aSomeagetV12ainfix -ainfix +V0V21V2Iainfix &lt;=c0ainfix -ainfix +V0V21V2Aainfix =anthV21V11aSomeagetV12ainfix +V0V21Iainfix &lt;ainfix +V0V21V2Iainfix &lt;V21V13Aainfix &lt;=c0V21FAainfix =V13alengthV11Aainfix &lt;=V13V2Aainfix &lt;=c0V13Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V10V2Iainfix =V8ainfix ++V5aConsc2aNilAainfix =V10ainfix +V7c1Aainfix &lt;=c0V2Aainfix =anthV22V8aSomeagetV9ainfix -ainfix +V0V22V2Iainfix &lt;=c0ainfix -ainfix +V0V22V2Aainfix =anthV22V8aSomeagetV9ainfix +V0V22Iainfix &lt;ainfix +V0V22V2Iainfix &lt;V22V10Aainfix &lt;=c0V22FAainfix =V10alengthV8Aainfix &lt;=V10V2Aainfix &lt;=c0V10Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V7V2Iainfix =V5ainfix ++V4aConsc1aNilAainfix =V7ainfix +V1c1Aainfix &lt;=c0V2Aainfix =anthV23V5aSomeagetV6ainfix -ainfix +V0V23V2Iainfix &lt;=c0ainfix -ainfix +V0V23V2Aainfix =anthV23V5aSomeagetV6ainfix +V0V23Iainfix &lt;ainfix +V0V23V2Iainfix &lt;V23V7Aainfix &lt;=c0V23FAainfix =V7alengthV5Aainfix &lt;=V7V2Aainfix &lt;=c0V7Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V1V2Iainfix =V4aNilAainfix =V2c10Aainfix &lt;=c0V2Aainfix =anthV24V4aSomeagetV3ainfix -ainfix +V0V24V2Iainfix &lt;=c0ainfix -ainfix +V0V24V2Aainfix =anthV24V4aSomeagetV3ainfix +V0V24Iainfix &lt;ainfix +V0V24V2Iainfix &lt;V24V1Aainfix &lt;=c0V24FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &gt;c10c0">
@@ -1171,7 +1171,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="96" loccnumb="6" loccnume="13"
       expl="8. assertion"
-      sum="c603a7d6e4e1f9d2d6e91ccb907fba0f"
+      sum="046524aebf9e85b1537f8c91b280a3ad"
       proved="true"
       expanded="false"
       shape="assertionainfix =V21c2ICfaNilainfix =V18V23Aainfix =V21V22aConsVVV14Aainfix =V19ainfix -V15c1Aainfix =anthV24V18aSomeagetV12ainfix -ainfix +V20V24V2Iainfix &lt;=c0ainfix -ainfix +V20V24V2Aainfix =anthV24V18aSomeagetV12ainfix +V20V24Iainfix &lt;ainfix +V20V24V2Iainfix &lt;V24V19Aainfix &lt;=c0V24FAainfix =V19alengthV18Aainfix &lt;=V19V2Aainfix &lt;=c0V19Aainfix &lt;V20V2Aainfix &lt;=c0V20FFIainfix &gt;V15c0Iainfix =V17c1ICfaNilainfix =V14V26Aainfix =V17V25aConsVVV11Aainfix =V15ainfix -V13c1Aainfix =anthV27V14aSomeagetV12ainfix -ainfix +V16V27V2Iainfix &lt;=c0ainfix -ainfix +V16V27V2Aainfix =anthV27V14aSomeagetV12ainfix +V16V27Iainfix &lt;ainfix +V16V27V2Iainfix &lt;V27V15Aainfix &lt;=c0V27FAainfix =V15alengthV14Aainfix &lt;=V15V2Aainfix &lt;=c0V15Aainfix &lt;V16V2Aainfix &lt;=c0V16FFIainfix &gt;V13c0Iainfix =V11ainfix ++V8aConsc3aNilAainfix =V13ainfix +V10c1Aainfix &lt;=c0V2Aainfix =anthV28V11aSomeagetV12ainfix -ainfix +V0V28V2Iainfix &lt;=c0ainfix -ainfix +V0V28V2Aainfix =anthV28V11aSomeagetV12ainfix +V0V28Iainfix &lt;ainfix +V0V28V2Iainfix &lt;V28V13Aainfix &lt;=c0V28FAainfix =V13alengthV11Aainfix &lt;=V13V2Aainfix &lt;=c0V13Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V10V2Iainfix =V8ainfix ++V5aConsc2aNilAainfix =V10ainfix +V7c1Aainfix &lt;=c0V2Aainfix =anthV29V8aSomeagetV9ainfix -ainfix +V0V29V2Iainfix &lt;=c0ainfix -ainfix +V0V29V2Aainfix =anthV29V8aSomeagetV9ainfix +V0V29Iainfix &lt;ainfix +V0V29V2Iainfix &lt;V29V10Aainfix &lt;=c0V29FAainfix =V10alengthV8Aainfix &lt;=V10V2Aainfix &lt;=c0V10Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V7V2Iainfix =V5ainfix ++V4aConsc1aNilAainfix =V7ainfix +V1c1Aainfix &lt;=c0V2Aainfix =anthV30V5aSomeagetV6ainfix -ainfix +V0V30V2Iainfix &lt;=c0ainfix -ainfix +V0V30V2Aainfix =anthV30V5aSomeagetV6ainfix +V0V30Iainfix &lt;ainfix +V0V30V2Iainfix &lt;V30V7Aainfix &lt;=c0V30FAainfix =V7alengthV5Aainfix &lt;=V7V2Aainfix &lt;=c0V7Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V1V2Iainfix =V4aNilAainfix =V2c10Aainfix &lt;=c0V2Aainfix =anthV31V4aSomeagetV3ainfix -ainfix +V0V31V2Iainfix &lt;=c0ainfix -ainfix +V0V31V2Aainfix =anthV31V4aSomeagetV3ainfix +V0V31Iainfix &lt;ainfix +V0V31V2Iainfix &lt;V31V1Aainfix &lt;=c0V31FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &gt;c10c0">
@@ -1191,7 +1191,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="96" loccnumb="6" loccnume="13"
       expl="9. precondition"
-      sum="2d25a8eb382e21236637a18588f1b0e4"
+      sum="8ed6245661c9b756d3c0e3ad939ef9de"
       proved="true"
       expanded="false"
       shape="preconditionainfix &gt;V19c0Iainfix =V21c2ICfaNilainfix =V18V23Aainfix =V21V22aConsVVV14Aainfix =V19ainfix -V15c1Aainfix =anthV24V18aSomeagetV12ainfix -ainfix +V20V24V2Iainfix &lt;=c0ainfix -ainfix +V20V24V2Aainfix =anthV24V18aSomeagetV12ainfix +V20V24Iainfix &lt;ainfix +V20V24V2Iainfix &lt;V24V19Aainfix &lt;=c0V24FAainfix =V19alengthV18Aainfix &lt;=V19V2Aainfix &lt;=c0V19Aainfix &lt;V20V2Aainfix &lt;=c0V20FFIainfix &gt;V15c0Iainfix =V17c1ICfaNilainfix =V14V26Aainfix =V17V25aConsVVV11Aainfix =V15ainfix -V13c1Aainfix =anthV27V14aSomeagetV12ainfix -ainfix +V16V27V2Iainfix &lt;=c0ainfix -ainfix +V16V27V2Aainfix =anthV27V14aSomeagetV12ainfix +V16V27Iainfix &lt;ainfix +V16V27V2Iainfix &lt;V27V15Aainfix &lt;=c0V27FAainfix =V15alengthV14Aainfix &lt;=V15V2Aainfix &lt;=c0V15Aainfix &lt;V16V2Aainfix &lt;=c0V16FFIainfix &gt;V13c0Iainfix =V11ainfix ++V8aConsc3aNilAainfix =V13ainfix +V10c1Aainfix &lt;=c0V2Aainfix =anthV28V11aSomeagetV12ainfix -ainfix +V0V28V2Iainfix &lt;=c0ainfix -ainfix +V0V28V2Aainfix =anthV28V11aSomeagetV12ainfix +V0V28Iainfix &lt;ainfix +V0V28V2Iainfix &lt;V28V13Aainfix &lt;=c0V28FAainfix =V13alengthV11Aainfix &lt;=V13V2Aainfix &lt;=c0V13Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V10V2Iainfix =V8ainfix ++V5aConsc2aNilAainfix =V10ainfix +V7c1Aainfix &lt;=c0V2Aainfix =anthV29V8aSomeagetV9ainfix -ainfix +V0V29V2Iainfix &lt;=c0ainfix -ainfix +V0V29V2Aainfix =anthV29V8aSomeagetV9ainfix +V0V29Iainfix &lt;ainfix +V0V29V2Iainfix &lt;V29V10Aainfix &lt;=c0V29FAainfix =V10alengthV8Aainfix &lt;=V10V2Aainfix &lt;=c0V10Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V7V2Iainfix =V5ainfix ++V4aConsc1aNilAainfix =V7ainfix +V1c1Aainfix &lt;=c0V2Aainfix =anthV30V5aSomeagetV6ainfix -ainfix +V0V30V2Iainfix &lt;=c0ainfix -ainfix +V0V30V2Aainfix =anthV30V5aSomeagetV6ainfix +V0V30Iainfix &lt;ainfix +V0V30V2Iainfix &lt;V30V7Aainfix &lt;=c0V30FAainfix =V7alengthV5Aainfix &lt;=V7V2Aainfix &lt;=c0V7Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V1V2Iainfix =V4aNilAainfix =V2c10Aainfix &lt;=c0V2Aainfix =anthV31V4aSomeagetV3ainfix -ainfix +V0V31V2Iainfix &lt;=c0ainfix -ainfix +V0V31V2Aainfix =anthV31V4aSomeagetV3ainfix +V0V31Iainfix &lt;ainfix +V0V31V2Iainfix &lt;V31V1Aainfix &lt;=c0V31FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &gt;c10c0">
@@ -1211,7 +1211,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="96" loccnumb="6" loccnume="13"
       expl="10. assertion"
-      sum="12eba8fb60930906a7a55de5f6e71d4a"
+      sum="f0083b20d623c394447642229adf31b5"
       proved="true"
       expanded="false"
       shape="assertionainfix =V25c3ICfaNilainfix =V22V27Aainfix =V25V26aConsVVV18Aainfix =V23ainfix -V19c1Aainfix =anthV28V22aSomeagetV12ainfix -ainfix +V24V28V2Iainfix &lt;=c0ainfix -ainfix +V24V28V2Aainfix =anthV28V22aSomeagetV12ainfix +V24V28Iainfix &lt;ainfix +V24V28V2Iainfix &lt;V28V23Aainfix &lt;=c0V28FAainfix =V23alengthV22Aainfix &lt;=V23V2Aainfix &lt;=c0V23Aainfix &lt;V24V2Aainfix &lt;=c0V24FFIainfix &gt;V19c0Iainfix =V21c2ICfaNilainfix =V18V30Aainfix =V21V29aConsVVV14Aainfix =V19ainfix -V15c1Aainfix =anthV31V18aSomeagetV12ainfix -ainfix +V20V31V2Iainfix &lt;=c0ainfix -ainfix +V20V31V2Aainfix =anthV31V18aSomeagetV12ainfix +V20V31Iainfix &lt;ainfix +V20V31V2Iainfix &lt;V31V19Aainfix &lt;=c0V31FAainfix =V19alengthV18Aainfix &lt;=V19V2Aainfix &lt;=c0V19Aainfix &lt;V20V2Aainfix &lt;=c0V20FFIainfix &gt;V15c0Iainfix =V17c1ICfaNilainfix =V14V33Aainfix =V17V32aConsVVV11Aainfix =V15ainfix -V13c1Aainfix =anthV34V14aSomeagetV12ainfix -ainfix +V16V34V2Iainfix &lt;=c0ainfix -ainfix +V16V34V2Aainfix =anthV34V14aSomeagetV12ainfix +V16V34Iainfix &lt;ainfix +V16V34V2Iainfix &lt;V34V15Aainfix &lt;=c0V34FAainfix =V15alengthV14Aainfix &lt;=V15V2Aainfix &lt;=c0V15Aainfix &lt;V16V2Aainfix &lt;=c0V16FFIainfix &gt;V13c0Iainfix =V11ainfix ++V8aConsc3aNilAainfix =V13ainfix +V10c1Aainfix &lt;=c0V2Aainfix =anthV35V11aSomeagetV12ainfix -ainfix +V0V35V2Iainfix &lt;=c0ainfix -ainfix +V0V35V2Aainfix =anthV35V11aSomeagetV12ainfix +V0V35Iainfix &lt;ainfix +V0V35V2Iainfix &lt;V35V13Aainfix &lt;=c0V35FAainfix =V13alengthV11Aainfix &lt;=V13V2Aainfix &lt;=c0V13Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V10V2Iainfix =V8ainfix ++V5aConsc2aNilAainfix =V10ainfix +V7c1Aainfix &lt;=c0V2Aainfix =anthV36V8aSomeagetV9ainfix -ainfix +V0V36V2Iainfix &lt;=c0ainfix -ainfix +V0V36V2Aainfix =anthV36V8aSomeagetV9ainfix +V0V36Iainfix &lt;ainfix +V0V36V2Iainfix &lt;V36V10Aainfix &lt;=c0V36FAainfix =V10alengthV8Aainfix &lt;=V10V2Aainfix &lt;=c0V10Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V7V2Iainfix =V5ainfix ++V4aConsc1aNilAainfix =V7ainfix +V1c1Aainfix &lt;=c0V2Aainfix =anthV37V5aSomeagetV6ainfix -ainfix +V0V37V2Iainfix &lt;=c0ainfix -ainfix +V0V37V2Aainfix =anthV37V5aSomeagetV6ainfix +V0V37Iainfix &lt;ainfix +V0V37V2Iainfix &lt;V37V7Aainfix &lt;=c0V37FAainfix =V7alengthV5Aainfix &lt;=V7V2Aainfix &lt;=c0V7Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V1V2Iainfix =V4aNilAainfix =V2c10Aainfix &lt;=c0V2Aainfix =anthV38V4aSomeagetV3ainfix -ainfix +V0V38V2Iainfix &lt;=c0ainfix -ainfix +V0V38V2Aainfix =anthV38V4aSomeagetV3ainfix +V0V38Iainfix &lt;ainfix +V0V38V2Iainfix &lt;V38V1Aainfix &lt;=c0V38FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &gt;c10c0">
@@ -1233,7 +1233,7 @@
     locfile="../vstte12_ring_buffer.mlw"
     loclnum="106" loccnumb="6" loccnume="14"
     expl="VC for harness2"
-    sum="0a2ebb0e894e45db0fd383329cb9a246"
+    sum="5a0ee8ca53c206565282007bfe88c43e"
     proved="true"
     expanded="false"
     shape="ainfix =V32c4ICfaNilainfix =V29V34Aainfix =V32V33aConsVVV25Aainfix =V30ainfix -V26c1Aainfix =anthV35V29aSomeagetV19ainfix -ainfix +V31V35V2Iainfix &lt;=c0ainfix -ainfix +V31V35V2Aainfix =anthV35V29aSomeagetV19ainfix +V31V35Iainfix &lt;ainfix +V31V35V2Iainfix &lt;V35V30Aainfix &lt;=c0V35FAainfix =V30alengthV29Aainfix &lt;=V30V2Aainfix &lt;=c0V30Aainfix &lt;V31V2Aainfix &lt;=c0V31FFAainfix &gt;V26c0Aainfix =V25aConsc4aNilAainfix =V28c3ICfaNilainfix =V25V37Aainfix =V28V36aConsVVV21Aainfix =V26ainfix -V22c1Aainfix =anthV38V25aSomeagetV19ainfix -ainfix +V27V38V2Iainfix &lt;=c0ainfix -ainfix +V27V38V2Aainfix =anthV38V25aSomeagetV19ainfix +V27V38Iainfix &lt;ainfix +V27V38V2Iainfix &lt;V38V26Aainfix &lt;=c0V38FAainfix =V26alengthV25Aainfix &lt;=V26V2Aainfix &lt;=c0V26Aainfix &lt;V27V2Aainfix &lt;=c0V27FFAainfix &gt;V22c0Aainfix =V21aConsc3aConsc4aNilAainfix =V24c2ICfaNilainfix =V21V40Aainfix =V24V39aConsVVV18Aainfix =V22ainfix -V20c1Aainfix =anthV41V21aSomeagetV19ainfix -ainfix +V23V41V2Iainfix &lt;=c0ainfix -ainfix +V23V41V2Aainfix =anthV41V21aSomeagetV19ainfix +V23V41Iainfix &lt;ainfix +V23V41V2Iainfix &lt;V41V22Aainfix &lt;=c0V41FAainfix =V22alengthV21Aainfix &lt;=V22V2Aainfix &lt;=c0V22Aainfix &lt;V23V2Aainfix &lt;=c0V23FFAainfix &gt;V20c0Aainfix =V18aConsc2aConsc3aConsc4aNilIainfix =V18ainfix ++V14aConsc4aNilAainfix =V20ainfix +V15c1Aainfix &lt;=c0V2Aainfix =anthV42V18aSomeagetV19ainfix -ainfix +V16V42V2Iainfix &lt;=c0ainfix -ainfix +V16V42V2Aainfix =anthV42V18aSomeagetV19ainfix +V16V42Iainfix &lt;ainfix +V16V42V2Iainfix &lt;V42V20Aainfix &lt;=c0V42FAainfix =V20alengthV18Aainfix &lt;=V20V2Aainfix &lt;=c0V20Aainfix &lt;V16V2Aainfix &lt;=c0V16FAainfix &lt;V15V2Aainfix =V14aConsc2aConsc3aNilAainfix =V17c1ICfaNilainfix =V14V44Aainfix =V17V43aConsVVV11Aainfix =V15ainfix -V13c1Aainfix =anthV45V14aSomeagetV12ainfix -ainfix +V16V45V2Iainfix &lt;=c0ainfix -ainfix +V16V45V2Aainfix =anthV45V14aSomeagetV12ainfix +V16V45Iainfix &lt;ainfix +V16V45V2Iainfix &lt;V45V15Aainfix &lt;=c0V45FAainfix =V15alengthV14Aainfix &lt;=V15V2Aainfix &lt;=c0V15Aainfix &lt;V16V2Aainfix &lt;=c0V16FFAainfix &gt;V13c0Aainfix =V11aConsc1aConsc2aConsc3aNilIainfix =V11ainfix ++V8aConsc3aNilAainfix =V13ainfix +V10c1Aainfix &lt;=c0V2Aainfix =anthV46V11aSomeagetV12ainfix -ainfix +V0V46V2Iainfix &lt;=c0ainfix -ainfix +V0V46V2Aainfix =anthV46V11aSomeagetV12ainfix +V0V46Iainfix &lt;ainfix +V0V46V2Iainfix &lt;V46V13Aainfix &lt;=c0V46FAainfix =V13alengthV11Aainfix &lt;=V13V2Aainfix &lt;=c0V13Aainfix &lt;V0V2Aainfix &lt;=c0V0FAainfix &lt;V10V2Aainfix =V8aConsc1aConsc2aNilIainfix =V8ainfix ++V5aConsc2aNilAainfix =V10ainfix +V7c1Aainfix &lt;=c0V2Aainfix =anthV47V8aSomeagetV9ainfix -ainfix +V0V47V2Iainfix &lt;=c0ainfix -ainfix +V0V47V2Aainfix =anthV47V8aSomeagetV9ainfix +V0V47Iainfix &lt;ainfix +V0V47V2Iainfix &lt;V47V10Aainfix &lt;=c0V47FAainfix =V10alengthV8Aainfix &lt;=V10V2Aainfix &lt;=c0V10Aainfix &lt;V0V2Aainfix &lt;=c0V0FAainfix &lt;V7V2Aainfix =V5aConsc1aNilIainfix =V5ainfix ++V4aConsc1aNilAainfix =V7ainfix +V1c1Aainfix &lt;=c0V2Aainfix =anthV48V5aSomeagetV6ainfix -ainfix +V0V48V2Iainfix &lt;=c0ainfix -ainfix +V0V48V2Aainfix =anthV48V5aSomeagetV6ainfix +V0V48Iainfix &lt;ainfix +V0V48V2Iainfix &lt;V48V7Aainfix &lt;=c0V48FAainfix =V7alengthV5Aainfix &lt;=V7V2Aainfix &lt;=c0V7Aainfix &lt;V0V2Aainfix &lt;=c0V0FAainfix &lt;V1V2Iainfix =V4aNilAainfix =V2c3Aainfix &lt;=c0V2Aainfix =anthV49V4aSomeagetV3ainfix -ainfix +V0V49V2Iainfix &lt;=c0ainfix -ainfix +V0V49V2Aainfix =anthV49V4aSomeagetV3ainfix +V0V49Iainfix &lt;ainfix +V0V49V2Iainfix &lt;V49V1Aainfix &lt;=c0V49FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0FAainfix &gt;c3c0">
@@ -1248,7 +1248,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="106" loccnumb="6" loccnume="14"
       expl="1. precondition"
-      sum="8af67373d1cceafcdc41ac888578d199"
+      sum="cfac5868691e81627f8d4f1fb1b9bce8"
       proved="true"
       expanded="false"
       shape="preconditionainfix &gt;c3c0">
@@ -1268,7 +1268,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="106" loccnumb="6" loccnume="14"
       expl="2. precondition"
-      sum="d3c4c227f1336edfeb66715087261ee1"
+      sum="ad87ab56740a980709864b2179ba4624"
       proved="true"
       expanded="false"
       shape="preconditionainfix &lt;V1V2Iainfix =V4aNilAainfix =V2c3Aainfix &lt;=c0V2Aainfix =anthV5V4aSomeagetV3ainfix -ainfix +V0V5V2Iainfix &lt;=c0ainfix -ainfix +V0V5V2Aainfix =anthV5V4aSomeagetV3ainfix +V0V5Iainfix &lt;ainfix +V0V5V2Iainfix &lt;V5V1Aainfix &lt;=c0V5FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &gt;c3c0">
@@ -1288,7 +1288,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="106" loccnumb="6" loccnume="14"
       expl="3. assertion"
-      sum="2ee5fe8bdb5ed167c3aa26f6b6e840d8"
+      sum="ba32d278a80c63c3987d43c577408759"
       proved="true"
       expanded="false"
       shape="assertionainfix =V5aConsc1aNilIainfix =V5ainfix ++V4aConsc1aNilAainfix =V7ainfix +V1c1Aainfix &lt;=c0V2Aainfix =anthV8V5aSomeagetV6ainfix -ainfix +V0V8V2Iainfix &lt;=c0ainfix -ainfix +V0V8V2Aainfix =anthV8V5aSomeagetV6ainfix +V0V8Iainfix &lt;ainfix +V0V8V2Iainfix &lt;V8V7Aainfix &lt;=c0V8FAainfix =V7alengthV5Aainfix &lt;=V7V2Aainfix &lt;=c0V7Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V1V2Iainfix =V4aNilAainfix =V2c3Aainfix &lt;=c0V2Aainfix =anthV9V4aSomeagetV3ainfix -ainfix +V0V9V2Iainfix &lt;=c0ainfix -ainfix +V0V9V2Aainfix =anthV9V4aSomeagetV3ainfix +V0V9Iainfix &lt;ainfix +V0V9V2Iainfix &lt;V9V1Aainfix &lt;=c0V9FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &gt;c3c0">
@@ -1308,7 +1308,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="106" loccnumb="6" loccnume="14"
       expl="4. precondition"
-      sum="483c6f84a0cac5d07a206db973e3b239"
+      sum="dd26e14044e9ef7b63308389d6a9cb30"
       proved="true"
       expanded="false"
       shape="preconditionainfix &lt;V7V2Iainfix =V5aConsc1aNilIainfix =V5ainfix ++V4aConsc1aNilAainfix =V7ainfix +V1c1Aainfix &lt;=c0V2Aainfix =anthV8V5aSomeagetV6ainfix -ainfix +V0V8V2Iainfix &lt;=c0ainfix -ainfix +V0V8V2Aainfix =anthV8V5aSomeagetV6ainfix +V0V8Iainfix &lt;ainfix +V0V8V2Iainfix &lt;V8V7Aainfix &lt;=c0V8FAainfix =V7alengthV5Aainfix &lt;=V7V2Aainfix &lt;=c0V7Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V1V2Iainfix =V4aNilAainfix =V2c3Aainfix &lt;=c0V2Aainfix =anthV9V4aSomeagetV3ainfix -ainfix +V0V9V2Iainfix &lt;=c0ainfix -ainfix +V0V9V2Aainfix =anthV9V4aSomeagetV3ainfix +V0V9Iainfix &lt;ainfix +V0V9V2Iainfix &lt;V9V1Aainfix &lt;=c0V9FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &gt;c3c0">
@@ -1328,7 +1328,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="106" loccnumb="6" loccnume="14"
       expl="5. assertion"
-      sum="625ea4f689b81c2c484eeb2eb3c3dbbe"
+      sum="4094992830581097b8be7dbee601d42d"
       proved="true"
       expanded="false"
       shape="assertionainfix =V8aConsc1aConsc2aNilIainfix =V8ainfix ++V5aConsc2aNilAainfix =V10ainfix +V7c1Aainfix &lt;=c0V2Aainfix =anthV11V8aSomeagetV9ainfix -ainfix +V0V11V2Iainfix &lt;=c0ainfix -ainfix +V0V11V2Aainfix =anthV11V8aSomeagetV9ainfix +V0V11Iainfix &lt;ainfix +V0V11V2Iainfix &lt;V11V10Aainfix &lt;=c0V11FAainfix =V10alengthV8Aainfix &lt;=V10V2Aainfix &lt;=c0V10Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V7V2Iainfix =V5aConsc1aNilIainfix =V5ainfix ++V4aConsc1aNilAainfix =V7ainfix +V1c1Aainfix &lt;=c0V2Aainfix =anthV12V5aSomeagetV6ainfix -ainfix +V0V12V2Iainfix &lt;=c0ainfix -ainfix +V0V12V2Aainfix =anthV12V5aSomeagetV6ainfix +V0V12Iainfix &lt;ainfix +V0V12V2Iainfix &lt;V12V7Aainfix &lt;=c0V12FAainfix =V7alengthV5Aainfix &lt;=V7V2Aainfix &lt;=c0V7Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V1V2Iainfix =V4aNilAainfix =V2c3Aainfix &lt;=c0V2Aainfix =anthV13V4aSomeagetV3ainfix -ainfix +V0V13V2Iainfix &lt;=c0ainfix -ainfix +V0V13V2Aainfix =anthV13V4aSomeagetV3ainfix +V0V13Iainfix &lt;ainfix +V0V13V2Iainfix &lt;V13V1Aainfix &lt;=c0V13FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &gt;c3c0">
@@ -1348,7 +1348,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="106" loccnumb="6" loccnume="14"
       expl="6. precondition"
-      sum="6cee3b245bc4976e7fdad1573223c659"
+      sum="d6ed413e21eb67c48364af55c2ee81ac"
       proved="true"
       expanded="false"
       shape="preconditionainfix &lt;V10V2Iainfix =V8aConsc1aConsc2aNilIainfix =V8ainfix ++V5aConsc2aNilAainfix =V10ainfix +V7c1Aainfix &lt;=c0V2Aainfix =anthV11V8aSomeagetV9ainfix -ainfix +V0V11V2Iainfix &lt;=c0ainfix -ainfix +V0V11V2Aainfix =anthV11V8aSomeagetV9ainfix +V0V11Iainfix &lt;ainfix +V0V11V2Iainfix &lt;V11V10Aainfix &lt;=c0V11FAainfix =V10alengthV8Aainfix &lt;=V10V2Aainfix &lt;=c0V10Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V7V2Iainfix =V5aConsc1aNilIainfix =V5ainfix ++V4aConsc1aNilAainfix =V7ainfix +V1c1Aainfix &lt;=c0V2Aainfix =anthV12V5aSomeagetV6ainfix -ainfix +V0V12V2Iainfix &lt;=c0ainfix -ainfix +V0V12V2Aainfix =anthV12V5aSomeagetV6ainfix +V0V12Iainfix &lt;ainfix +V0V12V2Iainfix &lt;V12V7Aainfix &lt;=c0V12FAainfix =V7alengthV5Aainfix &lt;=V7V2Aainfix &lt;=c0V7Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V1V2Iainfix =V4aNilAainfix =V2c3Aainfix &lt;=c0V2Aainfix =anthV13V4aSomeagetV3ainfix -ainfix +V0V13V2Iainfix &lt;=c0ainfix -ainfix +V0V13V2Aainfix =anthV13V4aSomeagetV3ainfix +V0V13Iainfix &lt;ainfix +V0V13V2Iainfix &lt;V13V1Aainfix &lt;=c0V13FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &gt;c3c0">
@@ -1368,7 +1368,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="106" loccnumb="6" loccnume="14"
       expl="7. assertion"
-      sum="8bcb2d4bfe238c63c3c8807c9a8913d3"
+      sum="50ac6bb2e538e1e09555acffd6f6e0b8"
       proved="true"
       expanded="false"
       shape="assertionainfix =V11aConsc1aConsc2aConsc3aNilIainfix =V11ainfix ++V8aConsc3aNilAainfix =V13ainfix +V10c1Aainfix &lt;=c0V2Aainfix =anthV14V11aSomeagetV12ainfix -ainfix +V0V14V2Iainfix &lt;=c0ainfix -ainfix +V0V14V2Aainfix =anthV14V11aSomeagetV12ainfix +V0V14Iainfix &lt;ainfix +V0V14V2Iainfix &lt;V14V13Aainfix &lt;=c0V14FAainfix =V13alengthV11Aainfix &lt;=V13V2Aainfix &lt;=c0V13Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V10V2Iainfix =V8aConsc1aConsc2aNilIainfix =V8ainfix ++V5aConsc2aNilAainfix =V10ainfix +V7c1Aainfix &lt;=c0V2Aainfix =anthV15V8aSomeagetV9ainfix -ainfix +V0V15V2Iainfix &lt;=c0ainfix -ainfix +V0V15V2Aainfix =anthV15V8aSomeagetV9ainfix +V0V15Iainfix &lt;ainfix +V0V15V2Iainfix &lt;V15V10Aainfix &lt;=c0V15FAainfix =V10alengthV8Aainfix &lt;=V10V2Aainfix &lt;=c0V10Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V7V2Iainfix =V5aConsc1aNilIainfix =V5ainfix ++V4aConsc1aNilAainfix =V7ainfix +V1c1Aainfix &lt;=c0V2Aainfix =anthV16V5aSomeagetV6ainfix -ainfix +V0V16V2Iainfix &lt;=c0ainfix -ainfix +V0V16V2Aainfix =anthV16V5aSomeagetV6ainfix +V0V16Iainfix &lt;ainfix +V0V16V2Iainfix &lt;V16V7Aainfix &lt;=c0V16FAainfix =V7alengthV5Aainfix &lt;=V7V2Aainfix &lt;=c0V7Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V1V2Iainfix =V4aNilAainfix =V2c3Aainfix &lt;=c0V2Aainfix =anthV17V4aSomeagetV3ainfix -ainfix +V0V17V2Iainfix &lt;=c0ainfix -ainfix +V0V17V2Aainfix =anthV17V4aSomeagetV3ainfix +V0V17Iainfix &lt;ainfix +V0V17V2Iainfix &lt;V17V1Aainfix &lt;=c0V17FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &gt;c3c0">
@@ -1388,7 +1388,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="106" loccnumb="6" loccnume="14"
       expl="8. precondition"
-      sum="aae73245b9cefa815471c6b19b067c40"
+      sum="9817233291a46deaffaee95e0dfd732c"
       proved="true"
       expanded="false"
       shape="preconditionainfix &gt;V13c0Iainfix =V11aConsc1aConsc2aConsc3aNilIainfix =V11ainfix ++V8aConsc3aNilAainfix =V13ainfix +V10c1Aainfix &lt;=c0V2Aainfix =anthV14V11aSomeagetV12ainfix -ainfix +V0V14V2Iainfix &lt;=c0ainfix -ainfix +V0V14V2Aainfix =anthV14V11aSomeagetV12ainfix +V0V14Iainfix &lt;ainfix +V0V14V2Iainfix &lt;V14V13Aainfix &lt;=c0V14FAainfix =V13alengthV11Aainfix &lt;=V13V2Aainfix &lt;=c0V13Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V10V2Iainfix =V8aConsc1aConsc2aNilIainfix =V8ainfix ++V5aConsc2aNilAainfix =V10ainfix +V7c1Aainfix &lt;=c0V2Aainfix =anthV15V8aSomeagetV9ainfix -ainfix +V0V15V2Iainfix &lt;=c0ainfix -ainfix +V0V15V2Aainfix =anthV15V8aSomeagetV9ainfix +V0V15Iainfix &lt;ainfix +V0V15V2Iainfix &lt;V15V10Aainfix &lt;=c0V15FAainfix =V10alengthV8Aainfix &lt;=V10V2Aainfix &lt;=c0V10Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V7V2Iainfix =V5aConsc1aNilIainfix =V5ainfix ++V4aConsc1aNilAainfix =V7ainfix +V1c1Aainfix &lt;=c0V2Aainfix =anthV16V5aSomeagetV6ainfix -ainfix +V0V16V2Iainfix &lt;=c0ainfix -ainfix +V0V16V2Aainfix =anthV16V5aSomeagetV6ainfix +V0V16Iainfix &lt;ainfix +V0V16V2Iainfix &lt;V16V7Aainfix &lt;=c0V16FAainfix =V7alengthV5Aainfix &lt;=V7V2Aainfix &lt;=c0V7Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V1V2Iainfix =V4aNilAainfix =V2c3Aainfix &lt;=c0V2Aainfix =anthV17V4aSomeagetV3ainfix -ainfix +V0V17V2Iainfix &lt;=c0ainfix -ainfix +V0V17V2Aainfix =anthV17V4aSomeagetV3ainfix +V0V17Iainfix &lt;ainfix +V0V17V2Iainfix &lt;V17V1Aainfix &lt;=c0V17FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &gt;c3c0">
@@ -1408,7 +1408,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="106" loccnumb="6" loccnume="14"
       expl="9. assertion"
-      sum="eb047dafa52f1bd2a01fdf12dbada71e"
+      sum="50e3b92602496a008ee333c4d616fa0a"
       proved="true"
       expanded="false"
       shape="assertionainfix =V17c1ICfaNilainfix =V14V19Aainfix =V17V18aConsVVV11Aainfix =V15ainfix -V13c1Aainfix =anthV20V14aSomeagetV12ainfix -ainfix +V16V20V2Iainfix &lt;=c0ainfix -ainfix +V16V20V2Aainfix =anthV20V14aSomeagetV12ainfix +V16V20Iainfix &lt;ainfix +V16V20V2Iainfix &lt;V20V15Aainfix &lt;=c0V20FAainfix =V15alengthV14Aainfix &lt;=V15V2Aainfix &lt;=c0V15Aainfix &lt;V16V2Aainfix &lt;=c0V16FFIainfix &gt;V13c0Iainfix =V11aConsc1aConsc2aConsc3aNilIainfix =V11ainfix ++V8aConsc3aNilAainfix =V13ainfix +V10c1Aainfix &lt;=c0V2Aainfix =anthV21V11aSomeagetV12ainfix -ainfix +V0V21V2Iainfix &lt;=c0ainfix -ainfix +V0V21V2Aainfix =anthV21V11aSomeagetV12ainfix +V0V21Iainfix &lt;ainfix +V0V21V2Iainfix &lt;V21V13Aainfix &lt;=c0V21FAainfix =V13alengthV11Aainfix &lt;=V13V2Aainfix &lt;=c0V13Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V10V2Iainfix =V8aConsc1aConsc2aNilIainfix =V8ainfix ++V5aConsc2aNilAainfix =V10ainfix +V7c1Aainfix &lt;=c0V2Aainfix =anthV22V8aSomeagetV9ainfix -ainfix +V0V22V2Iainfix &lt;=c0ainfix -ainfix +V0V22V2Aainfix =anthV22V8aSomeagetV9ainfix +V0V22Iainfix &lt;ainfix +V0V22V2Iainfix &lt;V22V10Aainfix &lt;=c0V22FAainfix =V10alengthV8Aainfix &lt;=V10V2Aainfix &lt;=c0V10Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V7V2Iainfix =V5aConsc1aNilIainfix =V5ainfix ++V4aConsc1aNilAainfix =V7ainfix +V1c1Aainfix &lt;=c0V2Aainfix =anthV23V5aSomeagetV6ainfix -ainfix +V0V23V2Iainfix &lt;=c0ainfix -ainfix +V0V23V2Aainfix =anthV23V5aSomeagetV6ainfix +V0V23Iainfix &lt;ainfix +V0V23V2Iainfix &lt;V23V7Aainfix &lt;=c0V23FAainfix =V7alengthV5Aainfix &lt;=V7V2Aainfix &lt;=c0V7Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V1V2Iainfix =V4aNilAainfix =V2c3Aainfix &lt;=c0V2Aainfix =anthV24V4aSomeagetV3ainfix -ainfix +V0V24V2Iainfix &lt;=c0ainfix -ainfix +V0V24V2Aainfix =anthV24V4aSomeagetV3ainfix +V0V24Iainfix &lt;ainfix +V0V24V2Iainfix &lt;V24V1Aainfix &lt;=c0V24FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &gt;c3c0">
@@ -1428,7 +1428,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="106" loccnumb="6" loccnume="14"
       expl="10. assertion"
-      sum="55e30d2545c4aafd7752a1e90350a69b"
+      sum="dea27ea7126e38ef52d55c866677586f"
       proved="true"
       expanded="false"
       shape="assertionainfix =V14aConsc2aConsc3aNilIainfix =V17c1ICfaNilainfix =V14V19Aainfix =V17V18aConsVVV11Aainfix =V15ainfix -V13c1Aainfix =anthV20V14aSomeagetV12ainfix -ainfix +V16V20V2Iainfix &lt;=c0ainfix -ainfix +V16V20V2Aainfix =anthV20V14aSomeagetV12ainfix +V16V20Iainfix &lt;ainfix +V16V20V2Iainfix &lt;V20V15Aainfix &lt;=c0V20FAainfix =V15alengthV14Aainfix &lt;=V15V2Aainfix &lt;=c0V15Aainfix &lt;V16V2Aainfix &lt;=c0V16FFIainfix &gt;V13c0Iainfix =V11aConsc1aConsc2aConsc3aNilIainfix =V11ainfix ++V8aConsc3aNilAainfix =V13ainfix +V10c1Aainfix &lt;=c0V2Aainfix =anthV21V11aSomeagetV12ainfix -ainfix +V0V21V2Iainfix &lt;=c0ainfix -ainfix +V0V21V2Aainfix =anthV21V11aSomeagetV12ainfix +V0V21Iainfix &lt;ainfix +V0V21V2Iainfix &lt;V21V13Aainfix &lt;=c0V21FAainfix =V13alengthV11Aainfix &lt;=V13V2Aainfix &lt;=c0V13Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V10V2Iainfix =V8aConsc1aConsc2aNilIainfix =V8ainfix ++V5aConsc2aNilAainfix =V10ainfix +V7c1Aainfix &lt;=c0V2Aainfix =anthV22V8aSomeagetV9ainfix -ainfix +V0V22V2Iainfix &lt;=c0ainfix -ainfix +V0V22V2Aainfix =anthV22V8aSomeagetV9ainfix +V0V22Iainfix &lt;ainfix +V0V22V2Iainfix &lt;V22V10Aainfix &lt;=c0V22FAainfix =V10alengthV8Aainfix &lt;=V10V2Aainfix &lt;=c0V10Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V7V2Iainfix =V5aConsc1aNilIainfix =V5ainfix ++V4aConsc1aNilAainfix =V7ainfix +V1c1Aainfix &lt;=c0V2Aainfix =anthV23V5aSomeagetV6ainfix -ainfix +V0V23V2Iainfix &lt;=c0ainfix -ainfix +V0V23V2Aainfix =anthV23V5aSomeagetV6ainfix +V0V23Iainfix &lt;ainfix +V0V23V2Iainfix &lt;V23V7Aainfix &lt;=c0V23FAainfix =V7alengthV5Aainfix &lt;=V7V2Aainfix &lt;=c0V7Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V1V2Iainfix =V4aNilAainfix =V2c3Aainfix &lt;=c0V2Aainfix =anthV24V4aSomeagetV3ainfix -ainfix +V0V24V2Iainfix &lt;=c0ainfix -ainfix +V0V24V2Aainfix =anthV24V4aSomeagetV3ainfix +V0V24Iainfix &lt;ainfix +V0V24V2Iainfix &lt;V24V1Aainfix &lt;=c0V24FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &gt;c3c0">
@@ -1448,7 +1448,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="106" loccnumb="6" loccnume="14"
       expl="11. precondition"
-      sum="b19925eb327e920bf1d7431d6f12a152"
+      sum="6daafd77b8ee7639e881eb4ae7021f8a"
       proved="true"
       expanded="false"
       shape="preconditionainfix &lt;V15V2Iainfix =V14aConsc2aConsc3aNilIainfix =V17c1ICfaNilainfix =V14V19Aainfix =V17V18aConsVVV11Aainfix =V15ainfix -V13c1Aainfix =anthV20V14aSomeagetV12ainfix -ainfix +V16V20V2Iainfix &lt;=c0ainfix -ainfix +V16V20V2Aainfix =anthV20V14aSomeagetV12ainfix +V16V20Iainfix &lt;ainfix +V16V20V2Iainfix &lt;V20V15Aainfix &lt;=c0V20FAainfix =V15alengthV14Aainfix &lt;=V15V2Aainfix &lt;=c0V15Aainfix &lt;V16V2Aainfix &lt;=c0V16FFIainfix &gt;V13c0Iainfix =V11aConsc1aConsc2aConsc3aNilIainfix =V11ainfix ++V8aConsc3aNilAainfix =V13ainfix +V10c1Aainfix &lt;=c0V2Aainfix =anthV21V11aSomeagetV12ainfix -ainfix +V0V21V2Iainfix &lt;=c0ainfix -ainfix +V0V21V2Aainfix =anthV21V11aSomeagetV12ainfix +V0V21Iainfix &lt;ainfix +V0V21V2Iainfix &lt;V21V13Aainfix &lt;=c0V21FAainfix =V13alengthV11Aainfix &lt;=V13V2Aainfix &lt;=c0V13Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V10V2Iainfix =V8aConsc1aConsc2aNilIainfix =V8ainfix ++V5aConsc2aNilAainfix =V10ainfix +V7c1Aainfix &lt;=c0V2Aainfix =anthV22V8aSomeagetV9ainfix -ainfix +V0V22V2Iainfix &lt;=c0ainfix -ainfix +V0V22V2Aainfix =anthV22V8aSomeagetV9ainfix +V0V22Iainfix &lt;ainfix +V0V22V2Iainfix &lt;V22V10Aainfix &lt;=c0V22FAainfix =V10alengthV8Aainfix &lt;=V10V2Aainfix &lt;=c0V10Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V7V2Iainfix =V5aConsc1aNilIainfix =V5ainfix ++V4aConsc1aNilAainfix =V7ainfix +V1c1Aainfix &lt;=c0V2Aainfix =anthV23V5aSomeagetV6ainfix -ainfix +V0V23V2Iainfix &lt;=c0ainfix -ainfix +V0V23V2Aainfix =anthV23V5aSomeagetV6ainfix +V0V23Iainfix &lt;ainfix +V0V23V2Iainfix &lt;V23V7Aainfix &lt;=c0V23FAainfix =V7alengthV5Aainfix &lt;=V7V2Aainfix &lt;=c0V7Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V1V2Iainfix =V4aNilAainfix =V2c3Aainfix &lt;=c0V2Aainfix =anthV24V4aSomeagetV3ainfix -ainfix +V0V24V2Iainfix &lt;=c0ainfix -ainfix +V0V24V2Aainfix =anthV24V4aSomeagetV3ainfix +V0V24Iainfix &lt;ainfix +V0V24V2Iainfix &lt;V24V1Aainfix &lt;=c0V24FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &gt;c3c0">
@@ -1468,7 +1468,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="106" loccnumb="6" loccnume="14"
       expl="12. assertion"
-      sum="f0e52ab85e1726f450fdcf650858919f"
+      sum="341acf037bf7d48a8a5fc94e7a3a8223"
       proved="true"
       expanded="false"
       shape="assertionainfix =V18aConsc2aConsc3aConsc4aNilIainfix =V18ainfix ++V14aConsc4aNilAainfix =V20ainfix +V15c1Aainfix &lt;=c0V2Aainfix =anthV21V18aSomeagetV19ainfix -ainfix +V16V21V2Iainfix &lt;=c0ainfix -ainfix +V16V21V2Aainfix =anthV21V18aSomeagetV19ainfix +V16V21Iainfix &lt;ainfix +V16V21V2Iainfix &lt;V21V20Aainfix &lt;=c0V21FAainfix =V20alengthV18Aainfix &lt;=V20V2Aainfix &lt;=c0V20Aainfix &lt;V16V2Aainfix &lt;=c0V16FIainfix &lt;V15V2Iainfix =V14aConsc2aConsc3aNilIainfix =V17c1ICfaNilainfix =V14V23Aainfix =V17V22aConsVVV11Aainfix =V15ainfix -V13c1Aainfix =anthV24V14aSomeagetV12ainfix -ainfix +V16V24V2Iainfix &lt;=c0ainfix -ainfix +V16V24V2Aainfix =anthV24V14aSomeagetV12ainfix +V16V24Iainfix &lt;ainfix +V16V24V2Iainfix &lt;V24V15Aainfix &lt;=c0V24FAainfix =V15alengthV14Aainfix &lt;=V15V2Aainfix &lt;=c0V15Aainfix &lt;V16V2Aainfix &lt;=c0V16FFIainfix &gt;V13c0Iainfix =V11aConsc1aConsc2aConsc3aNilIainfix =V11ainfix ++V8aConsc3aNilAainfix =V13ainfix +V10c1Aainfix &lt;=c0V2Aainfix =anthV25V11aSomeagetV12ainfix -ainfix +V0V25V2Iainfix &lt;=c0ainfix -ainfix +V0V25V2Aainfix =anthV25V11aSomeagetV12ainfix +V0V25Iainfix &lt;ainfix +V0V25V2Iainfix &lt;V25V13Aainfix &lt;=c0V25FAainfix =V13alengthV11Aainfix &lt;=V13V2Aainfix &lt;=c0V13Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V10V2Iainfix =V8aConsc1aConsc2aNilIainfix =V8ainfix ++V5aConsc2aNilAainfix =V10ainfix +V7c1Aainfix &lt;=c0V2Aainfix =anthV26V8aSomeagetV9ainfix -ainfix +V0V26V2Iainfix &lt;=c0ainfix -ainfix +V0V26V2Aainfix =anthV26V8aSomeagetV9ainfix +V0V26Iainfix &lt;ainfix +V0V26V2Iainfix &lt;V26V10Aainfix &lt;=c0V26FAainfix =V10alengthV8Aainfix &lt;=V10V2Aainfix &lt;=c0V10Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V7V2Iainfix =V5aConsc1aNilIainfix =V5ainfix ++V4aConsc1aNilAainfix =V7ainfix +V1c1Aainfix &lt;=c0V2Aainfix =anthV27V5aSomeagetV6ainfix -ainfix +V0V27V2Iainfix &lt;=c0ainfix -ainfix +V0V27V2Aainfix =anthV27V5aSomeagetV6ainfix +V0V27Iainfix &lt;ainfix +V0V27V2Iainfix &lt;V27V7Aainfix &lt;=c0V27FAainfix =V7alengthV5Aainfix &lt;=V7V2Aainfix &lt;=c0V7Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V1V2Iainfix =V4aNilAainfix =V2c3Aainfix &lt;=c0V2Aainfix =anthV28V4aSomeagetV3ainfix -ainfix +V0V28V2Iainfix &lt;=c0ainfix -ainfix +V0V28V2Aainfix =anthV28V4aSomeagetV3ainfix +V0V28Iainfix &lt;ainfix +V0V28V2Iainfix &lt;V28V1Aainfix &lt;=c0V28FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &gt;c3c0">
@@ -1488,7 +1488,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="106" loccnumb="6" loccnume="14"
       expl="13. precondition"
-      sum="6ae91a495f7bf0d9c83f7034faa05ad0"
+      sum="645387a0fc1cbda2c1c8d934b6a33fc9"
       proved="true"
       expanded="false"
       shape="preconditionainfix &gt;V20c0Iainfix =V18aConsc2aConsc3aConsc4aNilIainfix =V18ainfix ++V14aConsc4aNilAainfix =V20ainfix +V15c1Aainfix &lt;=c0V2Aainfix =anthV21V18aSomeagetV19ainfix -ainfix +V16V21V2Iainfix &lt;=c0ainfix -ainfix +V16V21V2Aainfix =anthV21V18aSomeagetV19ainfix +V16V21Iainfix &lt;ainfix +V16V21V2Iainfix &lt;V21V20Aainfix &lt;=c0V21FAainfix =V20alengthV18Aainfix &lt;=V20V2Aainfix &lt;=c0V20Aainfix &lt;V16V2Aainfix &lt;=c0V16FIainfix &lt;V15V2Iainfix =V14aConsc2aConsc3aNilIainfix =V17c1ICfaNilainfix =V14V23Aainfix =V17V22aConsVVV11Aainfix =V15ainfix -V13c1Aainfix =anthV24V14aSomeagetV12ainfix -ainfix +V16V24V2Iainfix &lt;=c0ainfix -ainfix +V16V24V2Aainfix =anthV24V14aSomeagetV12ainfix +V16V24Iainfix &lt;ainfix +V16V24V2Iainfix &lt;V24V15Aainfix &lt;=c0V24FAainfix =V15alengthV14Aainfix &lt;=V15V2Aainfix &lt;=c0V15Aainfix &lt;V16V2Aainfix &lt;=c0V16FFIainfix &gt;V13c0Iainfix =V11aConsc1aConsc2aConsc3aNilIainfix =V11ainfix ++V8aConsc3aNilAainfix =V13ainfix +V10c1Aainfix &lt;=c0V2Aainfix =anthV25V11aSomeagetV12ainfix -ainfix +V0V25V2Iainfix &lt;=c0ainfix -ainfix +V0V25V2Aainfix =anthV25V11aSomeagetV12ainfix +V0V25Iainfix &lt;ainfix +V0V25V2Iainfix &lt;V25V13Aainfix &lt;=c0V25FAainfix =V13alengthV11Aainfix &lt;=V13V2Aainfix &lt;=c0V13Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V10V2Iainfix =V8aConsc1aConsc2aNilIainfix =V8ainfix ++V5aConsc2aNilAainfix =V10ainfix +V7c1Aainfix &lt;=c0V2Aainfix =anthV26V8aSomeagetV9ainfix -ainfix +V0V26V2Iainfix &lt;=c0ainfix -ainfix +V0V26V2Aainfix =anthV26V8aSomeagetV9ainfix +V0V26Iainfix &lt;ainfix +V0V26V2Iainfix &lt;V26V10Aainfix &lt;=c0V26FAainfix =V10alengthV8Aainfix &lt;=V10V2Aainfix &lt;=c0V10Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V7V2Iainfix =V5aConsc1aNilIainfix =V5ainfix ++V4aConsc1aNilAainfix =V7ainfix +V1c1Aainfix &lt;=c0V2Aainfix =anthV27V5aSomeagetV6ainfix -ainfix +V0V27V2Iainfix &lt;=c0ainfix -ainfix +V0V27V2Aainfix =anthV27V5aSomeagetV6ainfix +V0V27Iainfix &lt;ainfix +V0V27V2Iainfix &lt;V27V7Aainfix &lt;=c0V27FAainfix =V7alengthV5Aainfix &lt;=V7V2Aainfix &lt;=c0V7Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V1V2Iainfix =V4aNilAainfix =V2c3Aainfix &lt;=c0V2Aainfix =anthV28V4aSomeagetV3ainfix -ainfix +V0V28V2Iainfix &lt;=c0ainfix -ainfix +V0V28V2Aainfix =anthV28V4aSomeagetV3ainfix +V0V28Iainfix &lt;ainfix +V0V28V2Iainfix &lt;V28V1Aainfix &lt;=c0V28FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &gt;c3c0">
@@ -1508,7 +1508,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="106" loccnumb="6" loccnume="14"
       expl="14. assertion"
-      sum="2a68e6f643a52cca2455f089a69df34c"
+      sum="772ba70d5b515fcdceea429e4f62cbac"
       proved="true"
       expanded="false"
       shape="assertionainfix =V24c2ICfaNilainfix =V21V26Aainfix =V24V25aConsVVV18Aainfix =V22ainfix -V20c1Aainfix =anthV27V21aSomeagetV19ainfix -ainfix +V23V27V2Iainfix &lt;=c0ainfix -ainfix +V23V27V2Aainfix =anthV27V21aSomeagetV19ainfix +V23V27Iainfix &lt;ainfix +V23V27V2Iainfix &lt;V27V22Aainfix &lt;=c0V27FAainfix =V22alengthV21Aainfix &lt;=V22V2Aainfix &lt;=c0V22Aainfix &lt;V23V2Aainfix &lt;=c0V23FFIainfix &gt;V20c0Iainfix =V18aConsc2aConsc3aConsc4aNilIainfix =V18ainfix ++V14aConsc4aNilAainfix =V20ainfix +V15c1Aainfix &lt;=c0V2Aainfix =anthV28V18aSomeagetV19ainfix -ainfix +V16V28V2Iainfix &lt;=c0ainfix -ainfix +V16V28V2Aainfix =anthV28V18aSomeagetV19ainfix +V16V28Iainfix &lt;ainfix +V16V28V2Iainfix &lt;V28V20Aainfix &lt;=c0V28FAainfix =V20alengthV18Aainfix &lt;=V20V2Aainfix &lt;=c0V20Aainfix &lt;V16V2Aainfix &lt;=c0V16FIainfix &lt;V15V2Iainfix =V14aConsc2aConsc3aNilIainfix =V17c1ICfaNilainfix =V14V30Aainfix =V17V29aConsVVV11Aainfix =V15ainfix -V13c1Aainfix =anthV31V14aSomeagetV12ainfix -ainfix +V16V31V2Iainfix &lt;=c0ainfix -ainfix +V16V31V2Aainfix =anthV31V14aSomeagetV12ainfix +V16V31Iainfix &lt;ainfix +V16V31V2Iainfix &lt;V31V15Aainfix &lt;=c0V31FAainfix =V15alengthV14Aainfix &lt;=V15V2Aainfix &lt;=c0V15Aainfix &lt;V16V2Aainfix &lt;=c0V16FFIainfix &gt;V13c0Iainfix =V11aConsc1aConsc2aConsc3aNilIainfix =V11ainfix ++V8aConsc3aNilAainfix =V13ainfix +V10c1Aainfix &lt;=c0V2Aainfix =anthV32V11aSomeagetV12ainfix -ainfix +V0V32V2Iainfix &lt;=c0ainfix -ainfix +V0V32V2Aainfix =anthV32V11aSomeagetV12ainfix +V0V32Iainfix &lt;ainfix +V0V32V2Iainfix &lt;V32V13Aainfix &lt;=c0V32FAainfix =V13alengthV11Aainfix &lt;=V13V2Aainfix &lt;=c0V13Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V10V2Iainfix =V8aConsc1aConsc2aNilIainfix =V8ainfix ++V5aConsc2aNilAainfix =V10ainfix +V7c1Aainfix &lt;=c0V2Aainfix =anthV33V8aSomeagetV9ainfix -ainfix +V0V33V2Iainfix &lt;=c0ainfix -ainfix +V0V33V2Aainfix =anthV33V8aSomeagetV9ainfix +V0V33Iainfix &lt;ainfix +V0V33V2Iainfix &lt;V33V10Aainfix &lt;=c0V33FAainfix =V10alengthV8Aainfix &lt;=V10V2Aainfix &lt;=c0V10Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V7V2Iainfix =V5aConsc1aNilIainfix =V5ainfix ++V4aConsc1aNilAainfix =V7ainfix +V1c1Aainfix &lt;=c0V2Aainfix =anthV34V5aSomeagetV6ainfix -ainfix +V0V34V2Iainfix &lt;=c0ainfix -ainfix +V0V34V2Aainfix =anthV34V5aSomeagetV6ainfix +V0V34Iainfix &lt;ainfix +V0V34V2Iainfix &lt;V34V7Aainfix &lt;=c0V34FAainfix =V7alengthV5Aainfix &lt;=V7V2Aainfix &lt;=c0V7Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V1V2Iainfix =V4aNilAainfix =V2c3Aainfix &lt;=c0V2Aainfix =anthV35V4aSomeagetV3ainfix -ainfix +V0V35V2Iainfix &lt;=c0ainfix -ainfix +V0V35V2Aainfix =anthV35V4aSomeagetV3ainfix +V0V35Iainfix &lt;ainfix +V0V35V2Iainfix &lt;V35V1Aainfix &lt;=c0V35FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &gt;c3c0">
@@ -1528,7 +1528,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="106" loccnumb="6" loccnume="14"
       expl="15. assertion"
-      sum="ea708a892eb9a87a9bf78af04dc4a51a"
+      sum="6333ac2cb02d9526435fc0e91253b3ad"
       proved="true"
       expanded="false"
       shape="assertionainfix =V21aConsc3aConsc4aNilIainfix =V24c2ICfaNilainfix =V21V26Aainfix =V24V25aConsVVV18Aainfix =V22ainfix -V20c1Aainfix =anthV27V21aSomeagetV19ainfix -ainfix +V23V27V2Iainfix &lt;=c0ainfix -ainfix +V23V27V2Aainfix =anthV27V21aSomeagetV19ainfix +V23V27Iainfix &lt;ainfix +V23V27V2Iainfix &lt;V27V22Aainfix &lt;=c0V27FAainfix =V22alengthV21Aainfix &lt;=V22V2Aainfix &lt;=c0V22Aainfix &lt;V23V2Aainfix &lt;=c0V23FFIainfix &gt;V20c0Iainfix =V18aConsc2aConsc3aConsc4aNilIainfix =V18ainfix ++V14aConsc4aNilAainfix =V20ainfix +V15c1Aainfix &lt;=c0V2Aainfix =anthV28V18aSomeagetV19ainfix -ainfix +V16V28V2Iainfix &lt;=c0ainfix -ainfix +V16V28V2Aainfix =anthV28V18aSomeagetV19ainfix +V16V28Iainfix &lt;ainfix +V16V28V2Iainfix &lt;V28V20Aainfix &lt;=c0V28FAainfix =V20alengthV18Aainfix &lt;=V20V2Aainfix &lt;=c0V20Aainfix &lt;V16V2Aainfix &lt;=c0V16FIainfix &lt;V15V2Iainfix =V14aConsc2aConsc3aNilIainfix =V17c1ICfaNilainfix =V14V30Aainfix =V17V29aConsVVV11Aainfix =V15ainfix -V13c1Aainfix =anthV31V14aSomeagetV12ainfix -ainfix +V16V31V2Iainfix &lt;=c0ainfix -ainfix +V16V31V2Aainfix =anthV31V14aSomeagetV12ainfix +V16V31Iainfix &lt;ainfix +V16V31V2Iainfix &lt;V31V15Aainfix &lt;=c0V31FAainfix =V15alengthV14Aainfix &lt;=V15V2Aainfix &lt;=c0V15Aainfix &lt;V16V2Aainfix &lt;=c0V16FFIainfix &gt;V13c0Iainfix =V11aConsc1aConsc2aConsc3aNilIainfix =V11ainfix ++V8aConsc3aNilAainfix =V13ainfix +V10c1Aainfix &lt;=c0V2Aainfix =anthV32V11aSomeagetV12ainfix -ainfix +V0V32V2Iainfix &lt;=c0ainfix -ainfix +V0V32V2Aainfix =anthV32V11aSomeagetV12ainfix +V0V32Iainfix &lt;ainfix +V0V32V2Iainfix &lt;V32V13Aainfix &lt;=c0V32FAainfix =V13alengthV11Aainfix &lt;=V13V2Aainfix &lt;=c0V13Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V10V2Iainfix =V8aConsc1aConsc2aNilIainfix =V8ainfix ++V5aConsc2aNilAainfix =V10ainfix +V7c1Aainfix &lt;=c0V2Aainfix =anthV33V8aSomeagetV9ainfix -ainfix +V0V33V2Iainfix &lt;=c0ainfix -ainfix +V0V33V2Aainfix =anthV33V8aSomeagetV9ainfix +V0V33Iainfix &lt;ainfix +V0V33V2Iainfix &lt;V33V10Aainfix &lt;=c0V33FAainfix =V10alengthV8Aainfix &lt;=V10V2Aainfix &lt;=c0V10Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V7V2Iainfix =V5aConsc1aNilIainfix =V5ainfix ++V4aConsc1aNilAainfix =V7ainfix +V1c1Aainfix &lt;=c0V2Aainfix =anthV34V5aSomeagetV6ainfix -ainfix +V0V34V2Iainfix &lt;=c0ainfix -ainfix +V0V34V2Aainfix =anthV34V5aSomeagetV6ainfix +V0V34Iainfix &lt;ainfix +V0V34V2Iainfix &lt;V34V7Aainfix &lt;=c0V34FAainfix =V7alengthV5Aainfix &lt;=V7V2Aainfix &lt;=c0V7Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V1V2Iainfix =V4aNilAainfix =V2c3Aainfix &lt;=c0V2Aainfix =anthV35V4aSomeagetV3ainfix -ainfix +V0V35V2Iainfix &lt;=c0ainfix -ainfix +V0V35V2Aainfix =anthV35V4aSomeagetV3ainfix +V0V35Iainfix &lt;ainfix +V0V35V2Iainfix &lt;V35V1Aainfix &lt;=c0V35FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &gt;c3c0">
@@ -1548,7 +1548,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="106" loccnumb="6" loccnume="14"
       expl="16. precondition"
-      sum="77c911a95ffd858fbf42ba0f6863c1f4"
+      sum="06f9cde8900ba2cc5c0af163b436dca2"
       proved="true"
       expanded="false"
       shape="preconditionainfix &gt;V22c0Iainfix =V21aConsc3aConsc4aNilIainfix =V24c2ICfaNilainfix =V21V26Aainfix =V24V25aConsVVV18Aainfix =V22ainfix -V20c1Aainfix =anthV27V21aSomeagetV19ainfix -ainfix +V23V27V2Iainfix &lt;=c0ainfix -ainfix +V23V27V2Aainfix =anthV27V21aSomeagetV19ainfix +V23V27Iainfix &lt;ainfix +V23V27V2Iainfix &lt;V27V22Aainfix &lt;=c0V27FAainfix =V22alengthV21Aainfix &lt;=V22V2Aainfix &lt;=c0V22Aainfix &lt;V23V2Aainfix &lt;=c0V23FFIainfix &gt;V20c0Iainfix =V18aConsc2aConsc3aConsc4aNilIainfix =V18ainfix ++V14aConsc4aNilAainfix =V20ainfix +V15c1Aainfix &lt;=c0V2Aainfix =anthV28V18aSomeagetV19ainfix -ainfix +V16V28V2Iainfix &lt;=c0ainfix -ainfix +V16V28V2Aainfix =anthV28V18aSomeagetV19ainfix +V16V28Iainfix &lt;ainfix +V16V28V2Iainfix &lt;V28V20Aainfix &lt;=c0V28FAainfix =V20alengthV18Aainfix &lt;=V20V2Aainfix &lt;=c0V20Aainfix &lt;V16V2Aainfix &lt;=c0V16FIainfix &lt;V15V2Iainfix =V14aConsc2aConsc3aNilIainfix =V17c1ICfaNilainfix =V14V30Aainfix =V17V29aConsVVV11Aainfix =V15ainfix -V13c1Aainfix =anthV31V14aSomeagetV12ainfix -ainfix +V16V31V2Iainfix &lt;=c0ainfix -ainfix +V16V31V2Aainfix =anthV31V14aSomeagetV12ainfix +V16V31Iainfix &lt;ainfix +V16V31V2Iainfix &lt;V31V15Aainfix &lt;=c0V31FAainfix =V15alengthV14Aainfix &lt;=V15V2Aainfix &lt;=c0V15Aainfix &lt;V16V2Aainfix &lt;=c0V16FFIainfix &gt;V13c0Iainfix =V11aConsc1aConsc2aConsc3aNilIainfix =V11ainfix ++V8aConsc3aNilAainfix =V13ainfix +V10c1Aainfix &lt;=c0V2Aainfix =anthV32V11aSomeagetV12ainfix -ainfix +V0V32V2Iainfix &lt;=c0ainfix -ainfix +V0V32V2Aainfix =anthV32V11aSomeagetV12ainfix +V0V32Iainfix &lt;ainfix +V0V32V2Iainfix &lt;V32V13Aainfix &lt;=c0V32FAainfix =V13alengthV11Aainfix &lt;=V13V2Aainfix &lt;=c0V13Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V10V2Iainfix =V8aConsc1aConsc2aNilIainfix =V8ainfix ++V5aConsc2aNilAainfix =V10ainfix +V7c1Aainfix &lt;=c0V2Aainfix =anthV33V8aSomeagetV9ainfix -ainfix +V0V33V2Iainfix &lt;=c0ainfix -ainfix +V0V33V2Aainfix =anthV33V8aSomeagetV9ainfix +V0V33Iainfix &lt;ainfix +V0V33V2Iainfix &lt;V33V10Aainfix &lt;=c0V33FAainfix =V10alengthV8Aainfix &lt;=V10V2Aainfix &lt;=c0V10Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V7V2Iainfix =V5aConsc1aNilIainfix =V5ainfix ++V4aConsc1aNilAainfix =V7ainfix +V1c1Aainfix &lt;=c0V2Aainfix =anthV34V5aSomeagetV6ainfix -ainfix +V0V34V2Iainfix &lt;=c0ainfix -ainfix +V0V34V2Aainfix =anthV34V5aSomeagetV6ainfix +V0V34Iainfix &lt;ainfix +V0V34V2Iainfix &lt;V34V7Aainfix &lt;=c0V34FAainfix =V7alengthV5Aainfix &lt;=V7V2Aainfix &lt;=c0V7Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V1V2Iainfix =V4aNilAainfix =V2c3Aainfix &lt;=c0V2Aainfix =anthV35V4aSomeagetV3ainfix -ainfix +V0V35V2Iainfix &lt;=c0ainfix -ainfix +V0V35V2Aainfix =anthV35V4aSomeagetV3ainfix +V0V35Iainfix &lt;ainfix +V0V35V2Iainfix &lt;V35V1Aainfix &lt;=c0V35FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &gt;c3c0">
@@ -1568,7 +1568,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="106" loccnumb="6" loccnume="14"
       expl="17. assertion"
-      sum="bc068abab2f772869cef747890ae4668"
+      sum="d9e21b6f28f44e976545f9601c758c39"
       proved="true"
       expanded="false"
       shape="assertionainfix =V28c3ICfaNilainfix =V25V30Aainfix =V28V29aConsVVV21Aainfix =V26ainfix -V22c1Aainfix =anthV31V25aSomeagetV19ainfix -ainfix +V27V31V2Iainfix &lt;=c0ainfix -ainfix +V27V31V2Aainfix =anthV31V25aSomeagetV19ainfix +V27V31Iainfix &lt;ainfix +V27V31V2Iainfix &lt;V31V26Aainfix &lt;=c0V31FAainfix =V26alengthV25Aainfix &lt;=V26V2Aainfix &lt;=c0V26Aainfix &lt;V27V2Aainfix &lt;=c0V27FFIainfix &gt;V22c0Iainfix =V21aConsc3aConsc4aNilIainfix =V24c2ICfaNilainfix =V21V33Aainfix =V24V32aConsVVV18Aainfix =V22ainfix -V20c1Aainfix =anthV34V21aSomeagetV19ainfix -ainfix +V23V34V2Iainfix &lt;=c0ainfix -ainfix +V23V34V2Aainfix =anthV34V21aSomeagetV19ainfix +V23V34Iainfix &lt;ainfix +V23V34V2Iainfix &lt;V34V22Aainfix &lt;=c0V34FAainfix =V22alengthV21Aainfix &lt;=V22V2Aainfix &lt;=c0V22Aainfix &lt;V23V2Aainfix &lt;=c0V23FFIainfix &gt;V20c0Iainfix =V18aConsc2aConsc3aConsc4aNilIainfix =V18ainfix ++V14aConsc4aNilAainfix =V20ainfix +V15c1Aainfix &lt;=c0V2Aainfix =anthV35V18aSomeagetV19ainfix -ainfix +V16V35V2Iainfix &lt;=c0ainfix -ainfix +V16V35V2Aainfix =anthV35V18aSomeagetV19ainfix +V16V35Iainfix &lt;ainfix +V16V35V2Iainfix &lt;V35V20Aainfix &lt;=c0V35FAainfix =V20alengthV18Aainfix &lt;=V20V2Aainfix &lt;=c0V20Aainfix &lt;V16V2Aainfix &lt;=c0V16FIainfix &lt;V15V2Iainfix =V14aConsc2aConsc3aNilIainfix =V17c1ICfaNilainfix =V14V37Aainfix =V17V36aConsVVV11Aainfix =V15ainfix -V13c1Aainfix =anthV38V14aSomeagetV12ainfix -ainfix +V16V38V2Iainfix &lt;=c0ainfix -ainfix +V16V38V2Aainfix =anthV38V14aSomeagetV12ainfix +V16V38Iainfix &lt;ainfix +V16V38V2Iainfix &lt;V38V15Aainfix &lt;=c0V38FAainfix =V15alengthV14Aainfix &lt;=V15V2Aainfix &lt;=c0V15Aainfix &lt;V16V2Aainfix &lt;=c0V16FFIainfix &gt;V13c0Iainfix =V11aConsc1aConsc2aConsc3aNilIainfix =V11ainfix ++V8aConsc3aNilAainfix =V13ainfix +V10c1Aainfix &lt;=c0V2Aainfix =anthV39V11aSomeagetV12ainfix -ainfix +V0V39V2Iainfix &lt;=c0ainfix -ainfix +V0V39V2Aainfix =anthV39V11aSomeagetV12ainfix +V0V39Iainfix &lt;ainfix +V0V39V2Iainfix &lt;V39V13Aainfix &lt;=c0V39FAainfix =V13alengthV11Aainfix &lt;=V13V2Aainfix &lt;=c0V13Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V10V2Iainfix =V8aConsc1aConsc2aNilIainfix =V8ainfix ++V5aConsc2aNilAainfix =V10ainfix +V7c1Aainfix &lt;=c0V2Aainfix =anthV40V8aSomeagetV9ainfix -ainfix +V0V40V2Iainfix &lt;=c0ainfix -ainfix +V0V40V2Aainfix =anthV40V8aSomeagetV9ainfix +V0V40Iainfix &lt;ainfix +V0V40V2Iainfix &lt;V40V10Aainfix &lt;=c0V40FAainfix =V10alengthV8Aainfix &lt;=V10V2Aainfix &lt;=c0V10Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V7V2Iainfix =V5aConsc1aNilIainfix =V5ainfix ++V4aConsc1aNilAainfix =V7ainfix +V1c1Aainfix &lt;=c0V2Aainfix =anthV41V5aSomeagetV6ainfix -ainfix +V0V41V2Iainfix &lt;=c0ainfix -ainfix +V0V41V2Aainfix =anthV41V5aSomeagetV6ainfix +V0V41Iainfix &lt;ainfix +V0V41V2Iainfix &lt;V41V7Aainfix &lt;=c0V41FAainfix =V7alengthV5Aainfix &lt;=V7V2Aainfix &lt;=c0V7Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V1V2Iainfix =V4aNilAainfix =V2c3Aainfix &lt;=c0V2Aainfix =anthV42V4aSomeagetV3ainfix -ainfix +V0V42V2Iainfix &lt;=c0ainfix -ainfix +V0V42V2Aainfix =anthV42V4aSomeagetV3ainfix +V0V42Iainfix &lt;ainfix +V0V42V2Iainfix &lt;V42V1Aainfix &lt;=c0V42FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &gt;c3c0">
@@ -1588,7 +1588,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="106" loccnumb="6" loccnume="14"
       expl="18. assertion"
-      sum="b580143efe67f941522f380f250a0245"
+      sum="d6273be6e3c01ba10f6af04acab5e42e"
       proved="true"
       expanded="false"
       shape="assertionainfix =V25aConsc4aNilIainfix =V28c3ICfaNilainfix =V25V30Aainfix =V28V29aConsVVV21Aainfix =V26ainfix -V22c1Aainfix =anthV31V25aSomeagetV19ainfix -ainfix +V27V31V2Iainfix &lt;=c0ainfix -ainfix +V27V31V2Aainfix =anthV31V25aSomeagetV19ainfix +V27V31Iainfix &lt;ainfix +V27V31V2Iainfix &lt;V31V26Aainfix &lt;=c0V31FAainfix =V26alengthV25Aainfix &lt;=V26V2Aainfix &lt;=c0V26Aainfix &lt;V27V2Aainfix &lt;=c0V27FFIainfix &gt;V22c0Iainfix =V21aConsc3aConsc4aNilIainfix =V24c2ICfaNilainfix =V21V33Aainfix =V24V32aConsVVV18Aainfix =V22ainfix -V20c1Aainfix =anthV34V21aSomeagetV19ainfix -ainfix +V23V34V2Iainfix &lt;=c0ainfix -ainfix +V23V34V2Aainfix =anthV34V21aSomeagetV19ainfix +V23V34Iainfix &lt;ainfix +V23V34V2Iainfix &lt;V34V22Aainfix &lt;=c0V34FAainfix =V22alengthV21Aainfix &lt;=V22V2Aainfix &lt;=c0V22Aainfix &lt;V23V2Aainfix &lt;=c0V23FFIainfix &gt;V20c0Iainfix =V18aConsc2aConsc3aConsc4aNilIainfix =V18ainfix ++V14aConsc4aNilAainfix =V20ainfix +V15c1Aainfix &lt;=c0V2Aainfix =anthV35V18aSomeagetV19ainfix -ainfix +V16V35V2Iainfix &lt;=c0ainfix -ainfix +V16V35V2Aainfix =anthV35V18aSomeagetV19ainfix +V16V35Iainfix &lt;ainfix +V16V35V2Iainfix &lt;V35V20Aainfix &lt;=c0V35FAainfix =V20alengthV18Aainfix &lt;=V20V2Aainfix &lt;=c0V20Aainfix &lt;V16V2Aainfix &lt;=c0V16FIainfix &lt;V15V2Iainfix =V14aConsc2aConsc3aNilIainfix =V17c1ICfaNilainfix =V14V37Aainfix =V17V36aConsVVV11Aainfix =V15ainfix -V13c1Aainfix =anthV38V14aSomeagetV12ainfix -ainfix +V16V38V2Iainfix &lt;=c0ainfix -ainfix +V16V38V2Aainfix =anthV38V14aSomeagetV12ainfix +V16V38Iainfix &lt;ainfix +V16V38V2Iainfix &lt;V38V15Aainfix &lt;=c0V38FAainfix =V15alengthV14Aainfix &lt;=V15V2Aainfix &lt;=c0V15Aainfix &lt;V16V2Aainfix &lt;=c0V16FFIainfix &gt;V13c0Iainfix =V11aConsc1aConsc2aConsc3aNilIainfix =V11ainfix ++V8aConsc3aNilAainfix =V13ainfix +V10c1Aainfix &lt;=c0V2Aainfix =anthV39V11aSomeagetV12ainfix -ainfix +V0V39V2Iainfix &lt;=c0ainfix -ainfix +V0V39V2Aainfix =anthV39V11aSomeagetV12ainfix +V0V39Iainfix &lt;ainfix +V0V39V2Iainfix &lt;V39V13Aainfix &lt;=c0V39FAainfix =V13alengthV11Aainfix &lt;=V13V2Aainfix &lt;=c0V13Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V10V2Iainfix =V8aConsc1aConsc2aNilIainfix =V8ainfix ++V5aConsc2aNilAainfix =V10ainfix +V7c1Aainfix &lt;=c0V2Aainfix =anthV40V8aSomeagetV9ainfix -ainfix +V0V40V2Iainfix &lt;=c0ainfix -ainfix +V0V40V2Aainfix =anthV40V8aSomeagetV9ainfix +V0V40Iainfix &lt;ainfix +V0V40V2Iainfix &lt;V40V10Aainfix &lt;=c0V40FAainfix =V10alengthV8Aainfix &lt;=V10V2Aainfix &lt;=c0V10Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V7V2Iainfix =V5aConsc1aNilIainfix =V5ainfix ++V4aConsc1aNilAainfix =V7ainfix +V1c1Aainfix &lt;=c0V2Aainfix =anthV41V5aSomeagetV6ainfix -ainfix +V0V41V2Iainfix &lt;=c0ainfix -ainfix +V0V41V2Aainfix =anthV41V5aSomeagetV6ainfix +V0V41Iainfix &lt;ainfix +V0V41V2Iainfix &lt;V41V7Aainfix &lt;=c0V41FAainfix =V7alengthV5Aainfix &lt;=V7V2Aainfix &lt;=c0V7Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V1V2Iainfix =V4aNilAainfix =V2c3Aainfix &lt;=c0V2Aainfix =anthV42V4aSomeagetV3ainfix -ainfix +V0V42V2Iainfix &lt;=c0ainfix -ainfix +V0V42V2Aainfix =anthV42V4aSomeagetV3ainfix +V0V42Iainfix &lt;ainfix +V0V42V2Iainfix &lt;V42V1Aainfix &lt;=c0V42FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &gt;c3c0">
@@ -1608,7 +1608,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="106" loccnumb="6" loccnume="14"
       expl="19. precondition"
-      sum="6d2d4ea17d8d454b37b0349e977ab98c"
+      sum="7edb6248013e8c0e1caa0b14dd2c9cab"
       proved="true"
       expanded="false"
       shape="preconditionainfix &gt;V26c0Iainfix =V25aConsc4aNilIainfix =V28c3ICfaNilainfix =V25V30Aainfix =V28V29aConsVVV21Aainfix =V26ainfix -V22c1Aainfix =anthV31V25aSomeagetV19ainfix -ainfix +V27V31V2Iainfix &lt;=c0ainfix -ainfix +V27V31V2Aainfix =anthV31V25aSomeagetV19ainfix +V27V31Iainfix &lt;ainfix +V27V31V2Iainfix &lt;V31V26Aainfix &lt;=c0V31FAainfix =V26alengthV25Aainfix &lt;=V26V2Aainfix &lt;=c0V26Aainfix &lt;V27V2Aainfix &lt;=c0V27FFIainfix &gt;V22c0Iainfix =V21aConsc3aConsc4aNilIainfix =V24c2ICfaNilainfix =V21V33Aainfix =V24V32aConsVVV18Aainfix =V22ainfix -V20c1Aainfix =anthV34V21aSomeagetV19ainfix -ainfix +V23V34V2Iainfix &lt;=c0ainfix -ainfix +V23V34V2Aainfix =anthV34V21aSomeagetV19ainfix +V23V34Iainfix &lt;ainfix +V23V34V2Iainfix &lt;V34V22Aainfix &lt;=c0V34FAainfix =V22alengthV21Aainfix &lt;=V22V2Aainfix &lt;=c0V22Aainfix &lt;V23V2Aainfix &lt;=c0V23FFIainfix &gt;V20c0Iainfix =V18aConsc2aConsc3aConsc4aNilIainfix =V18ainfix ++V14aConsc4aNilAainfix =V20ainfix +V15c1Aainfix &lt;=c0V2Aainfix =anthV35V18aSomeagetV19ainfix -ainfix +V16V35V2Iainfix &lt;=c0ainfix -ainfix +V16V35V2Aainfix =anthV35V18aSomeagetV19ainfix +V16V35Iainfix &lt;ainfix +V16V35V2Iainfix &lt;V35V20Aainfix &lt;=c0V35FAainfix =V20alengthV18Aainfix &lt;=V20V2Aainfix &lt;=c0V20Aainfix &lt;V16V2Aainfix &lt;=c0V16FIainfix &lt;V15V2Iainfix =V14aConsc2aConsc3aNilIainfix =V17c1ICfaNilainfix =V14V37Aainfix =V17V36aConsVVV11Aainfix =V15ainfix -V13c1Aainfix =anthV38V14aSomeagetV12ainfix -ainfix +V16V38V2Iainfix &lt;=c0ainfix -ainfix +V16V38V2Aainfix =anthV38V14aSomeagetV12ainfix +V16V38Iainfix &lt;ainfix +V16V38V2Iainfix &lt;V38V15Aainfix &lt;=c0V38FAainfix =V15alengthV14Aainfix &lt;=V15V2Aainfix &lt;=c0V15Aainfix &lt;V16V2Aainfix &lt;=c0V16FFIainfix &gt;V13c0Iainfix =V11aConsc1aConsc2aConsc3aNilIainfix =V11ainfix ++V8aConsc3aNilAainfix =V13ainfix +V10c1Aainfix &lt;=c0V2Aainfix =anthV39V11aSomeagetV12ainfix -ainfix +V0V39V2Iainfix &lt;=c0ainfix -ainfix +V0V39V2Aainfix =anthV39V11aSomeagetV12ainfix +V0V39Iainfix &lt;ainfix +V0V39V2Iainfix &lt;V39V13Aainfix &lt;=c0V39FAainfix =V13alengthV11Aainfix &lt;=V13V2Aainfix &lt;=c0V13Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V10V2Iainfix =V8aConsc1aConsc2aNilIainfix =V8ainfix ++V5aConsc2aNilAainfix =V10ainfix +V7c1Aainfix &lt;=c0V2Aainfix =anthV40V8aSomeagetV9ainfix -ainfix +V0V40V2Iainfix &lt;=c0ainfix -ainfix +V0V40V2Aainfix =anthV40V8aSomeagetV9ainfix +V0V40Iainfix &lt;ainfix +V0V40V2Iainfix &lt;V40V10Aainfix &lt;=c0V40FAainfix =V10alengthV8Aainfix &lt;=V10V2Aainfix &lt;=c0V10Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V7V2Iainfix =V5aConsc1aNilIainfix =V5ainfix ++V4aConsc1aNilAainfix =V7ainfix +V1c1Aainfix &lt;=c0V2Aainfix =anthV41V5aSomeagetV6ainfix -ainfix +V0V41V2Iainfix &lt;=c0ainfix -ainfix +V0V41V2Aainfix =anthV41V5aSomeagetV6ainfix +V0V41Iainfix &lt;ainfix +V0V41V2Iainfix &lt;V41V7Aainfix &lt;=c0V41FAainfix =V7alengthV5Aainfix &lt;=V7V2Aainfix &lt;=c0V7Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V1V2Iainfix =V4aNilAainfix =V2c3Aainfix &lt;=c0V2Aainfix =anthV42V4aSomeagetV3ainfix -ainfix +V0V42V2Iainfix &lt;=c0ainfix -ainfix +V0V42V2Aainfix =anthV42V4aSomeagetV3ainfix +V0V42Iainfix &lt;ainfix +V0V42V2Iainfix &lt;V42V1Aainfix &lt;=c0V42FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &gt;c3c0">
@@ -1628,7 +1628,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="106" loccnumb="6" loccnume="14"
       expl="20. assertion"
-      sum="53875348ec68af42a1f49ab7478af78d"
+      sum="1e51f316b4ae862bf56f696597a28ed0"
       proved="true"
       expanded="false"
       shape="assertionainfix =V32c4ICfaNilainfix =V29V34Aainfix =V32V33aConsVVV25Aainfix =V30ainfix -V26c1Aainfix =anthV35V29aSomeagetV19ainfix -ainfix +V31V35V2Iainfix &lt;=c0ainfix -ainfix +V31V35V2Aainfix =anthV35V29aSomeagetV19ainfix +V31V35Iainfix &lt;ainfix +V31V35V2Iainfix &lt;V35V30Aainfix &lt;=c0V35FAainfix =V30alengthV29Aainfix &lt;=V30V2Aainfix &lt;=c0V30Aainfix &lt;V31V2Aainfix &lt;=c0V31FFIainfix &gt;V26c0Iainfix =V25aConsc4aNilIainfix =V28c3ICfaNilainfix =V25V37Aainfix =V28V36aConsVVV21Aainfix =V26ainfix -V22c1Aainfix =anthV38V25aSomeagetV19ainfix -ainfix +V27V38V2Iainfix &lt;=c0ainfix -ainfix +V27V38V2Aainfix =anthV38V25aSomeagetV19ainfix +V27V38Iainfix &lt;ainfix +V27V38V2Iainfix &lt;V38V26Aainfix &lt;=c0V38FAainfix =V26alengthV25Aainfix &lt;=V26V2Aainfix &lt;=c0V26Aainfix &lt;V27V2Aainfix &lt;=c0V27FFIainfix &gt;V22c0Iainfix =V21aConsc3aConsc4aNilIainfix =V24c2ICfaNilainfix =V21V40Aainfix =V24V39aConsVVV18Aainfix =V22ainfix -V20c1Aainfix =anthV41V21aSomeagetV19ainfix -ainfix +V23V41V2Iainfix &lt;=c0ainfix -ainfix +V23V41V2Aainfix =anthV41V21aSomeagetV19ainfix +V23V41Iainfix &lt;ainfix +V23V41V2Iainfix &lt;V41V22Aainfix &lt;=c0V41FAainfix =V22alengthV21Aainfix &lt;=V22V2Aainfix &lt;=c0V22Aainfix &lt;V23V2Aainfix &lt;=c0V23FFIainfix &gt;V20c0Iainfix =V18aConsc2aConsc3aConsc4aNilIainfix =V18ainfix ++V14aConsc4aNilAainfix =V20ainfix +V15c1Aainfix &lt;=c0V2Aainfix =anthV42V18aSomeagetV19ainfix -ainfix +V16V42V2Iainfix &lt;=c0ainfix -ainfix +V16V42V2Aainfix =anthV42V18aSomeagetV19ainfix +V16V42Iainfix &lt;ainfix +V16V42V2Iainfix &lt;V42V20Aainfix &lt;=c0V42FAainfix =V20alengthV18Aainfix &lt;=V20V2Aainfix &lt;=c0V20Aainfix &lt;V16V2Aainfix &lt;=c0V16FIainfix &lt;V15V2Iainfix =V14aConsc2aConsc3aNilIainfix =V17c1ICfaNilainfix =V14V44Aainfix =V17V43aConsVVV11Aainfix =V15ainfix -V13c1Aainfix =anthV45V14aSomeagetV12ainfix -ainfix +V16V45V2Iainfix &lt;=c0ainfix -ainfix +V16V45V2Aainfix =anthV45V14aSomeagetV12ainfix +V16V45Iainfix &lt;ainfix +V16V45V2Iainfix &lt;V45V15Aainfix &lt;=c0V45FAainfix =V15alengthV14Aainfix &lt;=V15V2Aainfix &lt;=c0V15Aainfix &lt;V16V2Aainfix &lt;=c0V16FFIainfix &gt;V13c0Iainfix =V11aConsc1aConsc2aConsc3aNilIainfix =V11ainfix ++V8aConsc3aNilAainfix =V13ainfix +V10c1Aainfix &lt;=c0V2Aainfix =anthV46V11aSomeagetV12ainfix -ainfix +V0V46V2Iainfix &lt;=c0ainfix -ainfix +V0V46V2Aainfix =anthV46V11aSomeagetV12ainfix +V0V46Iainfix &lt;ainfix +V0V46V2Iainfix &lt;V46V13Aainfix &lt;=c0V46FAainfix =V13alengthV11Aainfix &lt;=V13V2Aainfix &lt;=c0V13Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V10V2Iainfix =V8aConsc1aConsc2aNilIainfix =V8ainfix ++V5aConsc2aNilAainfix =V10ainfix +V7c1Aainfix &lt;=c0V2Aainfix =anthV47V8aSomeagetV9ainfix -ainfix +V0V47V2Iainfix &lt;=c0ainfix -ainfix +V0V47V2Aainfix =anthV47V8aSomeagetV9ainfix +V0V47Iainfix &lt;ainfix +V0V47V2Iainfix &lt;V47V10Aainfix &lt;=c0V47FAainfix =V10alengthV8Aainfix &lt;=V10V2Aainfix &lt;=c0V10Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V7V2Iainfix =V5aConsc1aNilIainfix =V5ainfix ++V4aConsc1aNilAainfix =V7ainfix +V1c1Aainfix &lt;=c0V2Aainfix =anthV48V5aSomeagetV6ainfix -ainfix +V0V48V2Iainfix &lt;=c0ainfix -ainfix +V0V48V2Aainfix =anthV48V5aSomeagetV6ainfix +V0V48Iainfix &lt;ainfix +V0V48V2Iainfix &lt;V48V7Aainfix &lt;=c0V48FAainfix =V7alengthV5Aainfix &lt;=V7V2Aainfix &lt;=c0V7Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &lt;V1V2Iainfix =V4aNilAainfix =V2c3Aainfix &lt;=c0V2Aainfix =anthV49V4aSomeagetV3ainfix -ainfix +V0V49V2Iainfix &lt;=c0ainfix -ainfix +V0V49V2Aainfix =anthV49V4aSomeagetV3ainfix +V0V49Iainfix &lt;ainfix +V0V49V2Iainfix &lt;V49V1Aainfix &lt;=c0V49FAainfix =V1alengthV4Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aainfix &lt;V0V2Aainfix &lt;=c0V0FIainfix &gt;c3c0">
@@ -1650,7 +1650,7 @@
     locfile="../vstte12_ring_buffer.mlw"
     loclnum="127" loccnumb="6" loccnume="10"
     expl="VC for test"
-    sum="4ee249fa90805cf2d06a246b108b4df6"
+    sum="e2c0931ad5bdbbcea195fe0d3f224d96"
     proved="true"
     expanded="false"
     shape="ainfix =V28V2ICfaNilainfix =V25V30Aainfix =V28V29aConsVVV21Aainfix =V26ainfix -V22c1Aainfix =anthV31V25aSomeagetV19ainfix -ainfix +V27V31V5Iainfix &lt;=c0ainfix -ainfix +V27V31V5Aainfix =anthV31V25aSomeagetV19ainfix +V27V31Iainfix &lt;ainfix +V27V31V5Iainfix &lt;V31V26Aainfix &lt;=c0V31FAainfix =V26alengthV25Aainfix &lt;=V26V5Aainfix &lt;=c0V26Aainfix &lt;V27V5Aainfix &lt;=c0V27FFAainfix &gt;V22c0Aainfix =V24V1ICfaNilainfix =V21V33Aainfix =V24V32aConsVVV18Aainfix =V22ainfix -V20c1Aainfix =anthV34V21aSomeagetV19ainfix -ainfix +V23V34V5Iainfix &lt;=c0ainfix -ainfix +V23V34V5Aainfix =anthV34V21aSomeagetV19ainfix +V23V34Iainfix &lt;ainfix +V23V34V5Iainfix &lt;V34V22Aainfix &lt;=c0V34FAainfix =V22alengthV21Aainfix &lt;=V22V5Aainfix &lt;=c0V22Aainfix &lt;V23V5Aainfix &lt;=c0V23FFAainfix &gt;V20c0Aainfix =V18aConsV1aConsV2aNilIainfix =V18ainfix ++V14aConsV2aNilAainfix =V20ainfix +V15c1Aainfix &lt;=c0V5Aainfix =anthV35V18aSomeagetV19ainfix -ainfix +V16V35V5Iainfix &lt;=c0ainfix -ainfix +V16V35V5Aainfix =anthV35V18aSomeagetV19ainfix +V16V35Iainfix &lt;ainfix +V16V35V5Iainfix &lt;V35V20Aainfix &lt;=c0V35FAainfix =V20alengthV18Aainfix &lt;=V20V5Aainfix &lt;=c0V20Aainfix &lt;V16V5Aainfix &lt;=c0V16FAainfix &lt;V15V5Aainfix =V14aConsV1aNilAainfix =V17V0ICfaNilainfix =V14V37Aainfix =V17V36aConsVVV11Aainfix =V15ainfix -V13c1Aainfix =anthV38V14aSomeagetV12ainfix -ainfix +V16V38V5Iainfix &lt;=c0ainfix -ainfix +V16V38V5Aainfix =anthV38V14aSomeagetV12ainfix +V16V38Iainfix &lt;ainfix +V16V38V5Iainfix &lt;V38V15Aainfix &lt;=c0V38FAainfix =V15alengthV14Aainfix &lt;=V15V5Aainfix &lt;=c0V15Aainfix &lt;V16V5Aainfix &lt;=c0V16FFAainfix &gt;V13c0Aainfix =V11aConsV0aConsV1aNilIainfix =V11ainfix ++V8aConsV1aNilAainfix =V13ainfix +V10c1Aainfix &lt;=c0V5Aainfix =anthV39V11aSomeagetV12ainfix -ainfix +V3V39V5Iainfix &lt;=c0ainfix -ainfix +V3V39V5Aainfix =anthV39V11aSomeagetV12ainfix +V3V39Iainfix &lt;ainfix +V3V39V5Iainfix &lt;V39V13Aainfix &lt;=c0V39FAainfix =V13alengthV11Aainfix &lt;=V13V5Aainfix &lt;=c0V13Aainfix &lt;V3V5Aainfix &lt;=c0V3FAainfix &lt;V10V5Iainfix =V8ainfix ++V7aConsV0aNilAainfix =V10ainfix +V4c1Aainfix &lt;=c0V5Aainfix =anthV40V8aSomeagetV9ainfix -ainfix +V3V40V5Iainfix &lt;=c0ainfix -ainfix +V3V40V5Aainfix =anthV40V8aSomeagetV9ainfix +V3V40Iainfix &lt;ainfix +V3V40V5Iainfix &lt;V40V10Aainfix &lt;=c0V40FAainfix =V10alengthV8Aainfix &lt;=V10V5Aainfix &lt;=c0V10Aainfix &lt;V3V5Aainfix &lt;=c0V3FAainfix &lt;V4V5Iainfix =V7aNilAainfix =V5c2Aainfix &lt;=c0V5Aainfix =anthV41V7aSomeagetV6ainfix -ainfix +V3V41V5Iainfix &lt;=c0ainfix -ainfix +V3V41V5Aainfix =anthV41V7aSomeagetV6ainfix +V3V41Iainfix &lt;ainfix +V3V41V5Iainfix &lt;V41V4Aainfix &lt;=c0V41FAainfix =V4alengthV7Aainfix &lt;=V4V5Aainfix &lt;=c0V4Aainfix &lt;V3V5Aainfix &lt;=c0V3FAainfix &gt;c2c0F">
@@ -1665,7 +1665,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="127" loccnumb="6" loccnume="10"
       expl="1. precondition"
-      sum="7242f420a1a699ae5da26f58993250db"
+      sum="73045756407806853d49f9baad4a9785"
       proved="true"
       expanded="false"
       shape="preconditionainfix &gt;c2c0F">
@@ -1685,7 +1685,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="127" loccnumb="6" loccnume="10"
       expl="2. precondition"
-      sum="1e1f75a859ef5df03cb589e84edcbddf"
+      sum="5e3fee3e2e52035eb8123528acc7d737"
       proved="true"
       expanded="false"
       shape="preconditionainfix &lt;V4V5Iainfix =V7aNilAainfix =V5c2Aainfix &lt;=c0V5Aainfix =anthV8V7aSomeagetV6ainfix -ainfix +V3V8V5Iainfix &lt;=c0ainfix -ainfix +V3V8V5Aainfix =anthV8V7aSomeagetV6ainfix +V3V8Iainfix &lt;ainfix +V3V8V5Iainfix &lt;V8V4Aainfix &lt;=c0V8FAainfix =V4alengthV7Aainfix &lt;=V4V5Aainfix &lt;=c0V4Aainfix &lt;V3V5Aainfix &lt;=c0V3FIainfix &gt;c2c0F">
@@ -1705,7 +1705,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="127" loccnumb="6" loccnume="10"
       expl="3. precondition"
-      sum="95f129687a2f5a6dc8a6a84ef33b320b"
+      sum="708fdb7f833b35950249d70aba37aa22"
       proved="true"
       expanded="false"
       shape="preconditionainfix &lt;V10V5Iainfix =V8ainfix ++V7aConsV0aNilAainfix =V10ainfix +V4c1Aainfix &lt;=c0V5Aainfix =anthV11V8aSomeagetV9ainfix -ainfix +V3V11V5Iainfix &lt;=c0ainfix -ainfix +V3V11V5Aainfix =anthV11V8aSomeagetV9ainfix +V3V11Iainfix &lt;ainfix +V3V11V5Iainfix &lt;V11V10Aainfix &lt;=c0V11FAainfix =V10alengthV8Aainfix &lt;=V10V5Aainfix &lt;=c0V10Aainfix &lt;V3V5Aainfix &lt;=c0V3FIainfix &lt;V4V5Iainfix =V7aNilAainfix =V5c2Aainfix &lt;=c0V5Aainfix =anthV12V7aSomeagetV6ainfix -ainfix +V3V12V5Iainfix &lt;=c0ainfix -ainfix +V3V12V5Aainfix =anthV12V7aSomeagetV6ainfix +V3V12Iainfix &lt;ainfix +V3V12V5Iainfix &lt;V12V4Aainfix &lt;=c0V12FAainfix =V4alengthV7Aainfix &lt;=V4V5Aainfix &lt;=c0V4Aainfix &lt;V3V5Aainfix &lt;=c0V3FIainfix &gt;c2c0F">
@@ -1725,7 +1725,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="127" loccnumb="6" loccnume="10"
       expl="4. assertion"
-      sum="ac3a27c293bb74c910ddea8fae454aeb"
+      sum="d0a9fe49d3134a896afa05683799e37a"
       proved="true"
       expanded="false"
       shape="assertionainfix =V11aConsV0aConsV1aNilIainfix =V11ainfix ++V8aConsV1aNilAainfix =V13ainfix +V10c1Aainfix &lt;=c0V5Aainfix =anthV14V11aSomeagetV12ainfix -ainfix +V3V14V5Iainfix &lt;=c0ainfix -ainfix +V3V14V5Aainfix =anthV14V11aSomeagetV12ainfix +V3V14Iainfix &lt;ainfix +V3V14V5Iainfix &lt;V14V13Aainfix &lt;=c0V14FAainfix =V13alengthV11Aainfix &lt;=V13V5Aainfix &lt;=c0V13Aainfix &lt;V3V5Aainfix &lt;=c0V3FIainfix &lt;V10V5Iainfix =V8ainfix ++V7aConsV0aNilAainfix =V10ainfix +V4c1Aainfix &lt;=c0V5Aainfix =anthV15V8aSomeagetV9ainfix -ainfix +V3V15V5Iainfix &lt;=c0ainfix -ainfix +V3V15V5Aainfix =anthV15V8aSomeagetV9ainfix +V3V15Iainfix &lt;ainfix +V3V15V5Iainfix &lt;V15V10Aainfix &lt;=c0V15FAainfix =V10alengthV8Aainfix &lt;=V10V5Aainfix &lt;=c0V10Aainfix &lt;V3V5Aainfix &lt;=c0V3FIainfix &lt;V4V5Iainfix =V7aNilAainfix =V5c2Aainfix &lt;=c0V5Aainfix =anthV16V7aSomeagetV6ainfix -ainfix +V3V16V5Iainfix &lt;=c0ainfix -ainfix +V3V16V5Aainfix =anthV16V7aSomeagetV6ainfix +V3V16Iainfix &lt;ainfix +V3V16V5Iainfix &lt;V16V4Aainfix &lt;=c0V16FAainfix =V4alengthV7Aainfix &lt;=V4V5Aainfix &lt;=c0V4Aainfix &lt;V3V5Aainfix &lt;=c0V3FIainfix &gt;c2c0F">
@@ -1745,7 +1745,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="127" loccnumb="6" loccnume="10"
       expl="5. precondition"
-      sum="1052cafc8f8219cf14a8a02dc9fcf887"
+      sum="808ae23b0e9a50c5617b804d27a8424c"
       proved="true"
       expanded="false"
       shape="preconditionainfix &gt;V13c0Iainfix =V11aConsV0aConsV1aNilIainfix =V11ainfix ++V8aConsV1aNilAainfix =V13ainfix +V10c1Aainfix &lt;=c0V5Aainfix =anthV14V11aSomeagetV12ainfix -ainfix +V3V14V5Iainfix &lt;=c0ainfix -ainfix +V3V14V5Aainfix =anthV14V11aSomeagetV12ainfix +V3V14Iainfix &lt;ainfix +V3V14V5Iainfix &lt;V14V13Aainfix &lt;=c0V14FAainfix =V13alengthV11Aainfix &lt;=V13V5Aainfix &lt;=c0V13Aainfix &lt;V3V5Aainfix &lt;=c0V3FIainfix &lt;V10V5Iainfix =V8ainfix ++V7aConsV0aNilAainfix =V10ainfix +V4c1Aainfix &lt;=c0V5Aainfix =anthV15V8aSomeagetV9ainfix -ainfix +V3V15V5Iainfix &lt;=c0ainfix -ainfix +V3V15V5Aainfix =anthV15V8aSomeagetV9ainfix +V3V15Iainfix &lt;ainfix +V3V15V5Iainfix &lt;V15V10Aainfix &lt;=c0V15FAainfix =V10alengthV8Aainfix &lt;=V10V5Aainfix &lt;=c0V10Aainfix &lt;V3V5Aainfix &lt;=c0V3FIainfix &lt;V4V5Iainfix =V7aNilAainfix =V5c2Aainfix &lt;=c0V5Aainfix =anthV16V7aSomeagetV6ainfix -ainfix +V3V16V5Iainfix &lt;=c0ainfix -ainfix +V3V16V5Aainfix =anthV16V7aSomeagetV6ainfix +V3V16Iainfix &lt;ainfix +V3V16V5Iainfix &lt;V16V4Aainfix &lt;=c0V16FAainfix =V4alengthV7Aainfix &lt;=V4V5Aainfix &lt;=c0V4Aainfix &lt;V3V5Aainfix &lt;=c0V3FIainfix &gt;c2c0F">
@@ -1765,7 +1765,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="127" loccnumb="6" loccnume="10"
       expl="6. assertion"
-      sum="2abd71d0ee1c13c18d9e44c3b51d33b9"
+      sum="cf3df2d6dfa7a7220ccfc3797f6b8e55"
       proved="true"
       expanded="false"
       shape="assertionainfix =V17V0ICfaNilainfix =V14V19Aainfix =V17V18aConsVVV11Aainfix =V15ainfix -V13c1Aainfix =anthV20V14aSomeagetV12ainfix -ainfix +V16V20V5Iainfix &lt;=c0ainfix -ainfix +V16V20V5Aainfix =anthV20V14aSomeagetV12ainfix +V16V20Iainfix &lt;ainfix +V16V20V5Iainfix &lt;V20V15Aainfix &lt;=c0V20FAainfix =V15alengthV14Aainfix &lt;=V15V5Aainfix &lt;=c0V15Aainfix &lt;V16V5Aainfix &lt;=c0V16FFIainfix &gt;V13c0Iainfix =V11aConsV0aConsV1aNilIainfix =V11ainfix ++V8aConsV1aNilAainfix =V13ainfix +V10c1Aainfix &lt;=c0V5Aainfix =anthV21V11aSomeagetV12ainfix -ainfix +V3V21V5Iainfix &lt;=c0ainfix -ainfix +V3V21V5Aainfix =anthV21V11aSomeagetV12ainfix +V3V21Iainfix &lt;ainfix +V3V21V5Iainfix &lt;V21V13Aainfix &lt;=c0V21FAainfix =V13alengthV11Aainfix &lt;=V13V5Aainfix &lt;=c0V13Aainfix &lt;V3V5Aainfix &lt;=c0V3FIainfix &lt;V10V5Iainfix =V8ainfix ++V7aConsV0aNilAainfix =V10ainfix +V4c1Aainfix &lt;=c0V5Aainfix =anthV22V8aSomeagetV9ainfix -ainfix +V3V22V5Iainfix &lt;=c0ainfix -ainfix +V3V22V5Aainfix =anthV22V8aSomeagetV9ainfix +V3V22Iainfix &lt;ainfix +V3V22V5Iainfix &lt;V22V10Aainfix &lt;=c0V22FAainfix =V10alengthV8Aainfix &lt;=V10V5Aainfix &lt;=c0V10Aainfix &lt;V3V5Aainfix &lt;=c0V3FIainfix &lt;V4V5Iainfix =V7aNilAainfix =V5c2Aainfix &lt;=c0V5Aainfix =anthV23V7aSomeagetV6ainfix -ainfix +V3V23V5Iainfix &lt;=c0ainfix -ainfix +V3V23V5Aainfix =anthV23V7aSomeagetV6ainfix +V3V23Iainfix &lt;ainfix +V3V23V5Iainfix &lt;V23V4Aainfix &lt;=c0V23FAainfix =V4alengthV7Aainfix &lt;=V4V5Aainfix &lt;=c0V4Aainfix &lt;V3V5Aainfix &lt;=c0V3FIainfix &gt;c2c0F">
@@ -1785,7 +1785,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="127" loccnumb="6" loccnume="10"
       expl="7. assertion"
-      sum="ef29f1e8a7a44e401938e29ba6429916"
+      sum="d01fa2bad7ddeb2ed5c4873c298bdfd6"
       proved="true"
       expanded="false"
       shape="assertionainfix =V14aConsV1aNilIainfix =V17V0ICfaNilainfix =V14V19Aainfix =V17V18aConsVVV11Aainfix =V15ainfix -V13c1Aainfix =anthV20V14aSomeagetV12ainfix -ainfix +V16V20V5Iainfix &lt;=c0ainfix -ainfix +V16V20V5Aainfix =anthV20V14aSomeagetV12ainfix +V16V20Iainfix &lt;ainfix +V16V20V5Iainfix &lt;V20V15Aainfix &lt;=c0V20FAainfix =V15alengthV14Aainfix &lt;=V15V5Aainfix &lt;=c0V15Aainfix &lt;V16V5Aainfix &lt;=c0V16FFIainfix &gt;V13c0Iainfix =V11aConsV0aConsV1aNilIainfix =V11ainfix ++V8aConsV1aNilAainfix =V13ainfix +V10c1Aainfix &lt;=c0V5Aainfix =anthV21V11aSomeagetV12ainfix -ainfix +V3V21V5Iainfix &lt;=c0ainfix -ainfix +V3V21V5Aainfix =anthV21V11aSomeagetV12ainfix +V3V21Iainfix &lt;ainfix +V3V21V5Iainfix &lt;V21V13Aainfix &lt;=c0V21FAainfix =V13alengthV11Aainfix &lt;=V13V5Aainfix &lt;=c0V13Aainfix &lt;V3V5Aainfix &lt;=c0V3FIainfix &lt;V10V5Iainfix =V8ainfix ++V7aConsV0aNilAainfix =V10ainfix +V4c1Aainfix &lt;=c0V5Aainfix =anthV22V8aSomeagetV9ainfix -ainfix +V3V22V5Iainfix &lt;=c0ainfix -ainfix +V3V22V5Aainfix =anthV22V8aSomeagetV9ainfix +V3V22Iainfix &lt;ainfix +V3V22V5Iainfix &lt;V22V10Aainfix &lt;=c0V22FAainfix =V10alengthV8Aainfix &lt;=V10V5Aainfix &lt;=c0V10Aainfix &lt;V3V5Aainfix &lt;=c0V3FIainfix &lt;V4V5Iainfix =V7aNilAainfix =V5c2Aainfix &lt;=c0V5Aainfix =anthV23V7aSomeagetV6ainfix -ainfix +V3V23V5Iainfix &lt;=c0ainfix -ainfix +V3V23V5Aainfix =anthV23V7aSomeagetV6ainfix +V3V23Iainfix &lt;ainfix +V3V23V5Iainfix &lt;V23V4Aainfix &lt;=c0V23FAainfix =V4alengthV7Aainfix &lt;=V4V5Aainfix &lt;=c0V4Aainfix &lt;V3V5Aainfix &lt;=c0V3FIainfix &gt;c2c0F">
@@ -1805,7 +1805,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="127" loccnumb="6" loccnume="10"
       expl="8. precondition"
-      sum="36d2408dc15069cd021af6ee6ae5cc4f"
+      sum="15bc7552271b035ac901c567cb024159"
       proved="true"
       expanded="false"
       shape="preconditionainfix &lt;V15V5Iainfix =V14aConsV1aNilIainfix =V17V0ICfaNilainfix =V14V19Aainfix =V17V18aConsVVV11Aainfix =V15ainfix -V13c1Aainfix =anthV20V14aSomeagetV12ainfix -ainfix +V16V20V5Iainfix &lt;=c0ainfix -ainfix +V16V20V5Aainfix =anthV20V14aSomeagetV12ainfix +V16V20Iainfix &lt;ainfix +V16V20V5Iainfix &lt;V20V15Aainfix &lt;=c0V20FAainfix =V15alengthV14Aainfix &lt;=V15V5Aainfix &lt;=c0V15Aainfix &lt;V16V5Aainfix &lt;=c0V16FFIainfix &gt;V13c0Iainfix =V11aConsV0aConsV1aNilIainfix =V11ainfix ++V8aConsV1aNilAainfix =V13ainfix +V10c1Aainfix &lt;=c0V5Aainfix =anthV21V11aSomeagetV12ainfix -ainfix +V3V21V5Iainfix &lt;=c0ainfix -ainfix +V3V21V5Aainfix =anthV21V11aSomeagetV12ainfix +V3V21Iainfix &lt;ainfix +V3V21V5Iainfix &lt;V21V13Aainfix &lt;=c0V21FAainfix =V13alengthV11Aainfix &lt;=V13V5Aainfix &lt;=c0V13Aainfix &lt;V3V5Aainfix &lt;=c0V3FIainfix &lt;V10V5Iainfix =V8ainfix ++V7aConsV0aNilAainfix =V10ainfix +V4c1Aainfix &lt;=c0V5Aainfix =anthV22V8aSomeagetV9ainfix -ainfix +V3V22V5Iainfix &lt;=c0ainfix -ainfix +V3V22V5Aainfix =anthV22V8aSomeagetV9ainfix +V3V22Iainfix &lt;ainfix +V3V22V5Iainfix &lt;V22V10Aainfix &lt;=c0V22FAainfix =V10alengthV8Aainfix &lt;=V10V5Aainfix &lt;=c0V10Aainfix &lt;V3V5Aainfix &lt;=c0V3FIainfix &lt;V4V5Iainfix =V7aNilAainfix =V5c2Aainfix &lt;=c0V5Aainfix =anthV23V7aSomeagetV6ainfix -ainfix +V3V23V5Iainfix &lt;=c0ainfix -ainfix +V3V23V5Aainfix =anthV23V7aSomeagetV6ainfix +V3V23Iainfix &lt;ainfix +V3V23V5Iainfix &lt;V23V4Aainfix &lt;=c0V23FAainfix =V4alengthV7Aainfix &lt;=V4V5Aainfix &lt;=c0V4Aainfix &lt;V3V5Aainfix &lt;=c0V3FIainfix &gt;c2c0F">
@@ -1825,7 +1825,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="127" loccnumb="6" loccnume="10"
       expl="9. assertion"
-      sum="34238a1bccae54f0f7330f11eb6b3217"
+      sum="dcde2472fe979c0c5361fde317ea3890"
       proved="true"
       expanded="false"
       shape="assertionainfix =V18aConsV1aConsV2aNilIainfix =V18ainfix ++V14aConsV2aNilAainfix =V20ainfix +V15c1Aainfix &lt;=c0V5Aainfix =anthV21V18aSomeagetV19ainfix -ainfix +V16V21V5Iainfix &lt;=c0ainfix -ainfix +V16V21V5Aainfix =anthV21V18aSomeagetV19ainfix +V16V21Iainfix &lt;ainfix +V16V21V5Iainfix &lt;V21V20Aainfix &lt;=c0V21FAainfix =V20alengthV18Aainfix &lt;=V20V5Aainfix &lt;=c0V20Aainfix &lt;V16V5Aainfix &lt;=c0V16FIainfix &lt;V15V5Iainfix =V14aConsV1aNilIainfix =V17V0ICfaNilainfix =V14V23Aainfix =V17V22aConsVVV11Aainfix =V15ainfix -V13c1Aainfix =anthV24V14aSomeagetV12ainfix -ainfix +V16V24V5Iainfix &lt;=c0ainfix -ainfix +V16V24V5Aainfix =anthV24V14aSomeagetV12ainfix +V16V24Iainfix &lt;ainfix +V16V24V5Iainfix &lt;V24V15Aainfix &lt;=c0V24FAainfix =V15alengthV14Aainfix &lt;=V15V5Aainfix &lt;=c0V15Aainfix &lt;V16V5Aainfix &lt;=c0V16FFIainfix &gt;V13c0Iainfix =V11aConsV0aConsV1aNilIainfix =V11ainfix ++V8aConsV1aNilAainfix =V13ainfix +V10c1Aainfix &lt;=c0V5Aainfix =anthV25V11aSomeagetV12ainfix -ainfix +V3V25V5Iainfix &lt;=c0ainfix -ainfix +V3V25V5Aainfix =anthV25V11aSomeagetV12ainfix +V3V25Iainfix &lt;ainfix +V3V25V5Iainfix &lt;V25V13Aainfix &lt;=c0V25FAainfix =V13alengthV11Aainfix &lt;=V13V5Aainfix &lt;=c0V13Aainfix &lt;V3V5Aainfix &lt;=c0V3FIainfix &lt;V10V5Iainfix =V8ainfix ++V7aConsV0aNilAainfix =V10ainfix +V4c1Aainfix &lt;=c0V5Aainfix =anthV26V8aSomeagetV9ainfix -ainfix +V3V26V5Iainfix &lt;=c0ainfix -ainfix +V3V26V5Aainfix =anthV26V8aSomeagetV9ainfix +V3V26Iainfix &lt;ainfix +V3V26V5Iainfix &lt;V26V10Aainfix &lt;=c0V26FAainfix =V10alengthV8Aainfix &lt;=V10V5Aainfix &lt;=c0V10Aainfix &lt;V3V5Aainfix &lt;=c0V3FIainfix &lt;V4V5Iainfix =V7aNilAainfix =V5c2Aainfix &lt;=c0V5Aainfix =anthV27V7aSomeagetV6ainfix -ainfix +V3V27V5Iainfix &lt;=c0ainfix -ainfix +V3V27V5Aainfix =anthV27V7aSomeagetV6ainfix +V3V27Iainfix &lt;ainfix +V3V27V5Iainfix &lt;V27V4Aainfix &lt;=c0V27FAainfix =V4alengthV7Aainfix &lt;=V4V5Aainfix &lt;=c0V4Aainfix &lt;V3V5Aainfix &lt;=c0V3FIainfix &gt;c2c0F">
@@ -1845,7 +1845,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="127" loccnumb="6" loccnume="10"
       expl="10. precondition"
-      sum="7d13dbe8c147da8967180653a9b470cd"
+      sum="b310e9de55189465827cad86ea2a4971"
       proved="true"
       expanded="false"
       shape="preconditionainfix &gt;V20c0Iainfix =V18aConsV1aConsV2aNilIainfix =V18ainfix ++V14aConsV2aNilAainfix =V20ainfix +V15c1Aainfix &lt;=c0V5Aainfix =anthV21V18aSomeagetV19ainfix -ainfix +V16V21V5Iainfix &lt;=c0ainfix -ainfix +V16V21V5Aainfix =anthV21V18aSomeagetV19ainfix +V16V21Iainfix &lt;ainfix +V16V21V5Iainfix &lt;V21V20Aainfix &lt;=c0V21FAainfix =V20alengthV18Aainfix &lt;=V20V5Aainfix &lt;=c0V20Aainfix &lt;V16V5Aainfix &lt;=c0V16FIainfix &lt;V15V5Iainfix =V14aConsV1aNilIainfix =V17V0ICfaNilainfix =V14V23Aainfix =V17V22aConsVVV11Aainfix =V15ainfix -V13c1Aainfix =anthV24V14aSomeagetV12ainfix -ainfix +V16V24V5Iainfix &lt;=c0ainfix -ainfix +V16V24V5Aainfix =anthV24V14aSomeagetV12ainfix +V16V24Iainfix &lt;ainfix +V16V24V5Iainfix &lt;V24V15Aainfix &lt;=c0V24FAainfix =V15alengthV14Aainfix &lt;=V15V5Aainfix &lt;=c0V15Aainfix &lt;V16V5Aainfix &lt;=c0V16FFIainfix &gt;V13c0Iainfix =V11aConsV0aConsV1aNilIainfix =V11ainfix ++V8aConsV1aNilAainfix =V13ainfix +V10c1Aainfix &lt;=c0V5Aainfix =anthV25V11aSomeagetV12ainfix -ainfix +V3V25V5Iainfix &lt;=c0ainfix -ainfix +V3V25V5Aainfix =anthV25V11aSomeagetV12ainfix +V3V25Iainfix &lt;ainfix +V3V25V5Iainfix &lt;V25V13Aainfix &lt;=c0V25FAainfix =V13alengthV11Aainfix &lt;=V13V5Aainfix &lt;=c0V13Aainfix &lt;V3V5Aainfix &lt;=c0V3FIainfix &lt;V10V5Iainfix =V8ainfix ++V7aConsV0aNilAainfix =V10ainfix +V4c1Aainfix &lt;=c0V5Aainfix =anthV26V8aSomeagetV9ainfix -ainfix +V3V26V5Iainfix &lt;=c0ainfix -ainfix +V3V26V5Aainfix =anthV26V8aSomeagetV9ainfix +V3V26Iainfix &lt;ainfix +V3V26V5Iainfix &lt;V26V10Aainfix &lt;=c0V26FAainfix =V10alengthV8Aainfix &lt;=V10V5Aainfix &lt;=c0V10Aainfix &lt;V3V5Aainfix &lt;=c0V3FIainfix &lt;V4V5Iainfix =V7aNilAainfix =V5c2Aainfix &lt;=c0V5Aainfix =anthV27V7aSomeagetV6ainfix -ainfix +V3V27V5Iainfix &lt;=c0ainfix -ainfix +V3V27V5Aainfix =anthV27V7aSomeagetV6ainfix +V3V27Iainfix &lt;ainfix +V3V27V5Iainfix &lt;V27V4Aainfix &lt;=c0V27FAainfix =V4alengthV7Aainfix &lt;=V4V5Aainfix &lt;=c0V4Aainfix &lt;V3V5Aainfix &lt;=c0V3FIainfix &gt;c2c0F">
@@ -1865,7 +1865,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="127" loccnumb="6" loccnume="10"
       expl="11. assertion"
-      sum="f71e80660e6a5e9a44d643d09fe157c4"
+      sum="bf25f1f1cbde3795db0421acb1cdb486"
       proved="true"
       expanded="false"
       shape="assertionainfix =V24V1ICfaNilainfix =V21V26Aainfix =V24V25aConsVVV18Aainfix =V22ainfix -V20c1Aainfix =anthV27V21aSomeagetV19ainfix -ainfix +V23V27V5Iainfix &lt;=c0ainfix -ainfix +V23V27V5Aainfix =anthV27V21aSomeagetV19ainfix +V23V27Iainfix &lt;ainfix +V23V27V5Iainfix &lt;V27V22Aainfix &lt;=c0V27FAainfix =V22alengthV21Aainfix &lt;=V22V5Aainfix &lt;=c0V22Aainfix &lt;V23V5Aainfix &lt;=c0V23FFIainfix &gt;V20c0Iainfix =V18aConsV1aConsV2aNilIainfix =V18ainfix ++V14aConsV2aNilAainfix =V20ainfix +V15c1Aainfix &lt;=c0V5Aainfix =anthV28V18aSomeagetV19ainfix -ainfix +V16V28V5Iainfix &lt;=c0ainfix -ainfix +V16V28V5Aainfix =anthV28V18aSomeagetV19ainfix +V16V28Iainfix &lt;ainfix +V16V28V5Iainfix &lt;V28V20Aainfix &lt;=c0V28FAainfix =V20alengthV18Aainfix &lt;=V20V5Aainfix &lt;=c0V20Aainfix &lt;V16V5Aainfix &lt;=c0V16FIainfix &lt;V15V5Iainfix =V14aConsV1aNilIainfix =V17V0ICfaNilainfix =V14V30Aainfix =V17V29aConsVVV11Aainfix =V15ainfix -V13c1Aainfix =anthV31V14aSomeagetV12ainfix -ainfix +V16V31V5Iainfix &lt;=c0ainfix -ainfix +V16V31V5Aainfix =anthV31V14aSomeagetV12ainfix +V16V31Iainfix &lt;ainfix +V16V31V5Iainfix &lt;V31V15Aainfix &lt;=c0V31FAainfix =V15alengthV14Aainfix &lt;=V15V5Aainfix &lt;=c0V15Aainfix &lt;V16V5Aainfix &lt;=c0V16FFIainfix &gt;V13c0Iainfix =V11aConsV0aConsV1aNilIainfix =V11ainfix ++V8aConsV1aNilAainfix =V13ainfix +V10c1Aainfix &lt;=c0V5Aainfix =anthV32V11aSomeagetV12ainfix -ainfix +V3V32V5Iainfix &lt;=c0ainfix -ainfix +V3V32V5Aainfix =anthV32V11aSomeagetV12ainfix +V3V32Iainfix &lt;ainfix +V3V32V5Iainfix &lt;V32V13Aainfix &lt;=c0V32FAainfix =V13alengthV11Aainfix &lt;=V13V5Aainfix &lt;=c0V13Aainfix &lt;V3V5Aainfix &lt;=c0V3FIainfix &lt;V10V5Iainfix =V8ainfix ++V7aConsV0aNilAainfix =V10ainfix +V4c1Aainfix &lt;=c0V5Aainfix =anthV33V8aSomeagetV9ainfix -ainfix +V3V33V5Iainfix &lt;=c0ainfix -ainfix +V3V33V5Aainfix =anthV33V8aSomeagetV9ainfix +V3V33Iainfix &lt;ainfix +V3V33V5Iainfix &lt;V33V10Aainfix &lt;=c0V33FAainfix =V10alengthV8Aainfix &lt;=V10V5Aainfix &lt;=c0V10Aainfix &lt;V3V5Aainfix &lt;=c0V3FIainfix &lt;V4V5Iainfix =V7aNilAainfix =V5c2Aainfix &lt;=c0V5Aainfix =anthV34V7aSomeagetV6ainfix -ainfix +V3V34V5Iainfix &lt;=c0ainfix -ainfix +V3V34V5Aainfix =anthV34V7aSomeagetV6ainfix +V3V34Iainfix &lt;ainfix +V3V34V5Iainfix &lt;V34V4Aainfix &lt;=c0V34FAainfix =V4alengthV7Aainfix &lt;=V4V5Aainfix &lt;=c0V4Aainfix &lt;V3V5Aainfix &lt;=c0V3FIainfix &gt;c2c0F">
@@ -1885,7 +1885,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="127" loccnumb="6" loccnume="10"
       expl="12. precondition"
-      sum="f29c6abd3b19218b699ff42d60b411bc"
+      sum="19db00f829be7a52f90d8976e69b2dba"
       proved="true"
       expanded="false"
       shape="preconditionainfix &gt;V22c0Iainfix =V24V1ICfaNilainfix =V21V26Aainfix =V24V25aConsVVV18Aainfix =V22ainfix -V20c1Aainfix =anthV27V21aSomeagetV19ainfix -ainfix +V23V27V5Iainfix &lt;=c0ainfix -ainfix +V23V27V5Aainfix =anthV27V21aSomeagetV19ainfix +V23V27Iainfix &lt;ainfix +V23V27V5Iainfix &lt;V27V22Aainfix &lt;=c0V27FAainfix =V22alengthV21Aainfix &lt;=V22V5Aainfix &lt;=c0V22Aainfix &lt;V23V5Aainfix &lt;=c0V23FFIainfix &gt;V20c0Iainfix =V18aConsV1aConsV2aNilIainfix =V18ainfix ++V14aConsV2aNilAainfix =V20ainfix +V15c1Aainfix &lt;=c0V5Aainfix =anthV28V18aSomeagetV19ainfix -ainfix +V16V28V5Iainfix &lt;=c0ainfix -ainfix +V16V28V5Aainfix =anthV28V18aSomeagetV19ainfix +V16V28Iainfix &lt;ainfix +V16V28V5Iainfix &lt;V28V20Aainfix &lt;=c0V28FAainfix =V20alengthV18Aainfix &lt;=V20V5Aainfix &lt;=c0V20Aainfix &lt;V16V5Aainfix &lt;=c0V16FIainfix &lt;V15V5Iainfix =V14aConsV1aNilIainfix =V17V0ICfaNilainfix =V14V30Aainfix =V17V29aConsVVV11Aainfix =V15ainfix -V13c1Aainfix =anthV31V14aSomeagetV12ainfix -ainfix +V16V31V5Iainfix &lt;=c0ainfix -ainfix +V16V31V5Aainfix =anthV31V14aSomeagetV12ainfix +V16V31Iainfix &lt;ainfix +V16V31V5Iainfix &lt;V31V15Aainfix &lt;=c0V31FAainfix =V15alengthV14Aainfix &lt;=V15V5Aainfix &lt;=c0V15Aainfix &lt;V16V5Aainfix &lt;=c0V16FFIainfix &gt;V13c0Iainfix =V11aConsV0aConsV1aNilIainfix =V11ainfix ++V8aConsV1aNilAainfix =V13ainfix +V10c1Aainfix &lt;=c0V5Aainfix =anthV32V11aSomeagetV12ainfix -ainfix +V3V32V5Iainfix &lt;=c0ainfix -ainfix +V3V32V5Aainfix =anthV32V11aSomeagetV12ainfix +V3V32Iainfix &lt;ainfix +V3V32V5Iainfix &lt;V32V13Aainfix &lt;=c0V32FAainfix =V13alengthV11Aainfix &lt;=V13V5Aainfix &lt;=c0V13Aainfix &lt;V3V5Aainfix &lt;=c0V3FIainfix &lt;V10V5Iainfix =V8ainfix ++V7aConsV0aNilAainfix =V10ainfix +V4c1Aainfix &lt;=c0V5Aainfix =anthV33V8aSomeagetV9ainfix -ainfix +V3V33V5Iainfix &lt;=c0ainfix -ainfix +V3V33V5Aainfix =anthV33V8aSomeagetV9ainfix +V3V33Iainfix &lt;ainfix +V3V33V5Iainfix &lt;V33V10Aainfix &lt;=c0V33FAainfix =V10alengthV8Aainfix &lt;=V10V5Aainfix &lt;=c0V10Aainfix &lt;V3V5Aainfix &lt;=c0V3FIainfix &lt;V4V5Iainfix =V7aNilAainfix =V5c2Aainfix &lt;=c0V5Aainfix =anthV34V7aSomeagetV6ainfix -ainfix +V3V34V5Iainfix &lt;=c0ainfix -ainfix +V3V34V5Aainfix =anthV34V7aSomeagetV6ainfix +V3V34Iainfix &lt;ainfix +V3V34V5Iainfix &lt;V34V4Aainfix &lt;=c0V34FAainfix =V4alengthV7Aainfix &lt;=V4V5Aainfix &lt;=c0V4Aainfix &lt;V3V5Aainfix &lt;=c0V3FIainfix &gt;c2c0F">
@@ -1905,7 +1905,7 @@
       locfile="../vstte12_ring_buffer.mlw"
       loclnum="127" loccnumb="6" loccnume="10"
       expl="13. assertion"
-      sum="c9eb12a91e83894340b4dbb53cf2ef9a"
+      sum="8488cbc2c5197eb0f72bc09f460378d3"
       proved="true"
       expanded="false"
       shape="assertionainfix =V28V2ICfaNilainfix =V25V30Aainfix =V28V29aConsVVV21Aainfix =V26ainfix -V22c1Aainfix =anthV31V25aSomeagetV19ainfix -ainfix +V27V31V5Iainfix &lt;=c0ainfix -ainfix +V27V31V5Aainfix =anthV31V25aSomeagetV19ainfix +V27V31Iainfix &lt;ainfix +V27V31V5Iainfix &lt;V31V26Aainfix &lt;=c0V31FAainfix =V26alengthV25Aainfix &lt;=V26V5Aainfix &lt;=c0V26Aainfix &lt;V27V5Aainfix &lt;=c0V27FFIainfix &gt;V22c0Iainfix =V24V1ICfaNilainfix =V21V33Aainfix =V24V32aConsVVV18Aainfix =V22ainfix -V20c1Aainfix =anthV34V21aSomeagetV19ainfix -ainfix +V23V34V5Iainfix &lt;=c0ainfix -ainfix +V23V34V5Aainfix =anthV34V21aSomeagetV19ainfix +V23V34Iainfix &lt;ainfix +V23V34V5Iainfix &lt;V34V22Aainfix &lt;=c0V34FAainfix =V22alengthV21Aainfix &lt;=V22V5Aainfix &lt;=c0V22Aainfix &lt;V23V5Aainfix &lt;=c0V23FFIainfix &gt;V20c0Iainfix =V18aConsV1aConsV2aNilIainfix =V18ainfix ++V14aConsV2aNilAainfix =V20ainfix +V15c1Aainfix &lt;=c0V5Aainfix =anthV35V18aSomeagetV19ainfix -ainfix +V16V35V5Iainfix &lt;=c0ainfix -ainfix +V16V35V5Aainfix =anthV35V18aSomeagetV19ainfix +V16V35Iainfix &lt;ainfix +V16V35V5Iainfix &lt;V35V20Aainfix &lt;=c0V35FAainfix =V20alengthV18Aainfix &lt;=V20V5Aainfix &lt;=c0V20Aainfix &lt;V16V5Aainfix &lt;=c0V16FIainfix &lt;V15V5Iainfix =V14aConsV1aNilIainfix =V17V0ICfaNilainfix =V14V37Aainfix =V17V36aConsVVV11Aainfix =V15ainfix -V13c1Aainfix =anthV38V14aSomeagetV12ainfix -ainfix +V16V38V5Iainfix &lt;=c0ainfix -ainfix +V16V38V5Aainfix =anthV38V14aSomeagetV12ainfix +V16V38Iainfix &lt;ainfix +V16V38V5Iainfix &lt;V38V15Aainfix &lt;=c0V38FAainfix =V15alengthV14Aainfix &lt;=V15V5Aainfix &lt;=c0V15Aainfix &lt;V16V5Aainfix &lt;=c0V16FFIainfix &gt;V13c0Iainfix =V11aConsV0aConsV1aNilIainfix =V11ainfix ++V8aConsV1aNilAainfix =V13ainfix +V10c1Aainfix &lt;=c0V5Aainfix =anthV39V11aSomeagetV12ainfix -ainfix +V3V39V5Iainfix &lt;=c0ainfix -ainfix +V3V39V5Aainfix =anthV39V11aSomeagetV12ainfix +V3V39Iainfix &lt;ainfix +V3V39V5Iainfix &lt;V39V13Aainfix &lt;=c0V39FAainfix =V13alengthV11Aainfix &lt;=V13V5Aainfix &lt;=c0V13Aainfix &lt;V3V5Aainfix &lt;=c0V3FIainfix &lt;V10V5Iainfix =V8ainfix ++V7aConsV0aNilAainfix =V10ainfix +V4c1Aainfix &lt;=c0V5Aainfix =anthV40V8aSomeagetV9ainfix -ainfix +V3V40V5Iainfix &lt;=c0ainfix -ainfix +V3V40V5Aainfix =anthV40V8aSomeagetV9ainfix +V3V40Iainfix &lt;ainfix +V3V40V5Iainfix &lt;V40V10Aainfix &lt;=c0V40FAainfix =V10alengthV8Aainfix &lt;=V10V5Aainfix &lt;=c0V10Aainfix &lt;V3V5Aainfix &lt;=c0V3FIainfix &lt;V4V5Iainfix =V7aNilAainfix =V5c2Aainfix &lt;=c0V5Aainfix =anthV41V7aSomeagetV6ainfix -ainfix +V3V41V5Iainfix &lt;=c0ainfix -ainfix +V3V41V5Aainfix =anthV41V7aSomeagetV6ainfix +V3V41Iainfix &lt;ainfix +V3V41V5Iainfix &lt;V41V4Aainfix &lt;=c0V41FAainfix =V4alengthV7Aainfix &lt;=V4V5Aainfix &lt;=c0V4Aainfix &lt;V3V5Aainfix &lt;=c0V3FIainfix &gt;c2c0F">

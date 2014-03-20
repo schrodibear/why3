@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2013   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -59,7 +59,7 @@ let provers =
 let keygen ?parent () = ()
 
 (* create an empty session in the current directory *)
-let env_session,_ =
+let env_session,_,_ =
   let dummy_session : unit Session.session = Session.create_session "." in
   Session.update_session ~keygen ~allow_obsolete:true dummy_session env config
 

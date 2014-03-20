@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2013   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -17,6 +17,7 @@ type t =
       mutable tree_width : int;
       mutable task_height : int;
       mutable verbose : int;
+      mutable default_prover : string;
       mutable default_editor : string;
       mutable intro_premises : bool;
       mutable show_labels : bool;

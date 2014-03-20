@@ -4,15 +4,7 @@
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.95.1"/>
- <prover
-  id="1"
-  name="Eprover"
-  version="1.6"/>
- <prover
-  id="2"
-  name="Z3"
-  version="2.19"/>
+  version="0.95.2"/>
  <file
   name="../algo64.mlw"
   verified="true"
@@ -26,27 +18,27 @@
    <goal
     name="WP_parameter quicksort"
     locfile="../algo64.mlw"
-    loclnum="37" loccnumb="10" loccnume="19"
+    loclnum="42" loccnumb="10" loccnume="19"
     expl="VC for quicksort"
-    sum="fcd077bab8a5898e2fec68c14d231ebf"
+    sum="a0ba4e5c3604987c94637a32a37c6bda"
     proved="true"
     expanded="true"
-    shape="iasorted_subV1V2ainfix +V3c1Aapermut_subV1V1V2ainfix +V3c1asorted_subV8V2ainfix +V3c1Aapermut_subV1V8V2ainfix +V3c1Aapermut_subV7V8V2ainfix +V3c1Iasorted_subV8V5ainfix +V3c1Aapermut_subV7V8V5ainfix +V3c1Aainfix &lt;=c0V0FAainfix &lt;V3V0Aainfix &lt;=V5V3Aainfix &lt;=c0V5Aainfix &lt;ainfix -V3V5ainfix -V3V2Aainfix &lt;=c0ainfix -V3V2Aapermut_subV6V7V2ainfix +V3c1Iasorted_subV7V2ainfix +V4c1Aapermut_subV6V7V2ainfix +V4c1Aainfix &lt;=c0V0FAainfix &lt;V4V0Aainfix &lt;=V2V4Aainfix &lt;=c0V2Aainfix &lt;ainfix -V4V2ainfix -V3V2Aainfix &lt;=c0ainfix -V3V2Iainfix &gt;=agetV6V10V9Iainfix &lt;=V10V3Aainfix &lt;=V5V10FAainfix =agetV6V11V9Iainfix &lt;V11V5Aainfix &lt;V4V11FAainfix &lt;=agetV6V12V9Iainfix &lt;=V12V4Aainfix &lt;=V2V12FEAapermut_subV1V6V2ainfix +V3c1Aainfix &lt;=V5V3Aainfix &lt;V4V5Aainfix &lt;=V2V4Aainfix &lt;=c0V0FAainfix &lt;V3V0Aainfix &lt;V2V3Aainfix &lt;=c0V2ainfix &lt;V2V3Iainfix &lt;V3V0Aainfix &lt;=V2V3Aainfix &lt;=c0V2Aainfix &lt;=c0V0F">
+    shape="iasorted_subV1V2ainfix +V3c1Aapermut_subV4V4V2ainfix +V3c1asorted_subV11V2ainfix +V3c1Aapermut_subV4V12V2ainfix +V3c1Aaqs_partitionV10V12V2V3V6V5c42Iasorted_subV11V6ainfix +V3c1Aapermut_subV10V12V6ainfix +V3c1Aainfix &lt;=c0V0Lamk arrayV0V11FAainfix &lt;V3V0Aainfix &lt;=V6V3Aainfix &lt;=c0V6Aainfix &lt;ainfix -V3V6ainfix -V3V2Aainfix &lt;=c0ainfix -V3V2Aaqs_partitionV8V10V2V3V6V5c42Iasorted_subV9V2ainfix +V5c1Aapermut_subV8V10V2ainfix +V5c1Aainfix &lt;=c0V0Lamk arrayV0V9FAainfix &lt;V5V0Aainfix &lt;=V2V5Aainfix &lt;=c0V2Aainfix &lt;ainfix -V5V2ainfix -V3V2Aainfix &lt;=c0ainfix -V3V2Iainfix &gt;=agetV7V13c42Iainfix &lt;=V13V3Aainfix &lt;=V6V13FAainfix =agetV7V14c42Iainfix &lt;V14V6Aainfix &lt;V5V14FAainfix &lt;=agetV7V15c42Iainfix &lt;=V15V5Aainfix &lt;=V2V15FAapermut_subV4V8V2ainfix +V3c1Aainfix &lt;=V6V3Aainfix &lt;V5V6Aainfix &lt;=V2V5Aainfix &lt;=c0V0Lamk arrayV0V7FAainfix &lt;V3V0Aainfix &lt;V2V3Aainfix &lt;=c0V2ainfix &lt;V2V3Iainfix &lt;V3V0Aainfix &lt;=V2V3Aainfix &lt;=c0V2Aainfix &lt;=c0V0Lamk arrayV0V1F">
     <label
      name="expl:VC for quicksort"/>
     <transf
-     name="split_goal"
+     name="split_goal_wp"
      proved="true"
      expanded="true">
      <goal
       name="WP_parameter quicksort.1"
       locfile="../algo64.mlw"
-      loclnum="37" loccnumb="10" loccnume="19"
+      loclnum="42" loccnumb="10" loccnume="19"
       expl="1. precondition"
-      sum="860773cc3127cc7d9bf3ac6fb63b2e56"
+      sum="e1f73adaa81d119e1d0e5773a0d17f31"
       proved="true"
-      expanded="true"
-      shape="preconditionainfix &lt;V3V0Aainfix &lt;V2V3Aainfix &lt;=c0V2Iainfix &lt;V2V3Iainfix &lt;V3V0Aainfix &lt;=V2V3Aainfix &lt;=c0V2Aainfix &lt;=c0V0F">
+      expanded="false"
+      shape="preconditionainfix &lt;V3V0Aainfix &lt;V2V3Aainfix &lt;=c0V2Iainfix &lt;V2V3Iainfix &lt;V3V0Aainfix &lt;=V2V3Aainfix &lt;=c0V2Aainfix &lt;=c0V0Lamk arrayV0V1F">
       <label
        name="expl:VC for quicksort"/>
       <proof
@@ -55,18 +47,18 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.01"/>
+       <result status="valid" time="0.02"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter quicksort.2"
       locfile="../algo64.mlw"
-      loclnum="37" loccnumb="10" loccnume="19"
+      loclnum="42" loccnumb="10" loccnume="19"
       expl="2. variant decrease"
-      sum="bdbc1a16c7d2b31121555597446c2de3"
+      sum="7dc1c60e6b6c8e90e40cffb3c0046c34"
       proved="true"
-      expanded="true"
-      shape="variant decreaseainfix &lt;ainfix -V4V2ainfix -V3V2Aainfix &lt;=c0ainfix -V3V2Iainfix &gt;=agetV6V8V7Iainfix &lt;=V8V3Aainfix &lt;=V5V8FAainfix =agetV6V9V7Iainfix &lt;V9V5Aainfix &lt;V4V9FAainfix &lt;=agetV6V10V7Iainfix &lt;=V10V4Aainfix &lt;=V2V10FEAapermut_subV1V6V2ainfix +V3c1Aainfix &lt;=V5V3Aainfix &lt;V4V5Aainfix &lt;=V2V4Aainfix &lt;=c0V0FIainfix &lt;V3V0Aainfix &lt;V2V3Aainfix &lt;=c0V2Iainfix &lt;V2V3Iainfix &lt;V3V0Aainfix &lt;=V2V3Aainfix &lt;=c0V2Aainfix &lt;=c0V0F">
+      expanded="false"
+      shape="variant decreaseainfix &lt;ainfix -V5V2ainfix -V3V2Aainfix &lt;=c0ainfix -V3V2Iainfix &gt;=agetV7V9c42Iainfix &lt;=V9V3Aainfix &lt;=V6V9FAainfix =agetV7V10c42Iainfix &lt;V10V6Aainfix &lt;V5V10FAainfix &lt;=agetV7V11c42Iainfix &lt;=V11V5Aainfix &lt;=V2V11FAapermut_subV4V8V2ainfix +V3c1Aainfix &lt;=V6V3Aainfix &lt;V5V6Aainfix &lt;=V2V5Aainfix &lt;=c0V0Lamk arrayV0V7FIainfix &lt;V3V0Aainfix &lt;V2V3Aainfix &lt;=c0V2Iainfix &lt;V2V3Iainfix &lt;V3V0Aainfix &lt;=V2V3Aainfix &lt;=c0V2Aainfix &lt;=c0V0Lamk arrayV0V1F">
       <label
        name="expl:VC for quicksort"/>
       <proof
@@ -81,12 +73,12 @@
      <goal
       name="WP_parameter quicksort.3"
       locfile="../algo64.mlw"
-      loclnum="37" loccnumb="10" loccnume="19"
+      loclnum="42" loccnumb="10" loccnume="19"
       expl="3. precondition"
-      sum="d69238372f211d5a042b1fa5f01c857d"
+      sum="a4143c4e9e45f69e96a27ce50d7066c8"
       proved="true"
-      expanded="true"
-      shape="preconditionainfix &lt;V4V0Aainfix &lt;=V2V4Aainfix &lt;=c0V2Iainfix &gt;=agetV6V8V7Iainfix &lt;=V8V3Aainfix &lt;=V5V8FAainfix =agetV6V9V7Iainfix &lt;V9V5Aainfix &lt;V4V9FAainfix &lt;=agetV6V10V7Iainfix &lt;=V10V4Aainfix &lt;=V2V10FEAapermut_subV1V6V2ainfix +V3c1Aainfix &lt;=V5V3Aainfix &lt;V4V5Aainfix &lt;=V2V4Aainfix &lt;=c0V0FIainfix &lt;V3V0Aainfix &lt;V2V3Aainfix &lt;=c0V2Iainfix &lt;V2V3Iainfix &lt;V3V0Aainfix &lt;=V2V3Aainfix &lt;=c0V2Aainfix &lt;=c0V0F">
+      expanded="false"
+      shape="preconditionainfix &lt;V5V0Aainfix &lt;=V2V5Aainfix &lt;=c0V2Iainfix &gt;=agetV7V9c42Iainfix &lt;=V9V3Aainfix &lt;=V6V9FAainfix =agetV7V10c42Iainfix &lt;V10V6Aainfix &lt;V5V10FAainfix &lt;=agetV7V11c42Iainfix &lt;=V11V5Aainfix &lt;=V2V11FAapermut_subV4V8V2ainfix +V3c1Aainfix &lt;=V6V3Aainfix &lt;V5V6Aainfix &lt;=V2V5Aainfix &lt;=c0V0Lamk arrayV0V7FIainfix &lt;V3V0Aainfix &lt;V2V3Aainfix &lt;=c0V2Iainfix &lt;V2V3Iainfix &lt;V3V0Aainfix &lt;=V2V3Aainfix &lt;=c0V2Aainfix &lt;=c0V0Lamk arrayV0V1F">
       <label
        name="expl:VC for quicksort"/>
       <proof
@@ -95,18 +87,18 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.02"/>
+       <result status="valid" time="0.01"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter quicksort.4"
       locfile="../algo64.mlw"
-      loclnum="37" loccnumb="10" loccnume="19"
+      loclnum="42" loccnumb="10" loccnume="19"
       expl="4. assertion"
-      sum="dd52b66e8a6d0c488c58a082a068cbdb"
+      sum="d1e7f5d1a857b4c812defb559b1e2e12"
       proved="true"
-      expanded="true"
-      shape="assertionapermut_subV6V7V2ainfix +V3c1Iasorted_subV7V2ainfix +V4c1Aapermut_subV6V7V2ainfix +V4c1Aainfix &lt;=c0V0FIainfix &lt;V4V0Aainfix &lt;=V2V4Aainfix &lt;=c0V2Iainfix &gt;=agetV6V9V8Iainfix &lt;=V9V3Aainfix &lt;=V5V9FAainfix =agetV6V10V8Iainfix &lt;V10V5Aainfix &lt;V4V10FAainfix &lt;=agetV6V11V8Iainfix &lt;=V11V4Aainfix &lt;=V2V11FEAapermut_subV1V6V2ainfix +V3c1Aainfix &lt;=V5V3Aainfix &lt;V4V5Aainfix &lt;=V2V4Aainfix &lt;=c0V0FIainfix &lt;V3V0Aainfix &lt;V2V3Aainfix &lt;=c0V2Iainfix &lt;V2V3Iainfix &lt;V3V0Aainfix &lt;=V2V3Aainfix &lt;=c0V2Aainfix &lt;=c0V0F">
+      expanded="false"
+      shape="assertionaqs_partitionV8V10V2V3V6V5c42Iasorted_subV9V2ainfix +V5c1Aapermut_subV8V10V2ainfix +V5c1Aainfix &lt;=c0V0Lamk arrayV0V9FIainfix &lt;V5V0Aainfix &lt;=V2V5Aainfix &lt;=c0V2Iainfix &gt;=agetV7V11c42Iainfix &lt;=V11V3Aainfix &lt;=V6V11FAainfix =agetV7V12c42Iainfix &lt;V12V6Aainfix &lt;V5V12FAainfix &lt;=agetV7V13c42Iainfix &lt;=V13V5Aainfix &lt;=V2V13FAapermut_subV4V8V2ainfix +V3c1Aainfix &lt;=V6V3Aainfix &lt;V5V6Aainfix &lt;=V2V5Aainfix &lt;=c0V0Lamk arrayV0V7FIainfix &lt;V3V0Aainfix &lt;V2V3Aainfix &lt;=c0V2Iainfix &lt;V2V3Iainfix &lt;V3V0Aainfix &lt;=V2V3Aainfix &lt;=c0V2Aainfix &lt;=c0V0Lamk arrayV0V1F">
       <label
        name="expl:VC for quicksort"/>
       <proof
@@ -115,18 +107,18 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.02"/>
+       <result status="valid" time="0.14"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter quicksort.5"
       locfile="../algo64.mlw"
-      loclnum="37" loccnumb="10" loccnume="19"
+      loclnum="42" loccnumb="10" loccnume="19"
       expl="5. variant decrease"
-      sum="6b37fdc9b8ba1d01b74a77d867dc1af8"
+      sum="9a0ba93f55083b56dc73b11952971e5d"
       proved="true"
-      expanded="true"
-      shape="variant decreaseainfix &lt;ainfix -V3V5ainfix -V3V2Aainfix &lt;=c0ainfix -V3V2Iapermut_subV6V7V2ainfix +V3c1Iasorted_subV7V2ainfix +V4c1Aapermut_subV6V7V2ainfix +V4c1Aainfix &lt;=c0V0FIainfix &lt;V4V0Aainfix &lt;=V2V4Aainfix &lt;=c0V2Iainfix &gt;=agetV6V9V8Iainfix &lt;=V9V3Aainfix &lt;=V5V9FAainfix =agetV6V10V8Iainfix &lt;V10V5Aainfix &lt;V4V10FAainfix &lt;=agetV6V11V8Iainfix &lt;=V11V4Aainfix &lt;=V2V11FEAapermut_subV1V6V2ainfix +V3c1Aainfix &lt;=V5V3Aainfix &lt;V4V5Aainfix &lt;=V2V4Aainfix &lt;=c0V0FIainfix &lt;V3V0Aainfix &lt;V2V3Aainfix &lt;=c0V2Iainfix &lt;V2V3Iainfix &lt;V3V0Aainfix &lt;=V2V3Aainfix &lt;=c0V2Aainfix &lt;=c0V0F">
+      expanded="false"
+      shape="variant decreaseainfix &lt;ainfix -V3V6ainfix -V3V2Aainfix &lt;=c0ainfix -V3V2Iaqs_partitionV8V10V2V3V6V5c42Iasorted_subV9V2ainfix +V5c1Aapermut_subV8V10V2ainfix +V5c1Aainfix &lt;=c0V0Lamk arrayV0V9FIainfix &lt;V5V0Aainfix &lt;=V2V5Aainfix &lt;=c0V2Iainfix &gt;=agetV7V11c42Iainfix &lt;=V11V3Aainfix &lt;=V6V11FAainfix =agetV7V12c42Iainfix &lt;V12V6Aainfix &lt;V5V12FAainfix &lt;=agetV7V13c42Iainfix &lt;=V13V5Aainfix &lt;=V2V13FAapermut_subV4V8V2ainfix +V3c1Aainfix &lt;=V6V3Aainfix &lt;V5V6Aainfix &lt;=V2V5Aainfix &lt;=c0V0Lamk arrayV0V7FIainfix &lt;V3V0Aainfix &lt;V2V3Aainfix &lt;=c0V2Iainfix &lt;V2V3Iainfix &lt;V3V0Aainfix &lt;=V2V3Aainfix &lt;=c0V2Aainfix &lt;=c0V0Lamk arrayV0V1F">
       <label
        name="expl:VC for quicksort"/>
       <proof
@@ -141,32 +133,12 @@
      <goal
       name="WP_parameter quicksort.6"
       locfile="../algo64.mlw"
-      loclnum="37" loccnumb="10" loccnume="19"
+      loclnum="42" loccnumb="10" loccnume="19"
       expl="6. precondition"
-      sum="c4bcca39da032ce4005ea1d0c439ac35"
+      sum="4cf9a6d2fbf230655e81bd9e1077f30c"
       proved="true"
-      expanded="true"
-      shape="preconditionainfix &lt;V3V0Aainfix &lt;=V5V3Aainfix &lt;=c0V5Iapermut_subV6V7V2ainfix +V3c1Iasorted_subV7V2ainfix +V4c1Aapermut_subV6V7V2ainfix +V4c1Aainfix &lt;=c0V0FIainfix &lt;V4V0Aainfix &lt;=V2V4Aainfix &lt;=c0V2Iainfix &gt;=agetV6V9V8Iainfix &lt;=V9V3Aainfix &lt;=V5V9FAainfix =agetV6V10V8Iainfix &lt;V10V5Aainfix &lt;V4V10FAainfix &lt;=agetV6V11V8Iainfix &lt;=V11V4Aainfix &lt;=V2V11FEAapermut_subV1V6V2ainfix +V3c1Aainfix &lt;=V5V3Aainfix &lt;V4V5Aainfix &lt;=V2V4Aainfix &lt;=c0V0FIainfix &lt;V3V0Aainfix &lt;V2V3Aainfix &lt;=c0V2Iainfix &lt;V2V3Iainfix &lt;V3V0Aainfix &lt;=V2V3Aainfix &lt;=c0V2Aainfix &lt;=c0V0F">
-      <label
-       name="expl:VC for quicksort"/>
-      <proof
-       prover="0"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.01"/>
-      </proof>
-     </goal>
-     <goal
-      name="WP_parameter quicksort.7"
-      locfile="../algo64.mlw"
-      loclnum="37" loccnumb="10" loccnume="19"
-      expl="7. assertion"
-      sum="7ad64f8644601ffd7ea74cdf1b5d59b8"
-      proved="true"
-      expanded="true"
-      shape="assertionapermut_subV7V8V2ainfix +V3c1Iasorted_subV8V5ainfix +V3c1Aapermut_subV7V8V5ainfix +V3c1Aainfix &lt;=c0V0FIainfix &lt;V3V0Aainfix &lt;=V5V3Aainfix &lt;=c0V5Iapermut_subV6V7V2ainfix +V3c1Iasorted_subV7V2ainfix +V4c1Aapermut_subV6V7V2ainfix +V4c1Aainfix &lt;=c0V0FIainfix &lt;V4V0Aainfix &lt;=V2V4Aainfix &lt;=c0V2Iainfix &gt;=agetV6V10V9Iainfix &lt;=V10V3Aainfix &lt;=V5V10FAainfix =agetV6V11V9Iainfix &lt;V11V5Aainfix &lt;V4V11FAainfix &lt;=agetV6V12V9Iainfix &lt;=V12V4Aainfix &lt;=V2V12FEAapermut_subV1V6V2ainfix +V3c1Aainfix &lt;=V5V3Aainfix &lt;V4V5Aainfix &lt;=V2V4Aainfix &lt;=c0V0FIainfix &lt;V3V0Aainfix &lt;V2V3Aainfix &lt;=c0V2Iainfix &lt;V2V3Iainfix &lt;V3V0Aainfix &lt;=V2V3Aainfix &lt;=c0V2Aainfix &lt;=c0V0F">
+      expanded="false"
+      shape="preconditionainfix &lt;V3V0Aainfix &lt;=V6V3Aainfix &lt;=c0V6Iaqs_partitionV8V10V2V3V6V5c42Iasorted_subV9V2ainfix +V5c1Aapermut_subV8V10V2ainfix +V5c1Aainfix &lt;=c0V0Lamk arrayV0V9FIainfix &lt;V5V0Aainfix &lt;=V2V5Aainfix &lt;=c0V2Iainfix &gt;=agetV7V11c42Iainfix &lt;=V11V3Aainfix &lt;=V6V11FAainfix =agetV7V12c42Iainfix &lt;V12V6Aainfix &lt;V5V12FAainfix &lt;=agetV7V13c42Iainfix &lt;=V13V5Aainfix &lt;=V2V13FAapermut_subV4V8V2ainfix +V3c1Aainfix &lt;=V6V3Aainfix &lt;V5V6Aainfix &lt;=V2V5Aainfix &lt;=c0V0Lamk arrayV0V7FIainfix &lt;V3V0Aainfix &lt;V2V3Aainfix &lt;=c0V2Iainfix &lt;V2V3Iainfix &lt;V3V0Aainfix &lt;=V2V3Aainfix &lt;=c0V2Aainfix &lt;=c0V0Lamk arrayV0V1F">
       <label
        name="expl:VC for quicksort"/>
       <proof
@@ -179,84 +151,79 @@
       </proof>
      </goal>
      <goal
-      name="WP_parameter quicksort.8"
+      name="WP_parameter quicksort.7"
       locfile="../algo64.mlw"
-      loclnum="37" loccnumb="10" loccnume="19"
-      expl="8. postcondition"
-      sum="d40b41f6a4f1e904835fdbc5cea95039"
+      loclnum="42" loccnumb="10" loccnume="19"
+      expl="7. assertion"
+      sum="d66e4148760aa8026127ff6e67f9f59e"
       proved="true"
-      expanded="true"
-      shape="postconditionapermut_subV1V8V2ainfix +V3c1Iapermut_subV7V8V2ainfix +V3c1Iasorted_subV8V5ainfix +V3c1Aapermut_subV7V8V5ainfix +V3c1Aainfix &lt;=c0V0FIainfix &lt;V3V0Aainfix &lt;=V5V3Aainfix &lt;=c0V5Iapermut_subV6V7V2ainfix +V3c1Iasorted_subV7V2ainfix +V4c1Aapermut_subV6V7V2ainfix +V4c1Aainfix &lt;=c0V0FIainfix &lt;V4V0Aainfix &lt;=V2V4Aainfix &lt;=c0V2Iainfix &gt;=agetV6V10V9Iainfix &lt;=V10V3Aainfix &lt;=V5V10FAainfix =agetV6V11V9Iainfix &lt;V11V5Aainfix &lt;V4V11FAainfix &lt;=agetV6V12V9Iainfix &lt;=V12V4Aainfix &lt;=V2V12FEAapermut_subV1V6V2ainfix +V3c1Aainfix &lt;=V5V3Aainfix &lt;V4V5Aainfix &lt;=V2V4Aainfix &lt;=c0V0FIainfix &lt;V3V0Aainfix &lt;V2V3Aainfix &lt;=c0V2Iainfix &lt;V2V3Iainfix &lt;V3V0Aainfix &lt;=V2V3Aainfix &lt;=c0V2Aainfix &lt;=c0V0F">
+      expanded="false"
+      shape="assertionaqs_partitionV10V12V2V3V6V5c42Iasorted_subV11V6ainfix +V3c1Aapermut_subV10V12V6ainfix +V3c1Aainfix &lt;=c0V0Lamk arrayV0V11FIainfix &lt;V3V0Aainfix &lt;=V6V3Aainfix &lt;=c0V6Iaqs_partitionV8V10V2V3V6V5c42Iasorted_subV9V2ainfix +V5c1Aapermut_subV8V10V2ainfix +V5c1Aainfix &lt;=c0V0Lamk arrayV0V9FIainfix &lt;V5V0Aainfix &lt;=V2V5Aainfix &lt;=c0V2Iainfix &gt;=agetV7V13c42Iainfix &lt;=V13V3Aainfix &lt;=V6V13FAainfix =agetV7V14c42Iainfix &lt;V14V6Aainfix &lt;V5V14FAainfix &lt;=agetV7V15c42Iainfix &lt;=V15V5Aainfix &lt;=V2V15FAapermut_subV4V8V2ainfix +V3c1Aainfix &lt;=V6V3Aainfix &lt;V5V6Aainfix &lt;=V2V5Aainfix &lt;=c0V0Lamk arrayV0V7FIainfix &lt;V3V0Aainfix &lt;V2V3Aainfix &lt;=c0V2Iainfix &lt;V2V3Iainfix &lt;V3V0Aainfix &lt;=V2V3Aainfix &lt;=c0V2Aainfix &lt;=c0V0Lamk arrayV0V1F">
       <label
        name="expl:VC for quicksort"/>
       <proof
        prover="0"
-       timelimit="17"
+       timelimit="5"
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="2.07"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter quicksort.8"
+      locfile="../algo64.mlw"
+      loclnum="42" loccnumb="10" loccnume="19"
+      expl="8. postcondition"
+      sum="d4f1cbfd97104fff5b918b4646fa6ebd"
+      proved="true"
+      expanded="false"
+      shape="postconditionapermut_subV4V12V2ainfix +V3c1Iaqs_partitionV10V12V2V3V6V5c42Iasorted_subV11V6ainfix +V3c1Aapermut_subV10V12V6ainfix +V3c1Aainfix &lt;=c0V0Lamk arrayV0V11FIainfix &lt;V3V0Aainfix &lt;=V6V3Aainfix &lt;=c0V6Iaqs_partitionV8V10V2V3V6V5c42Iasorted_subV9V2ainfix +V5c1Aapermut_subV8V10V2ainfix +V5c1Aainfix &lt;=c0V0Lamk arrayV0V9FIainfix &lt;V5V0Aainfix &lt;=V2V5Aainfix &lt;=c0V2Iainfix &gt;=agetV7V13c42Iainfix &lt;=V13V3Aainfix &lt;=V6V13FAainfix =agetV7V14c42Iainfix &lt;V14V6Aainfix &lt;V5V14FAainfix &lt;=agetV7V15c42Iainfix &lt;=V15V5Aainfix &lt;=V2V15FAapermut_subV4V8V2ainfix +V3c1Aainfix &lt;=V6V3Aainfix &lt;V5V6Aainfix &lt;=V2V5Aainfix &lt;=c0V0Lamk arrayV0V7FIainfix &lt;V3V0Aainfix &lt;V2V3Aainfix &lt;=c0V2Iainfix &lt;V2V3Iainfix &lt;V3V0Aainfix &lt;=V2V3Aainfix &lt;=c0V2Aainfix &lt;=c0V0Lamk arrayV0V1F">
+      <label
+       name="expl:VC for quicksort"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.53"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter quicksort.9"
       locfile="../algo64.mlw"
-      loclnum="37" loccnumb="10" loccnume="19"
+      loclnum="42" loccnumb="10" loccnume="19"
       expl="9. postcondition"
-      sum="4c7142942554e853ce232e51a6ff1f6b"
+      sum="60389eea36e3a45af340b262fedda9b3"
       proved="true"
-      expanded="true"
-      shape="postconditionasorted_subV8V2ainfix +V3c1Iapermut_subV7V8V2ainfix +V3c1Iasorted_subV8V5ainfix +V3c1Aapermut_subV7V8V5ainfix +V3c1Aainfix &lt;=c0V0FIainfix &lt;V3V0Aainfix &lt;=V5V3Aainfix &lt;=c0V5Iapermut_subV6V7V2ainfix +V3c1Iasorted_subV7V2ainfix +V4c1Aapermut_subV6V7V2ainfix +V4c1Aainfix &lt;=c0V0FIainfix &lt;V4V0Aainfix &lt;=V2V4Aainfix &lt;=c0V2Iainfix &gt;=agetV6V10V9Iainfix &lt;=V10V3Aainfix &lt;=V5V10FAainfix =agetV6V11V9Iainfix &lt;V11V5Aainfix &lt;V4V11FAainfix &lt;=agetV6V12V9Iainfix &lt;=V12V4Aainfix &lt;=V2V12FEAapermut_subV1V6V2ainfix +V3c1Aainfix &lt;=V5V3Aainfix &lt;V4V5Aainfix &lt;=V2V4Aainfix &lt;=c0V0FIainfix &lt;V3V0Aainfix &lt;V2V3Aainfix &lt;=c0V2Iainfix &lt;V2V3Iainfix &lt;V3V0Aainfix &lt;=V2V3Aainfix &lt;=c0V2Aainfix &lt;=c0V0F">
-      <label
-       name="expl:VC for quicksort"/>
-      <transf
-       name="inline_all"
-       proved="true"
-       expanded="true">
-       <goal
-        name="WP_parameter quicksort.9.1"
-        locfile="../algo64.mlw"
-        loclnum="37" loccnumb="10" loccnume="19"
-        expl="1. postcondition"
-        sum="939cbbac569c75bb4ca3e5930ef7d123"
-        proved="true"
-        expanded="true"
-        shape="postconditionainfix =agetV8V9agetV8V10Oainfix &lt;agetV8V9agetV8V10Iainfix &lt;V10ainfix +V3c1Aainfix =V9V10Oainfix &lt;V9V10Aainfix =V2V9Oainfix &lt;V2V9FIapermut_subV7V8V2ainfix +V3c1Iainfix =agetV8V11agetV8V12Oainfix &lt;agetV8V11agetV8V12Iainfix &lt;V12ainfix +V3c1Aainfix =V11V12Oainfix &lt;V11V12Aainfix =V5V11Oainfix &lt;V5V11FAapermut_subV7V8V5ainfix +V3c1Aainfix =c0V0Oainfix &lt;c0V0FIainfix &lt;V3V0Aainfix =V5V3Oainfix &lt;V5V3Aainfix =c0V5Oainfix &lt;c0V5Iapermut_subV6V7V2ainfix +V3c1Iainfix =agetV7V13agetV7V14Oainfix &lt;agetV7V13agetV7V14Iainfix &lt;V14ainfix +V4c1Aainfix =V13V14Oainfix &lt;V13V14Aainfix =V2V13Oainfix &lt;V2V13FAapermut_subV6V7V2ainfix +V4c1Aainfix =c0V0Oainfix &lt;c0V0FIainfix &lt;V4V0Aainfix =V2V4Oainfix &lt;V2V4Aainfix =c0V2Oainfix &lt;c0V2Iainfix =V15agetV6V16Oainfix &lt;V15agetV6V16Iainfix =V16V3Oainfix &lt;V16V3Aainfix =V5V16Oainfix &lt;V5V16FAainfix =agetV6V17V15Iainfix &lt;V17V5Aainfix &lt;V4V17FAainfix =agetV6V18V15Oainfix &lt;agetV6V18V15Iainfix =V18V4Oainfix &lt;V18V4Aainfix =V2V18Oainfix &lt;V2V18FEAapermut_subV1V6V2ainfix +V3c1Aainfix =V5V3Oainfix &lt;V5V3Aainfix &lt;V4V5Aainfix =V2V4Oainfix &lt;V2V4Aainfix =c0V0Oainfix &lt;c0V0FIainfix &lt;V3V0Aainfix &lt;V2V3Aainfix =c0V2Oainfix &lt;c0V2Iainfix &lt;V2V3Iainfix &lt;V3V0Aainfix =V2V3Oainfix &lt;V2V3Aainfix =c0V2Oainfix &lt;c0V2Aainfix =c0V0Oainfix &lt;c0V0F">
-        <label
-         name="expl:VC for quicksort"/>
-        <proof
-         prover="1"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.86"/>
-        </proof>
-        <proof
-         prover="2"
-         timelimit="20"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="7.68"/>
-        </proof>
-       </goal>
-      </transf>
-     </goal>
-     <goal
-      name="WP_parameter quicksort.10"
-      locfile="../algo64.mlw"
-      loclnum="37" loccnumb="10" loccnume="19"
-      expl="10. postcondition"
-      sum="ae131e9ba218ef49491fed41ba2b7dda"
-      proved="true"
-      expanded="true"
-      shape="postconditionapermut_subV1V1V2ainfix +V3c1INainfix &lt;V2V3Iainfix &lt;V3V0Aainfix &lt;=V2V3Aainfix &lt;=c0V2Aainfix &lt;=c0V0F">
+      expanded="false"
+      shape="postconditionasorted_subV11V2ainfix +V3c1Iaqs_partitionV10V12V2V3V6V5c42Iasorted_subV11V6ainfix +V3c1Aapermut_subV10V12V6ainfix +V3c1Aainfix &lt;=c0V0Lamk arrayV0V11FIainfix &lt;V3V0Aainfix &lt;=V6V3Aainfix &lt;=c0V6Iaqs_partitionV8V10V2V3V6V5c42Iasorted_subV9V2ainfix +V5c1Aapermut_subV8V10V2ainfix +V5c1Aainfix &lt;=c0V0Lamk arrayV0V9FIainfix &lt;V5V0Aainfix &lt;=V2V5Aainfix &lt;=c0V2Iainfix &gt;=agetV7V13c42Iainfix &lt;=V13V3Aainfix &lt;=V6V13FAainfix =agetV7V14c42Iainfix &lt;V14V6Aainfix &lt;V5V14FAainfix &lt;=agetV7V15c42Iainfix &lt;=V15V5Aainfix &lt;=V2V15FAapermut_subV4V8V2ainfix +V3c1Aainfix &lt;=V6V3Aainfix &lt;V5V6Aainfix &lt;=V2V5Aainfix &lt;=c0V0Lamk arrayV0V7FIainfix &lt;V3V0Aainfix &lt;V2V3Aainfix &lt;=c0V2Iainfix &lt;V2V3Iainfix &lt;V3V0Aainfix &lt;=V2V3Aainfix &lt;=c0V2Aainfix &lt;=c0V0Lamk arrayV0V1F">
       <label
        name="expl:VC for quicksort"/>
       <proof
        prover="0"
-       timelimit="17"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.16"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter quicksort.10"
+      locfile="../algo64.mlw"
+      loclnum="42" loccnumb="10" loccnume="19"
+      expl="10. postcondition"
+      sum="aae5b53b9239e2569042d779508c7be5"
+      proved="true"
+      expanded="false"
+      shape="postconditionapermut_subV4V4V2ainfix +V3c1INainfix &lt;V2V3Iainfix &lt;V3V0Aainfix &lt;=V2V3Aainfix &lt;=c0V2Aainfix &lt;=c0V0Lamk arrayV0V1F">
+      <label
+       name="expl:VC for quicksort"/>
+      <proof
+       prover="0"
+       timelimit="5"
        memlimit="1000"
        obsolete="false"
        archived="false">
@@ -266,21 +233,138 @@
      <goal
       name="WP_parameter quicksort.11"
       locfile="../algo64.mlw"
-      loclnum="37" loccnumb="10" loccnume="19"
+      loclnum="42" loccnumb="10" loccnume="19"
       expl="11. postcondition"
-      sum="7d85e987becf04086d6bca226dae8830"
+      sum="8db76749bdd5a917d54bd193ed583d46"
       proved="true"
-      expanded="true"
-      shape="postconditionasorted_subV1V2ainfix +V3c1INainfix &lt;V2V3Iainfix &lt;V3V0Aainfix &lt;=V2V3Aainfix &lt;=c0V2Aainfix &lt;=c0V0F">
+      expanded="false"
+      shape="postconditionasorted_subV1V2ainfix +V3c1INainfix &lt;V2V3Iainfix &lt;V3V0Aainfix &lt;=V2V3Aainfix &lt;=c0V2Aainfix &lt;=c0V0Lamk arrayV0V1F">
       <label
        name="expl:VC for quicksort"/>
       <proof
        prover="0"
-       timelimit="17"
+       timelimit="5"
        memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.02"/>
+      </proof>
+     </goal>
+    </transf>
+   </goal>
+   <goal
+    name="WP_parameter qs"
+    locfile="../algo64.mlw"
+    loclnum="58" loccnumb="6" loccnume="8"
+    expl="VC for qs"
+    sum="2f0ea9a2f922d98d2f297799012fc43d"
+    proved="true"
+    expanded="false"
+    shape="iasorted_subV1c0V0Aapermut_allV2V2asorted_subV4c0V0Aapermut_allV2V5Iasorted_subV4c0ainfix +V3c1Aapermut_subV2V5c0ainfix +V3c1Aainfix &lt;=c0V0Lamk arrayV0V4FAainfix &lt;V3V0Aainfix &lt;=c0V3Aainfix &lt;=c0c0Lainfix -V0c1ainfix &gt;V0c0Iainfix &lt;=c0V0Lamk arrayV0V1F">
+    <label
+     name="expl:VC for qs"/>
+    <transf
+     name="split_goal_wp"
+     proved="true"
+     expanded="false">
+     <goal
+      name="WP_parameter qs.1"
+      locfile="../algo64.mlw"
+      loclnum="58" loccnumb="6" loccnume="8"
+      expl="1. precondition"
+      sum="8c00f6934f65e9c39f9c09ab73f91279"
+      proved="true"
+      expanded="false"
+      shape="preconditionainfix &lt;V3V0Aainfix &lt;=c0V3Aainfix &lt;=c0c0Lainfix -V0c1Iainfix &gt;V0c0Iainfix &lt;=c0V0Lamk arrayV0V1F">
+      <label
+       name="expl:VC for qs"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter qs.2"
+      locfile="../algo64.mlw"
+      loclnum="58" loccnumb="6" loccnume="8"
+      expl="2. postcondition"
+      sum="01286808ec84d087a5a4b8d7536d0734"
+      proved="true"
+      expanded="false"
+      shape="postconditionapermut_allV2V5Iasorted_subV4c0ainfix +V3c1Aapermut_subV2V5c0ainfix +V3c1Aainfix &lt;=c0V0Lamk arrayV0V4FIainfix &lt;V3V0Aainfix &lt;=c0V3Aainfix &lt;=c0c0Lainfix -V0c1Iainfix &gt;V0c0Iainfix &lt;=c0V0Lamk arrayV0V1F">
+      <label
+       name="expl:VC for qs"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter qs.3"
+      locfile="../algo64.mlw"
+      loclnum="58" loccnumb="6" loccnume="8"
+      expl="3. postcondition"
+      sum="703f39eec05db1f34c5aa54e58f9632b"
+      proved="true"
+      expanded="false"
+      shape="postconditionasorted_subV4c0V0Iasorted_subV4c0ainfix +V3c1Aapermut_subV2V5c0ainfix +V3c1Aainfix &lt;=c0V0Lamk arrayV0V4FIainfix &lt;V3V0Aainfix &lt;=c0V3Aainfix &lt;=c0c0Lainfix -V0c1Iainfix &gt;V0c0Iainfix &lt;=c0V0Lamk arrayV0V1F">
+      <label
+       name="expl:VC for qs"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter qs.4"
+      locfile="../algo64.mlw"
+      loclnum="58" loccnumb="6" loccnume="8"
+      expl="4. postcondition"
+      sum="61ef3b42c571d3266a8f4837e66b5612"
+      proved="true"
+      expanded="false"
+      shape="postconditionapermut_allV2V2INainfix &gt;V0c0Iainfix &lt;=c0V0Lamk arrayV0V1F">
+      <label
+       name="expl:VC for qs"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.01"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter qs.5"
+      locfile="../algo64.mlw"
+      loclnum="58" loccnumb="6" loccnume="8"
+      expl="5. postcondition"
+      sum="187fbbba680280cd5e202e8e201c087f"
+      proved="true"
+      expanded="false"
+      shape="postconditionasorted_subV1c0V0INainfix &gt;V0c0Iainfix &lt;=c0V0Lamk arrayV0V1F">
+      <label
+       name="expl:VC for qs"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.01"/>
       </proof>
      </goal>
     </transf>

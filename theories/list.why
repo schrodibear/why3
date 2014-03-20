@@ -356,12 +356,12 @@ theory NumOcc
   use import int.Int
   use import List
 
-  (** number of occurrences of [x] in [l] *)
   function num_occ (x: 'a) (l: list 'a) : int =
     match l with
     | Nil      -> 0
     | Cons y r -> (if x = y then 1 else 0) + num_occ x r
-   end
+    end
+  (** number of occurrences of [x] in [l] *)
 
   use import Mem
 
@@ -548,6 +548,7 @@ theory ListRich
   use export NthHdTl
   use export Append
   use export Reverse
+  use export RevAppend
   use export Sorted
   use export NumOcc
   use export Permut

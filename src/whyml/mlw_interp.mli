@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2013   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -11,16 +11,12 @@
 
 (* WhyML interpretation *)
 
-val eval_global_term: Env.env -> Decl.known_map -> Term.term -> Term.term
+type value
 
-type result
+val print_value: Format.formatter -> value -> unit
 
-val print_result: Format.formatter -> result -> unit
+val eval_global_term: 
+  Env.env -> Decl.known_map -> Term.term -> value
 
-type state
-
-val print_state: Format.formatter -> state -> unit
-
-val eval_global_expr: Env.env ->
-  Mlw_decl.known_map -> Decl.known_map -> Mlw_expr.expr -> result * state
-
+val eval_global_symbol:
+  Env.env -> Mlw_module.modul -> Mlw_expr.fun_defn -> unit

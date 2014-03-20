@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2013   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -49,9 +49,9 @@ val read_env_spec : unit -> Env.env * Whyconf.config * bool
 (** read_simple_spec also *)
 
 val read_update_session :
-  allow_obsolete:bool ->
-  Why3.Env.env ->
-  Why3.Whyconf.config -> string -> unit Why3.Session.env_session * bool
+  allow_obsolete:bool -> Why3.Env.env ->
+  Why3.Whyconf.config -> string ->
+  unit Why3.Session.env_session * bool * bool
 
 (** {2 Spec for filtering } *)
 type filter_prover

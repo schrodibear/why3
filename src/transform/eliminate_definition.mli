@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2013   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -16,10 +16,10 @@ val compute_diff :
 (** compute the meta_remove given two tasks one included in the other *)
 
 
-
 val eliminate_definition_func : Task.task Trans.trans
 val eliminate_definition_pred : Task.task Trans.trans
 val eliminate_definition      : Task.task Trans.trans
+val eliminate_definition_gen : (Term.lsymbol -> bool) -> Task.task Trans.trans
 
 val eliminate_mutual_recursion: Task.task Trans.trans
 

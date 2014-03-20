@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2013   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -294,14 +294,13 @@ val t_tuple : term list -> term
 val is_fs_tuple : lsymbol -> bool
 val is_fs_tuple_id : ident -> int option
 
-val fs_func_app : lsymbol  (* value-typed higher-order application *)
-val ps_pred_app : lsymbol  (* prop-typed higher-order application *)
+val fs_func_app : lsymbol  (* higher-order application symbol *)
 
-val t_func_app : term -> term -> term
-val t_pred_app : term -> term -> term
+val t_func_app : term -> term -> term  (* value-typed application *)
+val t_pred_app : term -> term -> term  (* prop-typed application *)
 
-val t_func_app_l : term -> term list -> term
-val t_pred_app_l : term -> term list -> term
+val t_func_app_l : term -> term list -> term  (* value-typed application *)
+val t_pred_app_l : term -> term list -> term  (* prop-typed application *)
 
 (** {2 Term library} *)
 

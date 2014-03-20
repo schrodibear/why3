@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2013   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -116,7 +116,7 @@ module Make(O: OBSERVER) : sig
     allow_obsolete:bool ->
     'key session ->
     Env.env -> Whyconf.config ->
-    O.key env_session * bool
+    O.key env_session * bool * bool
   (**
      Same as {!Session.update_session} except initialization is done.
     *)

@@ -5,11 +5,11 @@ REPLAYOPT=""
 
 while test $# != 0; do
 case "$1" in
-  "-force")
-        REPLAYOPT="$REPLAYOPT -force"
+  "--force")
+        REPLAYOPT="$REPLAYOPT --force"
         ;;
-  "-obsolete-only")
-        REPLAYOPT="$REPLAYOPT -obsolete-only"
+  "--obsolete-only")
+        REPLAYOPT="$REPLAYOPT --obsolete-only"
         ;;
   "--prover")
         REPLAYOPT="$REPLAYOPT --prover $2"
@@ -28,7 +28,7 @@ TMPERR=$PWD/why3regtests.err
 cd `dirname $0`
 
 # too early to do that
-# REPLAYOPT="$REPLAYOPT -smoke-detector top"
+# REPLAYOPT="$REPLAYOPT --smoke-detector top"
 
 res=0
 export success=0
@@ -59,8 +59,13 @@ run_dir () {
     done
 }
 
+echo "=== Standard Library ==="
+run_dir ../lib/why3
+echo ""
+
 echo "=== Tests ==="
-run_dir tests
+# there's no session there...
+# run_dir tests
 run_dir tests-provers
 echo ""
 

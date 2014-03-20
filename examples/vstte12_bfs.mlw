@@ -94,6 +94,7 @@ module BFS
         subset (diff (succ v) !acc) !visited /\
         (forall x: vertex. x<> v -> closure !visited !current !next x)
       }
+      variant { cardinal !acc }
       let w = B.pop acc in
       if not (mem w !visited) then begin
         B.push w visited;
@@ -104,6 +105,7 @@ module BFS
   let bfs (s: vertex) (t: vertex)
     ensures { forall d: int. not (path s t d) }
     raises { Found r -> shortest_path s t r }
+    diverges (* the set of reachable nodes may be infinite *)
   = let visited = ref (singleton s) in
     let current = ref (singleton s) in
     let next    = ref empty in

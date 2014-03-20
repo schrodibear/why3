@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2013   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -1216,8 +1216,8 @@ let why3tac ?(timelimit=timelimit) s gl =
       | Valid -> Tactics.admit_as_an_axiom gl
       | Invalid -> error "Invalid"
       | Unknown s -> error ("Don't know: " ^ s)
-      | Failure s -> error ("Failure: " ^ s)
-      | Timeout -> error "Timeout"
+      | Call_provers.Failure s -> error ("Failure: " ^ s)
+      | Call_provers.Timeout -> error "Timeout"
       | OutOfMemory -> error "Out Of Memory"
       | HighFailure ->
           error ("Prover failure\n" ^ res.pr_output ^ "\n")

@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2013   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -16,6 +16,7 @@ type driver = private {
   drv_thprelude   : Printer.prelude_map;
   drv_blacklist   : Printer.blacklist;
   drv_syntax      : Printer.syntax_map;
+  drv_converter   : Printer.syntax_map;
 }
 
 val load_driver :
