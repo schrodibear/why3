@@ -59,7 +59,7 @@ theory Abs
 
   function abs(x : real) : real = if x >= 0.0 then x else -x
 
-  lemma Abs_le: forall x y:real. abs x <= y <-> -y <= x <= y
+  lemma Abs_le: forall x y:real [abs x, y]. abs x <= y <-> -y <= x <= y
 
   lemma Abs_pos: forall x:real. abs x >= 0.0
 
