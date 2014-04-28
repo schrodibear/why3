@@ -74,6 +74,9 @@ why3.conf
 /bin/why3session.opt
 /bin/why3session.byte
 /bin/why3session
+/bin/why3wc.opt
+/bin/why3wc.byte
+/bin/why3wc
 
 # /doc/
 /doc/version.tex
@@ -117,7 +120,7 @@ why3.conf
 /lib/why3/META
 
 # /lib/ocaml/
-/lib/ocaml/why3__BigInt.ml
+/lib/ocaml/why3__BigInt_compat.ml
 
 # /share/
 /share/emacs/semantic.cache
@@ -138,7 +141,9 @@ orphaned-proofs.prf
 pvsbin/
 
 # Isabelle
+/lib/isabelle/bool/
 /lib/isabelle/int/
+/lib/isabelle/number/
 /lib/isabelle/list/
 /lib/isabelle/map/
 /lib/isabelle/set/
@@ -164,6 +169,9 @@ pvsbin/
 
 # /src/session
 /src/session/xml.ml
+
+# /src/tools
+/src/tools/why3wc.ml
 
 # /plugins/tptp/
 /plugins/tptp/tptp_lexer.ml
@@ -211,9 +219,12 @@ pvsbin/
 /examples/use_api/runstrat/makejob.opt
 /examples/use_api/runstrat/runstrat.opt
 /examples/vstte10_max_sum/*__*.ml
-/examples/euler001/euler001__*.ml
-/examples/sudoku/sudoku__*.ml
-/examples/in_progress/defunctionalization/defunctionalization__*.ml
+/examples/euler001/*__*.ml
+/examples/sudoku/*__*.ml
+/examples/defunctionalization/*__*.ml
+examples/vstte12_combinators/jsmain.js
+examples/vstte12_combinators/*__*.ml
+
 
 # modules
 /modules/string/
@@ -222,6 +233,7 @@ pvsbin/
 /modules/pqueue/
 /modules/mach/array/
 /modules/mach/int/
+
 
 # jessie3
 /src/jessie/.depend
@@ -232,6 +244,7 @@ pvsbin/
 /src/jessie/Makefile
 /src/jessie/literals.ml
 /src/jessie/ptests_local_config.ml
+/src/jessie/tests/basic/frama_c_journal.ml
 /src/jessie/tests/basic/result/*.log
 /src/jessie/tests/demo/result/*.log
 /trash
