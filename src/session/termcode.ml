@@ -48,13 +48,142 @@ let goal_expl_task ~root task =
   in
   gid, info, task
 
-(* Shapes *)
+(* {2 ident dictionaries for shapes} *)
+
+let dict_table = Hashtbl.create 17
+let dict_count = ref 0
+let reverse_ident_table = Hashtbl.create 17
+let reverse_dict_count = ref 0
+
+let reset_dict () =
+  Hashtbl.clear dict_table;
+  Hashtbl.clear reverse_ident_table;
+  dict_count := 0;
+  reverse_dict_count := 0
+
+(* {3 direct table to read shapes from strings} *)
+
+
+let get_name s b i =
+  try while !i < String.length s do
+    match String.get s !i with
+      | ')' -> incr i; raise Exit
+      | c -> incr i; Buffer.add_char b c
+    done;
+    invalid_arg "Termcode.get_name: missing closing parenthesis"
+  with Exit ->
+    let id = Buffer.contents b in
+    Hashtbl.add dict_table !dict_count id;
+(*
+    Format.eprintf "%d -> %s@." !dict_count id;
+*)
+    incr dict_count;
+    id
+
+let get_num s n i =
+  try while !i < String.length s do
+    match String.get s !i with
+      | ')' -> incr i; raise Exit
+      | '0'..'9' as c ->
+        incr i; n := !n * 10 + (Char.code c - Char.code '0')
+      | _ ->
+        invalid_arg "Termcode.get_num: decimal digit expected"
+    done;
+    invalid_arg "Termcode.get_num: missing closing parenthesis"
+  with Exit ->
+    try Hashtbl.find dict_table !n
+    with Not_found ->
+      invalid_arg
+        ("Termcode.get_num: invalid ident number " ^ string_of_int !n)
+
+let get_id s i =
+  if !i >= String.length s then
+    invalid_arg "Termcode.get_id: missing closing parenthesis";
+  match String.get s !i with
+    | '0'..'9' as c ->
+      let n = ref (Char.code c - Char.code '0') in
+      incr i;
+      get_num s n i
+    | ')' -> invalid_arg "Termcode.get_id: unexpected closing parenthesis"
+    | c ->
+      let b = Buffer.create 17 in
+      Buffer.add_char b c;
+      incr i;
+      get_name s b i
+
+
+(*
+let store_id s i =
+  let b = Buffer.create 17 in
+  try while !i < String.length s do
+    match String.get s !i with
+      | ')' -> incr i; raise Exit
+      | c -> incr i; Buffer.add_char b c
+    done;
+    invalid_arg "Termcode.store_id: missing closing parenthesis"
+  with Exit ->
+    let id = Buffer.contents b in
+    try
+      let n = Hashtbl.find reverse_ident_table id in
+      string_of_int n
+    with
+        Not_found ->
+          Hashtbl.add reverse_ident_table id !reverse_dict_count;
+          incr reverse_dict_count;
+          id
+*)
+
+(* {2 Shapes} *)
 
 type shape = string
-let print_shape = Format.pp_print_string
-let string_of_shape x = x
-let shape_of_string x = x
+
+let string_of_shape s = s
+(*
+  try
+  let l = String.length s in
+  let r = Buffer.create l in
+  let i = ref 0 in
+  while !i < l do
+  match String.get s !i with
+    | '(' ->
+      Buffer.add_char r '(';
+      incr i;
+      Buffer.add_string r (store_id s i);
+      Buffer.add_char r ')'
+    | c -> Buffer.add_char r c; incr i
+  done;
+  Buffer.contents r
+  with e ->
+    Format.eprintf "Error while reading shape [%s]@." s;
+    raise e
+*)
+
+let shape_of_string s =
+  try
+  let l = String.length s in
+  let r = Buffer.create l in
+  let i = ref 0 in
+  while !i < l do
+  match String.get s !i with
+    | '(' -> incr i; Buffer.add_string r (get_id s i)
+    | c -> Buffer.add_char r c; incr i
+  done;
+  Buffer.contents r
+  with e ->
+    Format.eprintf "Error while reading shape [%s]@." s;
+    raise e
+
+(* tests
+let _ = reset_dict () ; shape_of_string "a(b)cde(0)"
+let _ = reset_dict () ; shape_of_string "a(bc)d(e)f(1)g(0)h"
+let _ = reset_dict () ; shape_of_string "(abc)(def)(1)(0)(1)"
+let _ = reset_dict () ; shape_of_string "(abcde)(fghij)(1)(0)(1)"
+*)
+
 let equal_shape (x:string) y = x = y
+(* unused
+let print_shape fmt s = Format.pp_print_string fmt (string_of_shape s)
+*)
 
 let debug = Debug.register_info_flag "session_pairing"
   ~desc:"Print@ debugging@ messages@ about@ reconstruction@ of@ \
@@ -104,7 +233,26 @@ let tag_var = "V"
 let tag_wild = "w"
 let tag_as = "z"
 
-let ident_shape ~push id acc = push id.Ident.id_string acc
+
+let id_string_shape ~push id acc =
+  push id acc
+(*
+  let l = String.length id in
+  if l <= 4 then push id acc else
+  (* sanity check *)
+  if (match String.get id 0 with
+      | '0'..'9' -> true
+      | _ ->
+        try
+          let (_:int) = String.index id ')' in
+          true
+        with Not_found -> false)
+    then push id acc
+    else push ")" (push id (push "(" acc))
+*)
+
+let ident_shape ~push id acc =
+  id_string_shape ~push id.Ident.id_string acc
 
 let const_shape ~push acc c =
   let b = Buffer.create 17 in
@@ -224,7 +372,9 @@ let t_shape_task ~version t =
   | SV1 | SV2 -> ()
   | SV3 ->
     let _, expl, _ = goal_expl_task ~root:false t in
-    Opt.iter (Buffer.add_string b) expl
+    match expl with
+      | None -> ()
+      | Some expl -> id_string_shape ~push expl ()
   end;
   let f = Task.task_goal_fmla t in
   let () = t_shape ~version ~push (ref (-1)) Mvs.empty () f in
@@ -277,10 +427,13 @@ module Checksum = struct
     | CV1 -> ident_v1 b id
     | CV2 -> ident_v2 b id
 
-  let const b c =
+  let const =
     let buf = Buffer.create 17 in
-    Format.bprintf buf "%a" Pretty.print_const c;
-    string b (Buffer.contents buf)
+    fun b c ->
+      Format.bprintf buf "%a" Pretty.print_const c;
+      let s = Buffer.contents buf in
+      Buffer.clear buf;
+      string b s
 
   let tvsymbol b tv = ident b tv.Ty.tv_name
 
@@ -405,12 +558,35 @@ module Checksum = struct
     | Theory.MAstr s -> char b 's'; string b s
     | Theory.MAint i -> char b 'i'; int b i
 
-  let tdecl b d = match d.Theory.td_node with
+  let rec tdecl b d = match d.Theory.td_node with
     | Theory.Decl d -> decl b d
-    | Theory.Use _ -> assert false
+    | Theory.Use th ->
+      char b 'U'; ident b th.Theory.th_name; list string b th.Theory.th_path;
+      string b (theory_v2 th)
     | Theory.Clone (th, _) ->
         char b 'C'; ident b th.Theory.th_name; list string b th.Theory.th_path
     | Theory.Meta (m, mal) -> char b 'M'; meta b m; list meta_arg b mal
+
+  and theory_v2_aux t =
+    let c = ref 0 in
+    let m = ref Ident.Mid.empty in
+    let b = Buffer.create 8192 in
+    List.iter (tdecl (CV2,c,m,b)) t.Theory.th_decls;
+    let dnew = Digest.string (Buffer.contents b) in
+    Digest.to_hex dnew
+
+  and theory_v2 =
+    let table = Ident.Wid.create 17 in
+    fun t ->
+      try Ident.Wid.find table t.Theory.th_name
+      with Not_found ->
+        let v = theory_v2_aux t in
+        Ident.Wid.set table t.Theory.th_name v;
+        v
+
+  let theory ~version t = match version with
+    | CV1 -> assert false
+    | CV2 -> theory_v2 t
 
   let task_v1 =
     let c = ref 0 in
@@ -446,9 +622,11 @@ module Checksum = struct
       let _,_,dnew = Trans.apply tr t in
       Digest.to_hex dnew
 
+
   let task ~version t = match version with
     | CV1 -> task_v1 t
     | CV2 -> task_v2 t
+
 end
 
 let task_checksum ?(version=current_shape_version) t =
@@ -458,6 +636,14 @@ let task_checksum ?(version=current_shape_version) t =
     | _ -> assert false
   in
   Checksum.task ~version t
+
+let theory_checksum ?(version=current_shape_version) t =
+  let version = match version with
+    | 1 | 2 | 3 -> CV1
+    | 4 -> CV2
+    | _ -> assert false
+  in
+  Checksum.theory ~version t
 
 (*************************************************************)
 (* Pairing of new and old subgoals                           *)
@@ -483,7 +669,7 @@ let task_checksum ?(version=current_shape_version) t =
 
 module type S = sig
   type t
-  val checksum : t -> string
+  val checksum : t -> checksum option
   val shape    : t -> string
   val name     : t -> Ident.ident
 end
@@ -549,19 +735,26 @@ module Pairing(Old: S)(New: S) = struct
       with Not_found -> assert false in
     (* phase 1: pair goals with identical checksums *)
     let old_checksums = Hashtbl.create 17 in
-    let add oldg = Hashtbl.add old_checksums (Old.checksum oldg) oldg in
-    List.iter add oldgoals;
+    let add acc oldg = match Old.checksum oldg with
+      | None -> mk_node (Old oldg) :: acc
+      | Some s -> Hashtbl.add old_checksums s oldg; acc
+    in
+    let old_goals_without_checksum =
+      List.fold_left add [] oldgoals
+    in
     let collect acc newg =
-      let c = New.checksum newg in
       try
-        let oldg = Hashtbl.find old_checksums c in
-        Hashtbl.remove old_checksums c;
-        result.(new_goal_index newg) <- (newg, Some (oldg, false));
-        acc
+        match New.checksum newg with
+        | None -> raise Not_found
+        | Some c ->
+          let oldg = Hashtbl.find old_checksums c in
+          Hashtbl.remove old_checksums c;
+          result.(new_goal_index newg) <- (newg, Some (oldg, false));
+          acc
       with Not_found ->
         mk_node (New newg) :: acc
     in
-    let newgoals = List.fold_left collect [] newgoals in
+    let newgoals = List.fold_left collect old_goals_without_checksum newgoals in
     let add _ oldg acc = mk_node (Old oldg) :: acc in
     let allgoals = Hashtbl.fold add old_checksums newgoals in
     Hashtbl.clear old_checksums;
@@ -592,9 +785,19 @@ module Pairing(Old: S)(New: S) = struct
     end;
     Array.to_list result
 
-(*
-  let associate oldgoals newgoals =
-    try List.map2 (fun o n -> n, Some (o, true)) oldgoals newgoals
-    with Invalid_argument _ -> associate oldgoals newgoals
-*)
+  let simple_associate ~obsolete oldgoals newgoals =
+    let rec aux acc o n =
+      match o,n with
+        | _, [] -> acc
+        | [], n :: rem_n -> aux ((n,None)::acc) [] rem_n
+        | o :: rem_o, n :: rem_n -> aux ((n,Some(o,obsolete))::acc) rem_o rem_n
+    in
+    aux [] oldgoals newgoals
+
+  let associate ~theory_was_fully_up_to_date ~use_shapes =
+    if use_shapes then
+      associate
+    else
+      simple_associate ~obsolete:(not theory_was_fully_up_to_date)
+
 end

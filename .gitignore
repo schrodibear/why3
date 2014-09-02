@@ -16,6 +16,7 @@ why3.conf
 *.vo
 *.vd
 *.glob
+*.elc
 \#*\#
 
 # /
@@ -62,15 +63,21 @@ why3.conf
 /bin/why3doc.byte
 /bin/why3doc.opt
 /bin/why3doc
-/bin/why3replayer.byte
-/bin/why3replayer.opt
-/bin/why3replayer
-/bin/why3html.byte
-/bin/why3html.opt
-/bin/why3html
-/bin/why3stats.byte
-/bin/why3stats.opt
-/bin/why3stats
+/bin/why3extract.byte
+/bin/why3extract.opt
+/bin/why3extract
+/bin/why3execute.byte
+/bin/why3execute.opt
+/bin/why3execute
+/bin/why3prove.byte
+/bin/why3prove.opt
+/bin/why3prove
+/bin/why3realize.byte
+/bin/why3realize.opt
+/bin/why3realize
+/bin/why3replay.byte
+/bin/why3replay.opt
+/bin/why3replay
 /bin/why3session.opt
 /bin/why3session.byte
 /bin/why3session
@@ -165,10 +172,13 @@ pvsbin/
 
 # /src/util/
 /src/util/config.ml
+/src/util/lexlib.ml
 /src/util/rc.ml
 
 # /src/session
 /src/session/xml.ml
+/src/session/compress.ml
+/src/session/strategy_parser.ml
 
 # /src/tools
 /src/tools/why3wc.ml
@@ -207,9 +217,11 @@ pvsbin/
 /examples/*/*.byte
 /examples/in_progress/*/*.opt
 /examples/in_progress/*/*.byte
+/examples/*.html
 /examples/*/*.html
 /examples/*/*/*.html
 /examples/*/*/*/*.html
+/examples/style.css
 /examples/*/style.css
 /examples/*/*/style.css
 /examples/*/*/*/style.css
@@ -221,9 +233,15 @@ pvsbin/
 /examples/vstte10_max_sum/*__*.ml
 /examples/euler001/*__*.ml
 /examples/sudoku/*__*.ml
+/examples/gcd/*__*.ml
+/examples/gcd/jsmain.js
 /examples/defunctionalization/*__*.ml
-examples/vstte12_combinators/jsmain.js
-examples/vstte12_combinators/*__*.ml
+/examples/vstte12_combinators/jsmain.js
+/examples/vstte12_combinators/*__*.ml
+/examples/in_progress/bigInt/jsmain.js
+/examples/in_progress/bigInt/*__*.ml
+/examples/in_progress/mp/jsmain.js
+/examples/in_progress/mp/*__*.ml
 
 
 # modules

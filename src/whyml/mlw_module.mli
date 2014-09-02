@@ -92,7 +92,13 @@ val restore_module : theory -> modul
 (** {2 Use and clone} *)
 
 val use_export : module_uc -> modul -> module_uc
-val clone_export : module_uc -> modul -> th_inst -> module_uc
+
+type mod_inst = {
+  inst_pv : pvsymbol Mpv.t;
+  inst_ps : psymbol Mps.t;
+}
+
+val clone_export : module_uc -> modul -> mod_inst -> th_inst -> module_uc
 
 (** {2 Logic decls} *)
 
@@ -114,3 +120,19 @@ val add_invariant : module_uc -> itysymbol -> post -> module_uc
 (** {2 Builtin symbols} *)
 
 val xs_exit : xsymbol (* exception used to break the loops *)
+
+(** {2 WhyML language} *)
+
+open Env
+
+type mlw_file = modul Mstr.t * theory Mstr.t
+
+val mlw_language : mlw_file language
+
+exception ModuleNotFound of pathname * string
+exception ModuleOrTheoryNotFound of pathname * string
+
+type module_or_theory = Module of modul | Theory of theory
+
+val read_module : env -> pathname -> string -> modul
+val read_module_or_theory : env -> pathname -> string -> module_or_theory

@@ -48,7 +48,7 @@ let fs_old =
   create_lsymbol (id_fresh "old") [ty] (Some ty)
 
 let mark_theory =
-  let uc = create_theory ~path:["why3"] (id_fresh "Mark") in
+  let uc = create_theory ~path:["why3";"Mark"] (id_fresh "Mark") in
   let uc = add_ty_decl uc ts_mark in
   close_theory uc
 
@@ -66,11 +66,11 @@ let th_mark_old =
 
 let fs_now = create_lsymbol (id_fresh "%now") [] (Some ty_mark)
 let t_now = fs_app fs_now [] ty_mark
-let e_now = e_lapp fs_now [] (ity_pur ts_mark [])
+let e_now = e_ghost (e_lapp fs_now [] (ity_pur ts_mark []))
 
 (* [vs_old] appears in the postconditions given to the core API,
    which expects every vsymbol to be a pure part of a pvsymbol *)
-let pv_old = create_pvsymbol (id_fresh "%old") ity_mark
+let pv_old = create_pvsymbol ~ghost:true (id_fresh "%old") ity_mark
 let vs_old = pv_old.pv_vs
 let t_old  = t_var vs_old
 
@@ -968,7 +968,7 @@ let add_wp_decl km name f uc =
   Theory.add_decl uc d
 
 let mk_env env km th =
-  let th_int = Env.find_theory env ["int"] "Int" in
+  let th_int = Env.read_theory env ["int"] "Int" in
   { prog_known = km;
     pure_known = Theory.get_known th;
     global_env = env;

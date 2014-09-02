@@ -5,7 +5,11 @@ ifeq ($(BENCH),yes)
   WHY3=../../bin/why3
   WHY3SHARE=../../share
 else
-  WHY3=$(BINDIR)/why3
+  ifeq ($(BINDIR),)
+    WHY3=why3
+  else
+    WHY3=$(BINDIR)/why3
+  endif
   WHY3SHARE=$(shell $(WHY3) --print-datadir)
 endif
 
@@ -29,8 +33,8 @@ all: $(MAIN).opt
 extract: $(ML)
 
 doc:
-	$(WHY3)doc ../sudoku.mlw
-	$(WHY3)session html ../sudoku.mlw
+	$(WHY3) doc ../sudoku.mlw
+	$(WHY3) session html .
 
 $(MAIN).byte: $(CMO) $(MAIN).cmo
 	ocamlc -g $(INCLUDE) $(BIGINTLIB).cma why3extract.cma -o $@ $^
@@ -41,7 +45,7 @@ $(MAIN).opt: $(CMX) $(MAIN).cmx
 $(MAIN).cmx: $(CMX)
 
 $(ML): ../sudoku.mlw
-	$(WHY3) -E ocaml32 ../sudoku.mlw -o .
+	$(WHY3)extract -D ocaml32 ../sudoku.mlw -o .
 
 %.cmx: %.ml
 	$(OCAMLOPT) $(INCLUDE) -annot -c $<

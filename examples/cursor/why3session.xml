@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"http://why3.lri.fr/why3session.dtd">
+<why3session shape_version="4">
+<prover id="0" name="Z3" version="4.3.1" timelimit="6" memlimit="1000"/>
+<prover id="1" name="Alt-Ergo" version="0.95.2" timelimit="6" memlimit="1000"/>
+<prover id="2" name="CVC4" version="1.3" timelimit="6" memlimit="1000"/>
+<file name="../cursor.mlw" expanded="true">
+<theory name="IterableList" sum="b9c534c3d2f22633ac6ff3bd8a27f7e8" expanded="true">
+</theory>
+<theory name="TestCursor" sum="8ce119f1773ed340c00c2fc77249a306" expanded="true">
+ <goal name="WP_parameter sum" expl="VC for sum" expanded="true">
+ <transf name="split_goal_wp" expanded="true">
+  <goal name="WP_parameter sum.1" expl="1. loop invariant init">
+  <proof prover="1"><result status="valid" time="0.01"/></proof>
+  </goal>
+  <goal name="WP_parameter sum.2" expl="2. loop invariant init">
+  <proof prover="1"><result status="valid" time="0.01"/></proof>
+  </goal>
+  <goal name="WP_parameter sum.3" expl="3. precondition">
+  <proof prover="1"><result status="valid" time="0.01"/></proof>
+  </goal>
+  <goal name="WP_parameter sum.4" expl="4. precondition">
+  <proof prover="1"><result status="valid" time="0.01"/></proof>
+  </goal>
+  <goal name="WP_parameter sum.5" expl="5. precondition">
+  <proof prover="1"><result status="valid" time="0.01"/></proof>
+  </goal>
+  <goal name="WP_parameter sum.6" expl="6. loop invariant preservation">
+  <proof prover="1"><result status="valid" time="0.00"/></proof>
+  </goal>
+  <goal name="WP_parameter sum.7" expl="7. loop invariant preservation">
+  <proof prover="1"><result status="valid" time="0.01"/></proof>
+  </goal>
+  <goal name="WP_parameter sum.8" expl="8. loop variant decrease">
+  <proof prover="1"><result status="valid" time="0.02"/></proof>
+  </goal>
+  <goal name="WP_parameter sum.9" expl="9. postcondition" expanded="true">
+  <proof prover="1"><result status="valid" time="0.01"/></proof>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+<theory name="IntListCursor" sum="429afccc0e1401d01ed29c9a2e3b79e8">
+ <goal name="WP_parameter create" expl="VC for create">
+ <proof prover="1"><result status="valid" time="0.02"/></proof>
+ </goal>
+ <goal name="WP_parameter has_next" expl="VC for has_next">
+ <proof prover="1"><result status="valid" time="0.01"/></proof>
+ </goal>
+ <goal name="WP_parameter next" expl="VC for next">
+ <proof prover="1"><result status="valid" time="0.02"/></proof>
+ </goal>
+</theory>
+<theory name="TestListCursor" sum="b20b81abd930be3377e5f69a55ed5b4e">
+ <goal name="WP_parameter list_sum" expl="VC for list_sum">
+ <transf name="split_goal_wp">
+  <goal name="WP_parameter list_sum.1" expl="1. loop invariant init">
+  <proof prover="1"><result status="valid" time="0.01"/></proof>
+  </goal>
+  <goal name="WP_parameter list_sum.2" expl="2. loop invariant init">
+  <proof prover="1"><result status="valid" time="0.02"/></proof>
+  </goal>
+  <goal name="WP_parameter list_sum.3" expl="3. precondition">
+  <proof prover="1"><result status="valid" time="0.01"/></proof>
+  </goal>
+  <goal name="WP_parameter list_sum.4" expl="4. precondition">
+  <proof prover="1"><result status="valid" time="0.02"/></proof>
+  </goal>
+  <goal name="WP_parameter list_sum.5" expl="5. precondition">
+  <proof prover="1"><result status="valid" time="0.02"/></proof>
+  </goal>
+  <goal name="WP_parameter list_sum.6" expl="6. loop invariant preservation">
+  <proof prover="1"><result status="valid" time="0.02"/></proof>
+  </goal>
+  <goal name="WP_parameter list_sum.7" expl="7. loop invariant preservation">
+  <proof prover="1"><result status="valid" time="0.02"/></proof>
+  </goal>
+  <goal name="WP_parameter list_sum.8" expl="8. loop variant decrease">
+  <proof prover="1"><result status="valid" time="0.01"/></proof>
+  </goal>
+  <goal name="WP_parameter list_sum.9" expl="9. postcondition">
+  <proof prover="1"><result status="valid" time="0.01"/></proof>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+<theory name="IntArrayCursor" sum="c6d3a9db6fb527ad95ecb30a1a613d73" expanded="true">
+ <goal name="WP_parameter create" expl="VC for create">
+ <proof prover="1"><result status="valid" time="0.01"/></proof>
+ </goal>
+ <goal name="WP_parameter has_next" expl="VC for has_next">
+ <proof prover="0"><result status="valid" time="0.01"/></proof>
+ </goal>
+ <goal name="WP_parameter reverse_cons" expl="VC for reverse_cons" expanded="true">
+ <transf name="split_goal_wp" expanded="true">
+  <goal name="WP_parameter reverse_cons.1" expl="1. variant decrease">
+  <proof prover="1"><result status="valid" time="0.00"/></proof>
+  </goal>
+  <goal name="WP_parameter reverse_cons.2" expl="2. precondition">
+  <proof prover="1"><result status="valid" time="0.01"/></proof>
+  </goal>
+  <goal name="WP_parameter reverse_cons.3" expl="3. postcondition" expanded="true">
+  <proof prover="1"><result status="valid" time="0.06"/></proof>
+  </goal>
+  <goal name="WP_parameter reverse_cons.4" expl="4. postcondition">
+  <proof prover="2"><result status="valid" time="0.02"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="WP_parameter next" expl="VC for next">
+ <transf name="split_goal_wp">
+  <goal name="WP_parameter next.1" expl="1. unreachable point">
+  <proof prover="1"><result status="valid" time="0.01"/></proof>
+  </goal>
+  <goal name="WP_parameter next.2" expl="2. index in array bounds">
+  <proof prover="1"><result status="valid" time="0.01"/></proof>
+  </goal>
+  <goal name="WP_parameter next.3" expl="3. postcondition">
+  <proof prover="0"><result status="valid" time="0.01"/></proof>
+  <proof prover="1"><result status="unknown" time="0.05"/></proof>
+  </goal>
+  <goal name="WP_parameter next.4" expl="4. postcondition">
+  <proof prover="2"><result status="valid" time="0.27"/></proof>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+<theory name="TestArrayCursor" sum="754ba7ec5f442f12bc77d6b28d1d91ac">
+ <goal name="WP_parameter array_sum_array_to_list" expl="VC for array_sum_array_to_list">
+ <proof prover="1"><result status="valid" time="0.04"/></proof>
+ </goal>
+ <goal name="WP_parameter array_sum" expl="VC for array_sum">
+ <transf name="split_goal_wp">
+  <goal name="WP_parameter array_sum.1" expl="1. loop invariant init">
+  <proof prover="1"><result status="valid" time="6.44"/></proof>
+  </goal>
+  <goal name="WP_parameter array_sum.2" expl="2. loop invariant init">
+  <proof prover="1"><result status="valid" time="0.01"/></proof>
+  </goal>
+  <goal name="WP_parameter array_sum.3" expl="3. precondition">
+  <proof prover="1"><result status="valid" time="0.01"/></proof>
+  </goal>
+  <goal name="WP_parameter array_sum.4" expl="4. precondition">
+  <proof prover="1"><result status="valid" time="0.01"/></proof>
+  </goal>
+  <goal name="WP_parameter array_sum.5" expl="5. precondition">
+  <proof prover="1"><result status="valid" time="0.01"/></proof>
+  </goal>
+  <goal name="WP_parameter array_sum.6" expl="6. loop invariant preservation">
+  <proof prover="1"><result status="valid" time="0.01"/></proof>
+  </goal>
+  <goal name="WP_parameter array_sum.7" expl="7. loop invariant preservation">
+  <proof prover="1"><result status="valid" time="0.01"/></proof>
+  </goal>
+  <goal name="WP_parameter array_sum.8" expl="8. loop variant decrease">
+  <proof prover="1"><result status="valid" time="0.02"/></proof>
+  </goal>
+  <goal name="WP_parameter array_sum.9" expl="9. postcondition">
+  <proof prover="1"><result status="valid" time="0.01"/></proof>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+</file>
+</why3session>

@@ -32,6 +32,10 @@ all: $(MAIN).$(OCAMLBEST)
 
 extract: $(ML)
 
+doc:
+	$(WHY3) doc ../euler001.mlw
+	$(WHY3) session html .
+
 $(MAIN).byte: $(CMO)  $(MAIN).cmo
 	ocamlc $(INCLUDE) $(BIGINTLIB).cma why3extract.cma -o $@ $^
 
@@ -41,7 +45,7 @@ $(MAIN).opt: $(CMX)  $(MAIN).cmx
 $(MAIN).cmx: $(CMX)
 
 $(ML): ../euler001.mlw
-	$(WHY3) -E ocaml32 ../euler001.mlw -o .
+	$(WHY3)extract -D ocaml32 ../euler001.mlw -o .
 
 %.cmx: %.ml
 	$(OCAMLOPT) $(INCLUDE) -annot -c $<

@@ -6,10 +6,15 @@ let compute_result text =
   try
     let t = Parse.parse_term text in
     let u = Vstte12_combinators__Combinators.reduction t in
-    Format.fprintf Format.str_formatter 
+    Format.fprintf Format.str_formatter
       "the normal form is %a" Parse.pr u;
     Format.flush_str_formatter ()
   with Parse.SyntaxError -> "syntax error"
+
+
+
+
+
 
 (* HTML rendering *)
 
@@ -43,7 +48,7 @@ let onload (_event : #Html.event Js.t) : bool Js.t =
   let rec dyn_preview old_text n =
     let text = Js.to_string (textbox##value) in
     let n =
-      if text <> old_text then 
+      if text <> old_text then
         begin
           begin try
                   let rendered =
@@ -53,7 +58,7 @@ let onload (_event : #Html.event Js.t) : bool Js.t =
             with _ -> ()
           end;
           20
-        end 
+        end
       else
         max 0 (n - 1)
     in

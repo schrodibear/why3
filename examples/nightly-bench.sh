@@ -3,7 +3,7 @@
 
 case "$1" in
   "-mail")
-        REPORTBYMAIL=yes;;
+        REPORTBYMAIL=$2;;
   "")
         REPORTBYMAIL=no;;
   *)
@@ -21,11 +21,10 @@ DATE=`date --utc +%Y-%m-%d`
 SUBJECT="Why3 nightly bench:"
 
 notify() {
-    if test "$REPORTBYMAIL" == "yes"; then
-        mail -s "$SUBJECT" why3-commits@lists.gforge.inria.fr < $REPORT
-        # mail -s "$SUBJECT" Claude.Marche@inria.fr < $REPORT
-    else
+    if test "$REPORTBYMAIL" == "no"; then
         cat $REPORT
+    else
+        mail -s "$SUBJECT" $REPORTBYMAIL < $REPORT
     fi
     exit 0
 }
@@ -98,23 +97,29 @@ cp $OUT $REPORTDIR/regtests-$DATE
 
 echo "Ending time (UTC): "`date --utc +%H:%M` >> $REPORT
 
+# 3-line summary
+echo "" >> $REPORT
+tail -3 $OUT >> $REPORT
+echo "" >> $REPORT
+
 # output the diff against previous run
 diff -u $PREVIOUS $OUT &> $DIFF
 if test "$?" == 0 ; then
     echo "---------- No difference with last bench ---------- " >> $REPORT
 else
-    echo "" >> $REPORT
-    echo "--------------- Diff with last bench --------------" >> $REPORT
-    echo "" >> $REPORT
-    sed '1,2d' $DIFF >> $REPORT
+    if expr `cat $DIFF | wc -l` '>=' `cat $OUT | wc -l` ; then
+        echo "------- Diff with last bench is larger than the bench itself ------" >> $REPORT
+    else
+        echo "--------------- Diff with last bench --------------" >> $REPORT
+        echo "" >> $REPORT
+        sed '1,2d' $DIFF >> $REPORT
+    fi
     cp $OUT $PREVIOUS
 fi
 
 # finally print the full state
 echo "" >> $REPORT
 echo "-------------- Full current state --------------" >> $REPORT
-echo "" >> $REPORT
-tail -1 $OUT >> $REPORT
 echo "" >> $REPORT
 cat $OUT >> $REPORT
 

@@ -427,6 +427,12 @@ let read_until re s i ch =
   if not (Str.string_match re s i) then
     while not (Str.string_match re (input_line ch) 0) do () done
 
+let read_until_or_eof re s i ch =
+  try
+    read_until re s i ch
+  with
+  | End_of_file -> ()
+
 let read_old_proof =
   let def = Str.regexp "\\(Definition\\|Notation\\|Lemma\\|Theorem\\|Variable\\|Hypothesis\\)[ ]+\\([^ :(.]+\\)" in
   let def_end = Str.regexp ".*[.]$" in
@@ -452,9 +458,9 @@ let read_old_proof =
           if Str.string_match old_intros s 0 then begin
             read_until old_end s (Str.match_end ()) ch;
             start := pos_in ch;
-            read_until qed (input_line ch) 0 ch
+            read_until_or_eof qed (input_line ch) 0 ch
           end else
-            read_until qed s 0 ch;
+            read_until_or_eof qed s 0 ch;
           Vernacular
         end in
       let len = pos_in ch - !start in
@@ -920,9 +926,9 @@ let print_task printer_args realize ?old fmt task =
       | [Theory.MAstr s1; Theory.MAstr s2] ->
         (* TODO: do not split string; in fact, do not even use a string argument *)
         let f,id =
-          let l = Strings.rev_split s1 '.' in
+          let l = Strings.rev_split '.' s1 in
           List.rev (List.tl l), List.hd l in
-        let th = Env.find_theory printer_args.env f id in
+        let th = Env.read_theory printer_args.env f id in
         Mid.add th.Theory.th_name (th, if s2 = "" then s1 else s2) mid
       | _ -> assert false
     ) Mid.empty task in
