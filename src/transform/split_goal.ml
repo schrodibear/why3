@@ -105,6 +105,7 @@ let rec split_pos ro acc f = match f.t_node with
   | Tfalse -> f::acc
   | Tapp _ -> f::acc
   | Tbinop (Tand,f1,f2) when ro.respect_as && asym f1 ->
+      let f1 = t_label_copy f f1 in
       split_pos ro (split_pos ro acc (t_implies f1 f2)) f1
   | Tbinop (Tand,f1,f2) ->
       split_pos ro (split_pos ro acc f2) f1
