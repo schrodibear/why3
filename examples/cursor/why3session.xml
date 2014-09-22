@@ -6,9 +6,9 @@
 <prover id="1" name="Alt-Ergo" version="0.95.2" timelimit="6" memlimit="1000"/>
 <prover id="2" name="CVC4" version="1.3" timelimit="6" memlimit="1000"/>
 <file name="../cursor.mlw" expanded="true">
-<theory name="IterableList" sum="b9c534c3d2f22633ac6ff3bd8a27f7e8" expanded="true">
+<theory name="IterableList" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="TestCursor" sum="8ce119f1773ed340c00c2fc77249a306" expanded="true">
+<theory name="TestCursor" sum="333c008a98d32cd755d2ab198a3820d0" expanded="true">
  <goal name="WP_parameter sum" expl="VC for sum" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter sum.1" expl="1. loop invariant init">
@@ -41,7 +41,7 @@
  </transf>
  </goal>
 </theory>
-<theory name="IntListCursor" sum="429afccc0e1401d01ed29c9a2e3b79e8">
+<theory name="IntListCursor" sum="3be4879452794a876cc462ddd755a3de">
  <goal name="WP_parameter create" expl="VC for create">
  <proof prover="1"><result status="valid" time="0.02"/></proof>
  </goal>
@@ -52,7 +52,7 @@
  <proof prover="1"><result status="valid" time="0.02"/></proof>
  </goal>
 </theory>
-<theory name="TestListCursor" sum="b20b81abd930be3377e5f69a55ed5b4e">
+<theory name="TestListCursor" sum="c8893f4016f1f1e3c221e4142f94eed3">
  <goal name="WP_parameter list_sum" expl="VC for list_sum">
  <transf name="split_goal_wp">
   <goal name="WP_parameter list_sum.1" expl="1. loop invariant init">
@@ -85,7 +85,7 @@
  </transf>
  </goal>
 </theory>
-<theory name="IntArrayCursor" sum="c6d3a9db6fb527ad95ecb30a1a613d73" expanded="true">
+<theory name="IntArrayCursor" sum="c77cddb83b83b50f0453ae017ebaaabf" expanded="true">
  <goal name="WP_parameter create" expl="VC for create">
  <proof prover="1"><result status="valid" time="0.01"/></proof>
  </goal>
@@ -126,7 +126,7 @@
  </transf>
  </goal>
 </theory>
-<theory name="TestArrayCursor" sum="754ba7ec5f442f12bc77d6b28d1d91ac">
+<theory name="TestArrayCursor" sum="1818e28aa2ccadd10a21d99b8b296439">
  <goal name="WP_parameter array_sum_array_to_list" expl="VC for array_sum_array_to_list">
  <proof prover="1"><result status="valid" time="0.04"/></proof>
  </goal>

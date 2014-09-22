@@ -957,7 +957,13 @@ let add_wp_decl km name f uc =
     let label = name.id_label in
     if lab_has_expl label then label
     else
-      let lab = Ident.create_label ("expl:VC for " ^ name.id_string) in
+      (* set a proper explanation *)
+      let n =
+        try let _, _, l = restore_path name in
+          String.concat "." l
+        with Not_found -> name.id_string
+      in
+      let lab = Ident.create_label ("expl:VC for " ^ n) in
       Slab.add lab label
   in
   let id = id_fresh ~label ?loc:name.id_loc s in

@@ -113,7 +113,7 @@ module Make(O: OBSERVER) : sig
     allow_obsolete:bool ->
     release:bool ->
     use_shapes:bool ->
-    'key session ->
+    'oldkey session ->
     Env.env -> Whyconf.config ->
     O.key env_session * bool * bool
   (**
@@ -296,6 +296,8 @@ module Make(O: OBSERVER) : sig
     (** Same as {!Session_tools.convert_unknown_prover} *)
 
   val run_strategy_on_goal:
+    ?intermediate_callback: (unit -> unit) ->
+    ?final_callback: (unit -> unit) ->
     O.key Session.env_session -> t ->
     Strategy.t -> O.key Session.goal -> unit
 
