@@ -155,12 +155,15 @@ pvsbin/
 /lib/isabelle/set/
 
 # /src/driver/
+/src/driver/driver_parser.output
 /src/driver/driver_lexer.ml
 /src/driver/driver_parser.ml
 /src/driver/driver_parser.mli
 /src/driver/driver_parser.conflicts
 
 # /src/parser/
+/src/parser/parser.output
+/src/parser/tptp_parser.output
 /src/parser/lexer.ml
 /src/parser/parser.ml
 /src/parser/parser.mli
@@ -183,6 +186,7 @@ pvsbin/
 /src/tools/why3wc.ml
 
 # /plugins/tptp/
+/plugins/tptp/tptp_parser.output
 /plugins/tptp/tptp_lexer.ml
 /plugins/tptp/tptp_parser.ml
 /plugins/tptp/tptp_parser.mli
@@ -254,6 +258,7 @@ pvsbin/
 
 # jessie3
 /src/jessie/.depend
+/src/jessie/.merlin
 /src/jessie/Jessie3_DEP
 /src/jessie/autom4te.cache/
 /src/jessie/config.log
