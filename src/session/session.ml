@@ -544,9 +544,17 @@ let save_string fmt s =
       | c -> pp_print_char fmt c
   done
 
+let opt pr lab fmt = function
+  | None -> ()
+  | Some s -> fprintf fmt "@ %s=\"%a\"" lab pr s
 
 let save_result fmt r =
-  fprintf fmt "<result@ status=\"%s\"@ time=\"%.2f\"/>"
+  let steps = if  r.Call_provers.pr_steps >= 0 then 
+		Some  r.Call_provers.pr_steps 
+	      else 
+		None
+  in
+  fprintf fmt "<result@ status=\"%s\"@ time=\"%.2f\"%a/>"
     (match r.Call_provers.pr_answer with
        | Call_provers.Valid -> "valid"
        | Call_provers.Failure _ -> "failure"
@@ -556,6 +564,7 @@ let save_result fmt r =
        | Call_provers.OutOfMemory -> "outofmemory"
        | Call_provers.Invalid -> "invalid")
     r.Call_provers.pr_time
+    (opt pp_print_int "steps") steps
 
 let save_status fmt s =
   match s with
@@ -574,10 +583,6 @@ let save_bool_def name def fmt b =
 
 let save_int_def name def fmt n =
   if n <> def then fprintf fmt "@ %s=\"%d\"" name n
-
-let opt pr lab fmt = function
-  | None -> ()
-  | Some s -> fprintf fmt "@ %s=\"%a\"" lab pr s
 
 let opt_string = opt save_string
 
@@ -1173,7 +1178,7 @@ let load_result r =
             | "failure" -> Call_provers.Failure ""
             | "highfailure" -> Call_provers.HighFailure
             | s ->
-                eprintf
+                Warning.emit
                   "[Warning] Session.load_result: unexpected status '%s'@." s;
                 Call_provers.HighFailure
         in
@@ -1181,16 +1186,22 @@ let load_result r =
           try float_of_string (List.assoc "time" r.Xml.attributes)
           with Not_found -> 0.0
         in
+        let steps = 
+          try int_of_string (List.assoc "steps" r.Xml.attributes)
+          with Not_found -> -1
+        in
         Done {
           Call_provers.pr_answer = answer;
           Call_provers.pr_time = time;
           Call_provers.pr_output = "";
-          Call_provers.pr_status = Unix.WEXITED 0
+          Call_provers.pr_status = Unix.WEXITED 0;
+	  Call_provers.pr_steps = steps
         }
     | "undone" -> Interrupted
     | "unedited" -> Unedited
     | s ->
-        eprintf "[Warning] Session.load_result: unexpected element '%s'@." s;
+        Warning.emit "[Warning] Session.load_result: unexpected element '%s'@."
+          s;
         Interrupted
 
 let load_option attr g =
@@ -1245,7 +1256,7 @@ let rec load_goal ctxt parent acc g =
         mg::acc
     | "label" -> acc
     | s ->
-        eprintf "[Warning] Session.load_goal: unexpected element '%s'@." s;
+        Warning.emit "[Warning] Session.load_goal: unexpected element '%s'@." s;
         acc
 
 and load_proof_or_transf ctxt mg a =
@@ -1260,7 +1271,7 @@ and load_proof_or_transf ctxt mg a =
             | [r] -> load_result r
             | [] -> Interrupted
             | _ ->
-              eprintf "[Error] Too many result elements@.";
+              Warning.emit "[Error] Too many result elements@.";
               raise (LoadError (a,"too many result elements"))
           in
           let edit = load_option "edited" a in
@@ -1283,7 +1294,7 @@ and load_proof_or_transf ctxt mg a =
           in
           ()
         with Failure _ | Not_found ->
-          eprintf "[Error] prover id not listed in header '%s'@." prover;
+          Warning.emit "[Error] prover id not listed in header '%s'@." prover;
           raise (LoadError (a,"prover not listing in header"))
       end
     | "transf" ->
@@ -1302,7 +1313,7 @@ and load_proof_or_transf ctxt mg a =
     | "metas" -> load_metas ctxt mg a;
     | "label" -> ()
     | s ->
-        eprintf
+        Warning.emit
           "[Warning] Session.load_proof_or_transf: unexpected element '%s'@."
           s
 
@@ -1438,7 +1449,8 @@ let load_theory ctxt mf acc th =
         mth.theory_verified <- theory_verified mth;
         mth::acc
     | s ->
-        eprintf "[Warning] Session.load_theory: unexpected element '%s'@." s;
+        Warning.emit "[Warning] Session.load_theory: unexpected element '%s'@."
+          s;
         acc
 
 let load_file ~keygen session old_provers f =
@@ -1471,11 +1483,11 @@ let load_file ~keygen session old_provers f =
                      prover_altern = altern} in
             Mint.add id (p,timelimit,memlimit) old_provers
           with Failure _ ->
-            eprintf "[Warning] Session.load_file: unexpected non-numeric prover id '%s'@." id;
+            Warning.emit "[Warning] Session.load_file: unexpected non-numeric prover id '%s'@." id;
             old_provers
         end
     | s ->
-        eprintf "[Warning] Session.load_file: unexpected element '%s'@." s;
+        Warning.emit "[Warning] Session.load_file: unexpected element '%s'@." s;
         old_provers
 
 let load_session ~keygen session xml =
@@ -1494,7 +1506,8 @@ let load_session ~keygen session xml =
         old_provers;
       Debug.dprintf debug "[Info] load_session: done@\n"
     | s ->
-        eprintf "[Warning] Session.load_session: unexpected element '%s'@." s
+        Warning.emit "[Warning] Session.load_session: unexpected element '%s'@."
+          s
 
 exception ShapesFileError of string
 exception SessionFileError of string
@@ -1582,7 +1595,7 @@ let read_file_session_and_shapes dir xml_filename =
        xml_filename compressed_shape_filename
     else
       begin
-        Format.eprintf "[Warning] could not read goal shapes because \
+        Warning.emit "[Warning] could not read goal shapes because \
                                 Why3 was not compiled with compress support@.";
         Xml.from_file xml_filename, false
       end
@@ -1592,11 +1605,11 @@ let read_file_session_and_shapes dir xml_filename =
       ReadShapesNoCompress.read_xml_and_shapes xml_filename shape_filename
     else
       begin
-        Format.eprintf "[Warning] could not find goal shapes file@.";
+        Warning.emit "[Warning] could not find goal shapes file@.";
         Xml.from_file xml_filename, false
       end
 with e ->
-  Format.eprintf "[Warning] failed to read goal shapes: %s@."
+  Warning.emit "[Warning] failed to read goal shapes: %s@."
     (Printexc.to_string e);
   Xml.from_file xml_filename, false
 
@@ -1621,7 +1634,7 @@ let read_session_with_keys ~keygen dir =
         (* xml does not exist yet *)
           raise (SessionFileError msg)
         | Xml.Parse_error s ->
-          Format.eprintf "XML database corrupted, ignored (%s)@." s;
+          Warning.emit "XML database corrupted, ignored (%s)@." s;
           raise (SessionFileError "XML corrupted")
   else false
   in
@@ -2294,12 +2307,12 @@ and merge_trans ~ctxt ~theories env to_goal _ from_transf =
       | (_, None) ->
         found_missed_goals_in_theory := true)
       associated;
-(* TODO: we should copy the goal, using the new new type of keys
+(* TODO: we should copy the goal, using the new type of keys
     if detached <> [] then
     to_transf.transf_detached <- Some { detached_goals = detached }
  *)
     ignore detached
-  with Exit -> ()
+  with Exit -> () (* silent failure, not a good thing... *)
 
 (** convert the ident from the old task to the ident at the same
     position in the new task *)

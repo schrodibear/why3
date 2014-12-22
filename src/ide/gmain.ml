@@ -420,11 +420,17 @@ let set_proof_state a =
   goals_model#set ~row:row#iter ~column:status_column
     (image_of_result ~obsolete res);
   let t = match res with
-    | S.Done { Call_provers.pr_time = time } ->
+    | S.Done { Call_provers.pr_time = time; Call_provers.pr_steps = steps } ->
+       let s = 
         if gconfig.show_time_limit then
           Format.sprintf "%.2f [%d.0]" time a.S.proof_timelimit
         else
           Format.sprintf "%.2f" time
+       in
+       if steps >= 0 then 
+	 Format.sprintf "%s (steps: %d)" s steps
+       else
+	 s
     | S.Unedited -> "(not yet edited)"
     | S.JustEdited -> "(edited)"
     | S.InternalFailure _ -> "(internal failure)"
@@ -493,7 +499,8 @@ let env_session () =
     | Some e -> e
 
 let task_text t =
-  Pp.string_of ~max_boxes:42 Pretty.print_task t
+  let max_boxes = (Gconfig.config ()).max_boxes in
+  Pp.string_of ~max_boxes Pretty.print_task t
 
 let split_transformation = "split_goal_wp"
 let inline_transformation = "inline_goal"
@@ -778,16 +785,28 @@ let () = Warning.set_hook record_warning
 let display_warnings () =
   if Queue.is_empty warnings then () else
     begin
+      let nwarn = ref 0 in
+      begin try
       Queue.iter
         (fun (loc,msg) ->
-          match loc with
-            | None ->
-              Format.fprintf Format.str_formatter "%s@\n" msg
-            | Some l ->
-            (* scroll_to_loc ~color:error_tag ~yalign:0.5 loc; *)
-              Format.fprintf Format.str_formatter "%a: %s@\n"
-                Loc.gen_report_position l msg)
-        warnings;
+         if !nwarn = 4 then
+           begin
+             Format.fprintf Format.str_formatter "[%d more warnings. See stderr for details]@\n" (Queue.length warnings - !nwarn);
+             raise Exit
+           end
+         else
+           begin
+             incr nwarn;
+             match loc with
+             | None ->
+                Format.fprintf Format.str_formatter "%s@\n@\n" msg
+             | Some l ->
+                (* scroll_to_loc ~color:error_tag ~yalign:0.5 loc; *)
+                Format.fprintf Format.str_formatter "%a: %s@\n@\n"
+                               Loc.gen_report_position l msg
+           end) warnings;
+        with Exit -> ();
+      end;
       Queue.clear warnings;
       let msg =
         Format.flush_str_formatter ()
@@ -990,6 +1009,7 @@ let bisect_proof_attempt pa =
         M.schedule_proof_attempt
           ~timelimit:!timelimit
           ~memlimit:pa.S.proof_memlimit
+	  ~stepslimit:(-1)
           ?old:(S.get_edited_as_abs eS.S.session pa)
           (** It is dangerous, isn't it? to be in place for bisecting? *)
           ~inplace:lp.S.prover_config.C.in_place
@@ -1027,6 +1047,7 @@ let bisect_proof_attempt pa =
             M.schedule_proof_attempt
               ~timelimit:!timelimit
               ~memlimit:pa.S.proof_memlimit
+	      ~stepslimit:(-1)
               ?old:(S.get_edited_as_abs eS.S.session pa)
               ~inplace:lp.S.prover_config.C.in_place
               ~command:(C.get_complete_command lp.S.prover_config)
@@ -1976,7 +1997,8 @@ let reload () =
       M.update_session ~allow_obsolete:true ~release:false ~use_shapes:true
         old_session gconfig.env gconfig.Gconfig.config
     in
-    current_env_session := Some new_env_session
+    current_env_session := Some new_env_session;
+    display_warnings ()
   with
     | e ->
         let e = match e with

@@ -11,7 +11,7 @@ case "$1" in
         exit 2
 esac
 
-REPORTDIR=$PWD/..
+REPORTDIR=$PWD/../why3-reports
 OUT=$REPORTDIR/nightly-bench.out
 PREVIOUS=$REPORTDIR/nightly-bench.previous
 DIFF=$REPORTDIR/nightly-bench.diff
@@ -107,6 +107,7 @@ diff -u $PREVIOUS $OUT &> $DIFF
 if test "$?" == 0 ; then
     echo "---------- No difference with last bench ---------- " >> $REPORT
 else
+    SUBJECT="$SUBJECT (with new differences)"
     if expr `cat $DIFF | wc -l` '>=' `cat $OUT | wc -l` ; then
         echo "------- Diff with last bench is larger than the bench itself ------" >> $REPORT
     else
