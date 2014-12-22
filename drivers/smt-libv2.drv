@@ -161,11 +161,12 @@ theory map.Map
 (*  syntax function const "(const[%t0] %1)" *)
 end
 
+(*
 theory bv.BV32
   syntax type t "(_ BitVec 32)"
 
   syntax function zero "#x00000000"
-  (*syntax function ones "#xFFFFFFFF"*)
+  syntax function ones "#xFFFFFFFF"
   syntax function bw_and "(bvand %1 %2)"
   syntax function bw_or "(bvor %1 %2)"
   syntax function bw_xor "(bvxor %1 %2)"
@@ -468,3 +469,4 @@ theory bv.BVConverter_8_16
 
   remove prop back_from_bigBV
 end
+*)
