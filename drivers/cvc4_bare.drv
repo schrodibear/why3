@@ -153,17 +153,27 @@ theory int.EuclideanDivision
    remove prop Mod_1
    remove prop Div_1
 end
+*)
 
 theory int.ComputerDivision
    syntax function div "(div %1 %2)"
    syntax function mod "(mod %1 %2)"
-   remove prop Mod_bound
-   remove prop Div_mod
-   remove prop Mod_1
-   remove prop Div_1
-end
-*)
 
+   remove prop Div_mod
+   remove prop Div_bound
+   remove prop Mod_bound
+   remove prop Div_sign_pos
+   remove prop Div_sign_neg
+   remove prop Mod_sign_pos
+   remove prop Mod_sign_neg
+   remove prop Rounds_toward_zero
+   remove prop Div_1
+   remove prop Mod_1
+   remove prop Div_inf
+   remove prop Mod_inf
+   remove prop Div_mult
+   remove prop Mod_mult
+end
 
 (*
 theory real.Truncate
@@ -182,6 +192,10 @@ theory map.Map
   syntax function get   "(select %1 %2)"
   syntax function set   "(store %1 %2 %3)"
 (*  syntax function const "(const[%t0] %1)" *)
+
+  remove prop Select_eq
+  remove prop Select_neq
+  remove prop Const
 end
 
 
