@@ -19,6 +19,7 @@ why3.conf
 *.vd
 *.glob
 *.elc
+*.summary
 \#*\#
 
 # /
@@ -153,6 +154,7 @@ pvsbin/
 /lib/isabelle/list/
 /lib/isabelle/map/
 /lib/isabelle/set/
+/lib/isabelle/last_build
 
 # /src/driver/
 /src/driver/driver_parser.output
@@ -222,8 +224,11 @@ pvsbin/
 /examples/in_progress/*/*.byte
 /examples/*.html
 /examples/*/*.html
+!/examples/*/index.html
 /examples/*/*/*.html
+!/examples/*/*/index.html
 /examples/*/*/*/*.html
+!/examples/*/*/*/index.html
 /examples/style.css
 /examples/*/style.css
 /examples/*/*/style.css
@@ -236,6 +241,7 @@ pvsbin/
 /examples/vstte10_max_sum/*__*.ml
 /examples/euler001/*__*.ml
 /examples/sudoku/*__*.ml
+/examples/sudoku/jsmain.js
 /examples/gcd/*__*.ml
 /examples/gcd/jsmain.js
 /examples/defunctionalization/*__*.ml
