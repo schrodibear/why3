@@ -21,14 +21,13 @@ let collect_expls lab =
   Ident.Slab.fold
     (fun lab acc ->
        let lab = lab.Ident.lab_string in
-       Str.(if string_match expl_regexp lab 0
-            then matched_group 1 lab :: acc
-            else acc))
+       if Str.string_match expl_regexp lab 0
+       then Str.matched_group 1 lab :: acc
+       else acc)
     lab
     []
 
-let concat_expls =
-  function
+let concat_expls = function
   | [] -> None
   | [l] -> Some l
   | l :: ls -> Some (l ^ " (" ^ String.concat ". " ls ^ ")")
@@ -38,10 +37,9 @@ let rec get_expls_fmla acc f =
   else if Ident.Slab.mem Split_goal.stop_split f.Term.t_label then acc
   else
     let res = collect_expls f.Term.t_label in
-    if res = [] then
-      match f.t_node with
+    if res = [] then match f.t_node with
       | Term.Ttrue | Term.Tfalse | Term.Tapp _ -> acc
-      | Term.Tbinop (Term.Timplies,_,f) -> get_expls_fmla acc f
+      | Term.Tbinop (Term.Timplies, _, f) -> get_expls_fmla acc f
       | Term.Tlet _ | Term.Tcase _ | Term.Tquant (Term.Tforall, _) ->
         Term.t_fold get_expls_fmla acc f
       | _ -> raise Exit
@@ -53,10 +51,11 @@ let get_expls_fmla f = try get_expls_fmla [] f with Exit -> []
 let goal_expl_task ~root task =
   let gid = (Task.task_goal task).Decl.pr_name in
   let info =
-    concat_expls @@
-      if root
-      then collect_expls gid.Ident.id_label
-      else get_expls_fmla @@ Task.task_goal_fmla task
+    let res = get_expls_fmla (Task.task_goal_fmla task) in
+    concat_expls
+      (if res <> [] && not root
+       then res
+       else collect_expls gid.Ident.id_label)
   in
   gid, info, task
 
