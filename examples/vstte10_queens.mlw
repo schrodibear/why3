@@ -111,4 +111,112 @@ module NQueens
     with Solution -> a
     end
 
+  (** variant: counting solutions (not part of the competition)
+
+      TODO: prove soundness i.e. we indeed count the number of solutions *)
+
+  use import ref.Refint
+
+  let rec count_bt_queens (board: array int) (n: int) (pos: int) : int
+    variant  { n - pos }
+    requires { length board = n /\ 0 <= pos <= n /\ solution board pos }
+    ensures  { eq_board board (old board) pos }
+  = 'Init:
+    if pos = n then
+      1
+    else begin
+      let s = ref 0 in
+      for i = 0 to n - 1 do
+        invariant { eq_board board (at board 'Init) pos }
+        board[pos] <- i;
+        if check_is_consistent board pos then
+          s += count_bt_queens board n (pos+1)
+      done;
+      !s
+    end
+
+  let count_queens (board: array int) (n: int) : int
+    requires { length board = n }
+    ensures  { true }
+  = count_bt_queens board n 0
+
+  let test_count_8 () =
+    let a = Array.make 8 0 in
+    count_queens a 8
+
 end
+
+(** counting solutions with machine integers *)
+
+module MachineArithmetic
+
+  use import ref.Refint
+  use import mach.array.Array63
+  use import mach.int.Int63
+
+  predicate is_board (board: array int63) (pos: int) =
+    forall q: int. 0 <= q < pos ->
+    0 <= to_int board[q] < to_int (length board)
+
+  exception MInconsistent
+
+  let mcheck_is_consistent (board: array int63) (pos: int63)
+    requires { 0 <= to_int pos < to_int (length board) }
+    requires { is_board board (to_int pos + 1) }
+  = try
+      let q = ref (of_int 0) in
+      while !q < pos do
+        invariant { 0 <= to_int !q <= to_int pos }
+        invariant { is_board board (to_int pos + 1) }
+        variant   { to_int pos - to_int !q }
+        let bq   = board[!q]   in
+        let bpos = board[pos] in
+        if bq        = bpos     then raise MInconsistent;
+        if bq - bpos = pos - !q then raise MInconsistent;
+        if bpos - bq = pos - !q then raise MInconsistent;
+        q := !q + of_int 1
+      done;
+      True
+    with MInconsistent ->
+      False
+    end
+
+  use mach.peano.Peano as P
+
+  let rec mcount_bt_queens
+    (solutions: ref P.t) (board: array int63) (n: int63) (pos: int63)
+    requires { to_int (length board) = to_int n }
+    requires { 0 <= to_int pos <= to_int n }
+    requires { is_board board (to_int pos) }
+    variant  { to_int n - to_int pos }
+    ensures  { is_board board (to_int pos) }
+  =
+    if eq pos n then
+      solutions := P.succ !solutions
+    else
+      let i = ref (of_int 0) in
+      while !i < n do
+        invariant { 0 <= to_int !i <= to_int n }
+        invariant { is_board board (to_int pos) }
+        variant   { to_int n - to_int !i }
+        board[pos] <- !i;
+        if mcheck_is_consistent board pos then
+          mcount_bt_queens solutions board n (pos + of_int 1);
+        i := !i + of_int 1
+      done
+
+  let mcount_queens (board: array int63) (n: int63) : P.t
+    requires { to_int (length board) = to_int n }
+    ensures  { true }
+  =
+     let solutions = ref (P.zero ()) in
+     mcount_bt_queens solutions board n (of_int 0);
+     !solutions
+
+  let test_mcount_8 () =
+    let n = of_int 8 in
+    let a = Array63.make n (of_int 0) in
+    mcount_queens a n
+
+end
+

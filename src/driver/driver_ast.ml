@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -27,12 +27,13 @@ type metarg =
   | PMAint of int
 
 type th_rule =
-  | Rprelude  of string
-  | Rsyntaxts of qualid * string
-  | Rsyntaxfs of qualid * string
-  | Rsyntaxps of qualid * string
-  | Rremovepr of qualid
-  | Rmeta     of string * metarg list
+  | Rprelude   of string
+  | Rsyntaxts  of qualid * string
+  | Rsyntaxfs  of qualid * string
+  | Rsyntaxps  of qualid * string
+  | Rconverter of qualid * string
+  | Rremovepr  of qualid
+  | Rmeta      of string * metarg list
 
 type theory_rules = {
   thr_name  : qualid;
@@ -43,7 +44,6 @@ type mo_rule =
   | MRtheory    of th_rule
   | MRexception of qualid * string
   | MRval       of qualid * string
-  | MRconverter of qualid * string
 
 type module_rules = {
   mor_name  : qualid;
@@ -53,17 +53,21 @@ type module_rules = {
 type global =
   | Prelude of string
   | Printer of string
+  | ModelParser of string
   | RegexpValid of string
   | RegexpInvalid of string
   | RegexpTimeout of string
   | RegexpOutOfMemory of string
+  | RegexpStepsLimitExceeded of string
   | RegexpUnknown of string * string
   | RegexpFailure of string * string
   | TimeRegexp of string
+  | StepRegexp of string * int
   | ExitCodeValid of int
   | ExitCodeInvalid of int
   | ExitCodeTimeout of int
   | ExitCodeOutOfMemory of int
+  | ExitCodeStepsLimitExceeded of int
   | ExitCodeUnknown of int * string
   | ExitCodeFailure of int * string
   | Filename of string

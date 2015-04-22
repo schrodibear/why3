@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -146,6 +146,12 @@ val sprintf :
 
 val sprintf_wnl :
   ('b,  formatter, unit, string) Pervasives.format4 -> 'b
+
+val html_char : Format.formatter -> char -> unit
+val html_string : Format.formatter -> string -> unit
+  (** formats the string by escaping special HTML characters
+      quote, double quote, <, > and & *)
+
 
 module Ansi :
 sig

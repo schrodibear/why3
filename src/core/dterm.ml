@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -549,8 +549,11 @@ and try_term strict keep_loc uloc env prop dty node =
   | DTcast _ | DTuloc _ | DTlabel _ ->
       assert false (* already stripped *)
 
-let fmla ~strict ~keep_loc dt = term ~strict ~keep_loc None Mstr.empty true dt
-let term ~strict ~keep_loc dt = term ~strict ~keep_loc None Mstr.empty false dt
+let fmla ?(strict=true) ?(keep_loc=true) dt =
+  term ~strict ~keep_loc None Mstr.empty true dt
+
+let term ?(strict=true) ?(keep_loc=true) dt =
+  term ~strict ~keep_loc None Mstr.empty false dt
 
 (** Exception printer *)
 

@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -22,8 +22,9 @@
 %token <string> STRING
 %token <string> OPERATOR
 %token <string> INPUT (* never reaches the parser *)
-%token THEORY END SYNTAX REMOVE META PRELUDE PRINTER
-%token VALID INVALID TIMEOUT OUTOFMEMORY UNKNOWN FAIL TIME
+%token THEORY END SYNTAX REMOVE META PRELUDE PRINTER MODEL_PARSER
+%token VALID INVALID UNKNOWN FAIL
+%token TIMEOUT OUTOFMEMORY STEPSLIMITEXCEEDED TIME STEPS
 %token UNDERSCORE LEFTPAR RIGHTPAR DOT QUOTE EOF
 %token BLACKLIST
 %token MODULE EXCEPTION VAL CONVERTER
@@ -51,16 +52,20 @@ list0_global_theory:
 global:
 | PRELUDE STRING { Prelude $2 }
 | PRINTER STRING { Printer $2 }
+| MODEL_PARSER STRING { ModelParser $2 }
 | VALID STRING { RegexpValid $2 }
 | INVALID STRING { RegexpInvalid $2 }
 | TIMEOUT STRING { RegexpTimeout $2 }
 | OUTOFMEMORY STRING { RegexpOutOfMemory $2 }
+| STEPSLIMITEXCEEDED STRING { RegexpStepsLimitExceeded $2 }
 | TIME STRING  { TimeRegexp $2 }
+| STEPS STRING INTEGER { StepRegexp ($2, $3) }
 | UNKNOWN STRING STRING { RegexpUnknown ($2, $3) }
 | FAIL STRING STRING { RegexpFailure ($2, $3) }
 | VALID INTEGER { ExitCodeValid $2 }
 | INVALID INTEGER { ExitCodeInvalid $2 }
 | TIMEOUT INTEGER { ExitCodeTimeout $2 }
+| STEPSLIMITEXCEEDED INTEGER { ExitCodeStepsLimitExceeded $2 }
 | UNKNOWN INTEGER STRING { ExitCodeUnknown ($2, $3) }
 | FAIL INTEGER STRING { ExitCodeFailure ($2, $3) }
 | FILENAME STRING { Filename $2 }
@@ -74,14 +79,15 @@ theory:
     { { thr_name = $2; thr_rules = $3 } }
 
 trule:
-| PRELUDE STRING                   { Rprelude  ($2) }
-| SYNTAX TYPE      qualid STRING   { Rsyntaxts ($3, $4) }
-| SYNTAX CONSTANT  qualid STRING   { Rsyntaxfs ($3, $4) }
-| SYNTAX FUNCTION  qualid STRING   { Rsyntaxfs ($3, $4) }
-| SYNTAX PREDICATE qualid STRING   { Rsyntaxps ($3, $4) }
-| REMOVE PROP qualid               { Rremovepr ($3) }
-| META ident meta_args             { Rmeta     ($2, $3) }
-| META STRING meta_args            { Rmeta     ($2, $3) }
+| PRELUDE STRING                   { Rprelude   ($2) }
+| SYNTAX TYPE      qualid STRING   { Rsyntaxts  ($3, $4) }
+| SYNTAX CONSTANT  qualid STRING   { Rsyntaxfs  ($3, $4) }
+| SYNTAX FUNCTION  qualid STRING   { Rsyntaxfs  ($3, $4) }
+| SYNTAX PREDICATE qualid STRING   { Rsyntaxps  ($3, $4) }
+| SYNTAX CONVERTER qualid STRING   { Rconverter ($3, $4) }
+| REMOVE PROP qualid               { Rremovepr  ($3) }
+| META ident meta_args             { Rmeta      ($2, $3) }
+| META STRING meta_args            { Rmeta      ($2, $3) }
 
 meta_args: separated_nonempty_list(COMMA,meta_arg) { $1 }
 
@@ -105,20 +111,22 @@ qualid_:
 | ident DOT qualid_  { ($1 :: $3) }
 
 ident:
-| IDENT     { $1 }
-| SYNTAX    { "syntax" }
-| REMOVE    { "remove" }
-| PRELUDE   { "prelude" }
-| BLACKLIST { "blacklist" }
-| PRINTER   { "printer" }
-| VALID     { "valid" }
-| INVALID   { "invalid" }
-| TIMEOUT   { "timeout" }
-| UNKNOWN   { "unknown" }
-| FAIL      { "fail" }
-| FILENAME  { "filename" }
-| TRANSFORM { "transformation" }
-| PLUGIN    { "plugin" }
+| IDENT        { $1 }
+| SYNTAX       { "syntax" }
+| REMOVE       { "remove" }
+| PRELUDE      { "prelude" }
+| BLACKLIST    { "blacklist" }
+| PRINTER      { "printer" }
+| STEPS        { "steps" }
+| MODEL_PARSER { "model_parser" }
+| VALID        { "valid" }
+| INVALID      { "invalid" }
+| TIMEOUT      { "timeout" }
+| UNKNOWN      { "unknown" }
+| FAIL         { "fail" }
+| FILENAME     { "filename" }
+| TRANSFORM    { "transformation" }
+| PLUGIN       { "plugin" }
 
 ident_rich:
 | ident                     { $1 }
@@ -188,6 +196,5 @@ mrule:
 | trule                          { MRtheory $1 }
 | SYNTAX EXCEPTION qualid STRING { MRexception ($3, $4) }
 | SYNTAX VAL qualid STRING       { MRval ($3, $4) }
-| SYNTAX CONVERTER qualid STRING { MRconverter ($3, $4) }
 
 loc(X): X { Loc.extract ($startpos,$endpos), $1 }

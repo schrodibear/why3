@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -65,14 +65,10 @@ let time_start = Unix.gettimeofday ()
 
 let set_debug_formatter f =
   (** enable the usual behavior of stderr: flush at every new line *)
-  let out,flush,newline,spaces =
-    Format.pp_get_all_formatter_output_functions f () in
-  Format.pp_set_all_formatter_output_functions
-    f
-    ~out
-    ~flush
-    ~newline:(fun () -> newline (); flush ())
-    ~spaces;
+  let o = Format.pp_get_formatter_out_functions f () in
+  Format.pp_set_formatter_out_functions f
+    { o with Format.out_newline =
+        (fun () -> o.Format.out_newline (); o.Format.out_flush ()) };
   formatter := f
 
 let get_debug_formatter () = !formatter

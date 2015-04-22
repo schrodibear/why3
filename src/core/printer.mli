@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -24,14 +24,24 @@ type blacklist = string list
 
 type 'a pp = Format.formatter -> 'a -> unit
 
+(* Makes it possible to estabilish traceability from names
+in the output of the printer to elements of AST in its input. *)
+type printer_mapping = {
+  lsymbol_m     : string -> Term.lsymbol;
+  queried_terms : Term.term list;
+}
+
 type printer_args = {
   env        : Env.env;
   prelude    : prelude;
   th_prelude : prelude_map;
   blacklist  : blacklist;
+  mutable printer_mapping : printer_mapping;
 }
 
 type printer = printer_args -> ?old:in_channel -> task pp
+
+val get_default_printer_mapping : printer_mapping
 
 val register_printer : desc:Pp.formatted -> string -> printer -> unit
 
@@ -46,6 +56,7 @@ val print_th_prelude : task -> prelude_map pp
 
 val meta_syntax_type : meta
 val meta_syntax_logic : meta
+val meta_syntax_converter : meta
 val meta_remove_prop : meta
 val meta_remove_logic : meta
 val meta_remove_type : meta
@@ -53,6 +64,7 @@ val meta_realized_theory : meta
 
 val syntax_type : tysymbol -> string -> tdecl
 val syntax_logic : lsymbol -> string -> tdecl
+val syntax_converter : lsymbol -> string -> tdecl
 val remove_prop : prsymbol -> tdecl
 
 val check_syntax_type: tysymbol -> string -> unit
@@ -60,12 +72,17 @@ val check_syntax_logic: lsymbol -> string -> unit
 
 type syntax_map = string Mid.t
 (* [syntax_map] maps the idents of removed props to "" *)
+type converter_map = string Mls.t
 
 val get_syntax_map : task -> syntax_map
 val add_syntax_map : tdecl -> syntax_map -> syntax_map
-  (* interprets a declaration as a syntax rule, if any *)
+(* interprets a declaration as a syntax rule, if any *)
+
+val get_converter_map : task -> converter_map
+val add_converter_map : tdecl -> converter_map -> converter_map
 
 val query_syntax : syntax_map -> ident -> string option
+val query_converter : converter_map -> lsymbol -> string option
 
 val syntax_arguments : string -> 'a pp -> 'a list pp
 (** (syntax_arguments templ print_arg fmt l) prints in the formatter fmt
@@ -82,6 +99,8 @@ val syntax_arguments_typed :
 (** {2 pretty-printing transformations (useful for caching)} *)
 
 val on_syntax_map : (syntax_map -> 'a Trans.trans) -> 'a Trans.trans
+
+val on_converter_map : (converter_map -> 'a Trans.trans) -> 'a Trans.trans
 
 val sprint_tdecl :
   ('a -> Format.formatter -> Theory.tdecl -> 'a * string list) ->
@@ -100,6 +119,7 @@ exception NotImplemented  of        string
 
 val unsupportedType : ty   -> string -> 'a
 val unsupportedTerm : term -> string -> 'a
+val unsupportedPattern : pattern -> string -> 'a
 val unsupportedDecl : decl -> string -> 'a
 val notImplemented  :         string -> 'a
 
@@ -123,4 +143,3 @@ val catch_unsupportedTerm : (term -> 'a) -> (term -> 'a)
 val catch_unsupportedDecl : (decl -> 'a) -> (decl -> 'a)
 (** same as {! catch_unsupportedType} but use [UnsupportedDecl]
     instead of [UnsupportedType] *)
-

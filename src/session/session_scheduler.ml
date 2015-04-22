@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -292,10 +292,12 @@ let schedule_edition t command filename callback =
   let res_parser =
     { Call_provers.prp_exitcodes = [(0,Call_provers.Unknown "")];
       Call_provers.prp_regexps = [];
-      Call_provers.prp_timeregexps = []
+      Call_provers.prp_timeregexps = [];
+      Call_provers.prp_stepsregexp = [];
+      Call_provers.prp_model_parser = fun _ _ -> [] 
     } in
   let precall =
-    Call_provers.call_on_file ~command ~res_parser ~redirect:false filename in
+    Call_provers.call_on_file ~command ~res_parser ~redirect:false filename ~printer_mapping:Printer.get_default_printer_mapping in
   callback Running;
   t.running_proofs <- (Check_prover(callback, precall ())) :: t.running_proofs;
   run_timeout_handler t
@@ -414,6 +416,7 @@ let adapt_limits a =
       match r with
       | Call_provers.OutOfMemory -> increased_time, a.proof_memlimit
       | Call_provers.Timeout -> a.proof_timelimit, increased_mem
+      | Call_provers.StepsLimitExceeded
       | Call_provers.Valid
       | Call_provers.Unknown _
       | Call_provers.Invalid -> increased_time, increased_mem
@@ -444,36 +447,38 @@ let fuzzy_proof_time nres ores =
     Done { res' with Call_provers.pr_time = told }
   | _, _ -> nres
 
+let dummy_limits = (0,0,0)
+
 (** run_external_proof_v3 doesn't modify existing proof attempt, it can just
     create new one by find_prover *)
 let run_external_proof_v3 eS eT a callback =
   match find_prover eS a with
   | None ->
-    callback a a.proof_prover 0 None Starting;
+    callback a a.proof_prover dummy_limits None Starting;
     (* nothing to do *)
-    callback a a.proof_prover 0 None MissingProver
+    callback a a.proof_prover dummy_limits None MissingProver
   | Some(ap,npc,a) ->
-    callback a ap 0 None Starting;
+    callback a ap dummy_limits None Starting;
     if a.proof_edited_as = None &&
        npc.prover_config.Whyconf.interactive
     then begin
-      callback a ap 0 None (MissingFile "unedited")
+      callback a ap dummy_limits None (MissingFile "unedited")
     end else begin
       let previous_result = a.proof_state in
       let timelimit, memlimit = adapt_limits a in
-      let stepslimit, timelimit =
+      let stepslimit =
 	match a with
 	| { proof_state =
             Done { Call_provers.pr_answer = Call_provers.Valid;
                    Call_provers.pr_steps = s };
-	    proof_obsolete = false } when s >= 0 -> s, 0
-	| _ -> -1, timelimit
+	    proof_obsolete = false } when s >= 0 -> s
+	| _ -> -1
       in
       let inplace = npc.prover_config.Whyconf.in_place in
-      let command = Whyconf.get_complete_command npc.prover_config in
+      let command = Whyconf.get_complete_command npc.prover_config stepslimit in
       let cb result =
         let result = fuzzy_proof_time result previous_result in
-        callback a ap timelimit
+        callback a ap (timelimit,memlimit,stepslimit)
           (match previous_result with Done res -> Some res | _ -> None)
           (StatusChange result) in
       try
@@ -491,13 +496,13 @@ let run_external_proof_v3 eS eT a callback =
           eT
           (goal_task_or_recover eS a.proof_parent)
       with NoFile f ->
-        callback a ap 0 None (MissingFile f)
+        callback a ap dummy_limits None (MissingFile f)
     end
 
 (** run_external_proof_v2 modify the session according to the current state *)
 let run_external_proof_v2 eS eT a callback =
   let previous_res = ref (a.proof_state,a.proof_obsolete) in
-  let callback a ap timelimit previous state =
+  let callback a ap limits previous state =
     begin match state with
     | Starting -> previous_res := (a.proof_state,a.proof_obsolete)
     | MissingFile _ ->
@@ -515,7 +520,7 @@ let run_external_proof_v2 eS eT a callback =
       end
     | _ -> ()
     end;
-    callback a ap timelimit previous state
+    callback a ap limits previous state
   in
   run_external_proof_v3 eS eT a callback
 
@@ -593,11 +598,94 @@ let run_prover eS eT ~context_unproved_goals_only ~timelimit ~memlimit pr a =
       prover_on_goal_or_children eS eT
         ~context_unproved_goals_only ~timelimit ~memlimit pr m.metas_goal
 
+
+
+(***********************************)
+(* method: mark proofs as obsolete *)
+(***********************************)
+
+let cancel_proof a =
+  if not a.proof_archived then
+    set_obsolete ~notify a
+
+let cancel = iter_proof_attempt cancel_proof
+
+(** Set or unset archive *)
+
+let set_archive a b = set_archived a b; notify (Proof_attempt a)
+
+(*********************************)
+(* method: check existing proofs *)
+(*********************************)
+
+type report =
+  | Result of Call_provers.prover_result * Call_provers.prover_result
+  | CallFailed of exn
+  | Prover_not_installed
+  | Edited_file_absent of string
+  | No_former_result of Call_provers.prover_result
+
+let push_report report (g,p,limits,r) =
+  (g.goal_name,p,limits,r)::report
+
+let check_external_proof eS eT todo a =
+  let callback a ap limits old s =
+    let g = a.proof_parent in
+    match s with
+    | Starting ->
+      Todo.start todo
+    | MissingFile f ->
+      Todo._done todo (g, ap, limits, Edited_file_absent f)
+    | MissingProver ->
+      Todo._done todo (g, ap, limits, Prover_not_installed)
+    | StatusChange (Scheduled | Running) -> ()
+    | StatusChange (Interrupted | Unedited | JustEdited) -> assert false
+    | StatusChange (InternalFailure e) ->
+      Todo._done todo (g, ap, limits, CallFailed e)
+    | StatusChange (Done res) ->
+      let r =
+        match old with
+        | None -> No_former_result res
+        | Some old -> Result (res, old) in
+      Todo._done todo (g, ap, limits, r) in
+  run_external_proof_v2 eS eT a callback
+
+let rec goal_iter_proof_attempt_with_release ~release f g =
+  let iter g = goal_iter_proof_attempt_with_release ~release f g in
+  PHprover.iter (fun _ a -> f a) g.goal_external_proofs;
+  PHstr.iter (fun _ t -> List.iter iter t.transf_goals) g.goal_transformations;
+  Mmetas_args.iter (fun _ t -> iter t.metas_goal) g.goal_metas;
+  if release then release_task g
+
+let check_all ?(release=false) ?filter eS eT ~callback =
+  Debug.dprintf debug "[Sched] check all@.%a@." print_session eS.session;
+  let todo = Todo.create [] push_report callback in
+  Todo.start todo;
+  let check_top_goal g =
+    let check a =
+      let c = match filter with
+        | None -> true
+        | Some f -> f a in
+      if c then check_external_proof eS eT todo a in
+    goal_iter_proof_attempt_with_release ~release check g
+  in
+  PHstr.iter (fun _ file ->
+      List.iter (fun t ->
+          List.iter check_top_goal t.theory_goals)
+        file.file_theories)
+    eS.session.session_files;
+  Todo.stop todo
+
+
 (**********************************)
 (* method: replay obsolete proofs *)
 (**********************************)
 
-let proof_successful_or_just_edited a =
+(* in the default context, a proof should be replayed if
+   . it was successful or
+   . it was just edited
+*)
+let proof_should_be_replayed a =
   match a.proof_state with
     | Done { Call_provers.pr_answer = Call_provers.Valid }
     | JustEdited -> true
@@ -608,7 +696,7 @@ let rec replay_on_goal_or_children eS eT
   iter_goal
     (fun a ->
        if not obsolete_only || a.proof_obsolete then
-         if not context_unproved_goals_only || proof_successful_or_just_edited a
+         if not context_unproved_goals_only || proof_should_be_replayed a
          then run_external_proof eS eT a)
     (iter_transf
        (replay_on_goal_or_children eS eT
@@ -649,83 +737,6 @@ let replay eS eT ~obsolete_only ~context_unproved_goals_only a =
     | Metas m ->
       replay_on_goal_or_children eS eT
         ~obsolete_only ~context_unproved_goals_only m.metas_goal
-
-
-(***********************************)
-(* method: mark proofs as obsolete *)
-(***********************************)
-
-let cancel_proof a =
-  if not a.proof_archived then
-    set_obsolete ~notify a
-
-let cancel = iter_proof_attempt cancel_proof
-
-(** Set or unset archive *)
-
-let set_archive a b = set_archived a b; notify (Proof_attempt a)
-
-(*********************************)
-(* method: check existing proofs *)
-(*********************************)
-
-type report =
-  | Result of Call_provers.prover_result * Call_provers.prover_result
-  | CallFailed of exn
-  | Prover_not_installed
-  | Edited_file_absent of string
-  | No_former_result of Call_provers.prover_result
-
-let push_report report (g,p,t,r) =
-  (g.goal_name,p,t,r)::report
-
-let check_external_proof eS eT todo a =
-  let callback a ap tl old s =
-    let g = a.proof_parent in
-    match s with
-    | Starting ->
-      Todo.start todo
-    | MissingFile f ->
-      Todo._done todo (g, ap, tl, Edited_file_absent f)
-    | MissingProver ->
-      Todo._done todo (g, ap, tl, Prover_not_installed)
-    | StatusChange (Scheduled | Running) -> ()
-    | StatusChange (Interrupted | Unedited | JustEdited) -> assert false
-    | StatusChange (InternalFailure e) ->
-      Todo._done todo (g, ap, tl, CallFailed e)
-    | StatusChange (Done res) ->
-      let r =
-        match old with
-        | None -> No_former_result res
-        | Some old -> Result (res, old) in
-      Todo._done todo (g, ap, tl, r) in
-  run_external_proof_v2 eS eT a callback
-
-let rec goal_iter_proof_attempt_with_release ~release f g =
-  let iter g = goal_iter_proof_attempt_with_release ~release f g in
-  PHprover.iter (fun _ a -> f a) g.goal_external_proofs;
-  PHstr.iter (fun _ t -> List.iter iter t.transf_goals) g.goal_transformations;
-  Mmetas_args.iter (fun _ t -> iter t.metas_goal) g.goal_metas;
-  if release then release_task g
-
-let check_all ?(release=false) ?filter eS eT ~callback =
-  Debug.dprintf debug "[Sched] check all@.%a@." print_session eS.session;
-  let todo = Todo.create [] push_report callback in
-  Todo.start todo;
-  let check_top_goal g =
-    let check a =
-      let c = match filter with
-        | None -> true
-        | Some f -> f a in
-      if c then check_external_proof eS eT todo a in
-    goal_iter_proof_attempt_with_release ~release check g
-  in
-  PHstr.iter (fun _ file ->
-      List.iter (fun t ->
-          List.iter check_top_goal t.theory_goals)
-        file.file_theories)
-    eS.session.session_files;
-  Todo.stop todo
 
 
 (***********************************)
@@ -888,12 +899,21 @@ let remove_metas t =
   O.remove t.metas_key;
   remove_metas ~notify t
 
+(* a proof is removable if
+    . it is not in progress and
+    . it is obsolete or not successful
+*)
+let proof_removable a =
+  match a.proof_state with
+  | Done pr ->
+    a.proof_obsolete || pr.Call_provers.pr_answer <> Call_provers.Valid
+  | _ -> false
+
+
 let rec clean = function
   | Goal g when Opt.inhabited g.goal_verified ->
     iter_goal
-      (fun a ->
-        if a.proof_obsolete || not (proof_successful_or_just_edited a) then
-          remove_proof_attempt a)
+      (fun a -> if proof_removable a then remove_proof_attempt a)
       (fun t ->
         if not (Opt.inhabited t.transf_verified) then remove_transformation t
         else transf_iter clean t)
@@ -903,18 +923,7 @@ let rec clean = function
       g
   | Goal g ->
     (** don't iter on proof_attempt if the goal is not proved *)
-    iter_goal
-      (fun _ -> ())
-      (fun t ->
-        (* NO !!!
-           if not t.transf_verified then remove_transformation t
-        else
-        *)
-        transf_iter clean t)
-      (fun m ->
-        if not (Opt.inhabited m.metas_verified) then remove_metas m
-        else metas_iter clean m)
-      g
+    iter_goal (fun _ -> ()) (transf_iter clean) (metas_iter clean) g
   | Proof_attempt a -> clean (Goal a.proof_parent)
   | any -> iter clean any
 

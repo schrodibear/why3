@@ -1,7 +1,7 @@
 ####################################################################
 #                                                                  #
 #  The Why3 Verification Platform   /   The Why3 Development Team  #
-#  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  #
+#  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  #
 #                                                                  #
 #  This software is distributed under the terms of the GNU Lesser  #
 #  General Public License version 2.1, with the special exception  #
@@ -171,8 +171,8 @@ OCAMLVERSION=`$OCAMLC -v | sed -n -e 's|.*version* *\(.*\)$|\1|p' `
 echo "ocaml version is $OCAMLVERSION"
 
 case "$OCAMLVERSION" in
-  0.*|1.*|2.*|3.0*|3.10*|3.11|3.11.0*|3.11.1*)
-        AC_MSG_ERROR(You need Objective Caml 3.11.2 or higher);;
+  0.*|1.*|2.*|3.*|4.00.0)
+        AC_MSG_ERROR(You need Objective Caml 4.00.1 or higher);;
 esac
 
 # Ocaml library path
@@ -275,8 +275,6 @@ if test "$MENHIR" = no ; then
 	AC_MSG_ERROR(Cannot find menhir.)
 fi
 
-AC_CHECK_PROG(CAMLP5O,camlp5o,camlp5o,no)
-
 ## Where are the library we need
 # we look for ocamlfind; if not present, we just don't use it to find
 # libraries
@@ -292,11 +290,21 @@ if test "$USEOCAMLFIND" = yes; then
    fi
 fi
 
-#if ocamlfind is used it gives the install path for ocaml library
-if test "$USEOCAMLFIND" = yes; then
-   OCAMLINSTALLLIB=$(ocamlfind printconf destdir)
+if test "$enable_local" = no; then
+   LOCALDIR=''
 else
-   OCAMLINSTALLLIB=$OCAMLLIB
+   LOCALDIR="${PWD}"
+fi
+
+if test "$enable_local" = yes ; then
+   OCAMLINSTALLLIB=$LOCALDIR/lib
+else
+   #if ocamlfind is used it gives the install path for ocaml library
+   if test "$USEOCAMLFIND" = yes; then
+      OCAMLINSTALLLIB=$(ocamlfind printconf destdir)
+   else
+      OCAMLINSTALLLIB=$OCAMLLIB
+   fi
 fi
 
 # bin-annot
@@ -486,10 +494,21 @@ else
         AC_MSG_CHECKING(Coq version)
         COQVERSION=`$COQC -v | sed -n -e 's|.*version* *\([[^ ]]*\) .*$|\1|p' `
 
+        #Even if the name of the variable is CAMLP4 the value can be camlp5
+        COQCAMLP=$(eval `coqtop -config`; echo ${CAMLP4BIN}${CAMLP4}o)
+        COQCAMLPLIB=$(eval `coqtop -config`; echo ${CAMLP4LIB})
+
         case $COQVERSION in
-          8.4*|trunk)
+          8.4*)
 	        enable_coq_support=yes
-                coq_compat_version=".8.4"
+                coq_compat_version="COQ84"
+                COQPPLIBS="$COQLIB/parsing/grammar.cma"
+                AC_MSG_RESULT($COQVERSION)
+                ;;
+          8.5*|trunk)
+                enable_coq_support=yes
+                coq_compat_version="COQ85"
+                COQPPLIBS="$OCAMLLIB/unix.cma $OCAMLLIB/threads/threads.cma $COQLIB/grammar/grammar.cma"
                 AC_MSG_RESULT($COQVERSION)
                 ;;
           *)
@@ -499,6 +518,12 @@ else
                 ;;
         esac
     fi
+    AC_CHECK_PROG(COQDEP,coqdep,coqdep,no)
+    if test "$COQDEP" = no ; then
+        enable_coq_support=no
+        AC_MSG_WARN(Cannot find coqdep.)
+        reason_coq_support=" (coqdep not found)"
+     fi
 fi
 
 if test "$enable_coq_support" = no; then
@@ -522,18 +547,9 @@ if test "$enable_coq_tactic" = yes -a "$CAMLP5O" = no; then
 fi
 
 if test "$enable_coq_libs" = yes; then
-   AC_CHECK_PROG(COQDEP,coqdep,coqdep,no)
-   if test "$COQDEP" = no ; then
-      enable_coq_libs=no
-      AC_MSG_WARN(Cannot find coqdep.)
-      reason_coq_libs=" (coqdep not found)"
-   fi
-fi
-
-if test "$enable_coq_libs" = yes; then
    AC_MSG_CHECKING([for Flocq])
    AS_IF(
-     [ echo "Require Import Flocq_version BinNat." \
+     [ echo "Require Import Flocq.Flocq_version BinNat." \
             "Goal (20200 <= Flocq_version)%N. easy. Qed." > conftest.v
        "$COQC" conftest.v > conftest.err ],
      [ AC_MSG_RESULT(yes) ],
@@ -661,21 +677,15 @@ if test "$enable_frama_c" = yes ; then
       FRAMAC_VERSION=`$FRAMAC -version | sed -n -e 's|Version: *\(.*\)$|\1|p'`
       AC_MSG_RESULT($FRAMAC_VERSION)
       case $FRAMAC_VERSION in
-         Neon-*) ;;
-         *) AC_MSG_WARN(Version Neon required.)
+         Sodium-*) ;;
+         *) AC_MSG_WARN(Version Sodium required.)
             enable_frama_c=no
-            reason_frama_c=" (version Neon required)"
+            reason_frama_c=" (version Sodium required)"
             ;;
       esac
       FRAMAC_SHARE=`$FRAMAC -print-path`
       FRAMAC_LIBDIR=`$FRAMAC -print-libpath`
    fi
-fi
-
-if test "$enable_local" = no; then
-   LOCALDIR=''
-else
-   LOCALDIR="${PWD}"
 fi
 
 #For the META
@@ -722,7 +732,8 @@ AC_SUBST(MENHIR)
 AC_SUBST(enable_profiling)
 AC_SUBST(enable_bin_annot)
 
-AC_SUBST(CAMLP5O)
+AC_SUBST(COQCAMLP)
+AC_SUBST(COQCAMLPLIB)
 
 AC_SUBST(enable_ide)
 AC_SUBST(LABLGTK2LIB)
@@ -745,13 +756,14 @@ AC_SUBST(MENHIRLIB)
 
 AC_SUBST(enable_coq_tactic)
 AC_SUBST(enable_coq_libs)
+AC_SUBST(enable_coq_support)
 AC_SUBST(enable_coq_fp_libs)
 AC_SUBST(coq_compat_version)
 
 AC_SUBST(COQC)
 AC_SUBST(COQDEP)
 AC_SUBST(COQLIB)
-AC_SUBST(COQVERSION)
+AC_SUBST(COQPPLIBS)
 AC_SUBST(COMPILETIMECOQ)
 
 AC_SUBST(enable_pvs_libs)

@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -14,15 +14,32 @@
   - no more parentheses in drivers (the printer will add them with protect_on)
 
   - driver uses %1, %2, etc. and translation eta-expanses if necessary
+      introduce a let when %1 appears several times?
 
   - simplications
       let x = y in ...
       let x = 17 in ... (converter)
       let x = () in ...
       let f (us: unit) = ... (when variable us is not used)
+      some beta-reductions, at least (fun _ -> e) ()
 
   - singleton types
     record/constructor fields of type unit
+
+  - preludes
+
+  - command line
+
+  - drivers:
+
+    we'd like to use both ocaml64.drv from the lib and a local
+    driver (specific to the files being extracted) but currently
+
+    - only one driver is allowed on the extraction command line
+
+    - import "ocaml64" in the local driver fails, because it's looking
+      for a file ocaml64 in the local directory (and not for ocaml64.drv
+      in the library)
 
 *)
 
@@ -512,7 +529,8 @@ module Translate = struct
           ML.Eraise (ML.Xexit, None)
       | Eraise (xs, e1) ->
           begin match query_syntax info.info_syn xs.xs_name with
-          | Some s -> ML.Eraise (ML.Xsyntax s, Some (expr info e1))
+          | Some s ->
+              ML.Eraise (ML.Xsyntax s, Some (expr info e1))
           | None when ity_equal xs.xs_ity ity_unit ->
               ML.Eraise (ML.Xident xs.xs_name, None)
           | None ->
@@ -887,6 +905,9 @@ module Print = struct
         fprintf fmt (protect_on paren "let %a = @[%a@] in@ %a")
           (print_lident info) v (print_expr info) e1 (print_expr info) e2;
         forget_id v
+    | Ematch (e1, [p, b1]) ->
+        fprintf fmt (protect_on paren "@[<hov 2>let @[%a@] =@ @[%a@]@] in@ %a")
+          (print_pat info) p (print_expr info) e1 (print_expr info) b1
     | Ematch (e1, bl) ->
         fprintf fmt "@[begin match @[%a@] with@\n@[<hov>%a@] end@]"
           (print_expr info) e1 (print_list newline (print_branch info)) bl
@@ -931,7 +952,7 @@ module Print = struct
           (print_expr info) e1 (print_expr info) e2
     | Efor (x, vfrom, dir, vto, e1) ->
         fprintf fmt
-          "@[<hov 2>(Why3__IntAux.for_loop_%s %a %a@ (fun %a -> %a))@]"
+          "@[<hov 2>(Why3__IntAux.for_loop_%s %a %a@ (fun %a ->@ %a))@]"
           (if dir = To then "to" else "downto")
           (print_lident info) vfrom (print_lident info) vto
           (print_lident info) x (print_expr info) e1
@@ -939,9 +960,11 @@ module Print = struct
         assert (a = None);
         fprintf fmt (protect_on paren "raise Pervasives.Exit")
     | Eraise (Xsyntax s, None) ->
-        syntax_arguments s (print_expr info) fmt []
+        fprintf fmt (protect_on paren "raise %a")
+          (syntax_arguments s (print_expr info)) []
     | Eraise (Xsyntax s, Some e1) ->
-        syntax_arguments s (print_expr info) fmt [e1]
+        fprintf fmt (protect_on paren "raise %a")
+          (syntax_arguments s (print_expr info)) [e1]
     | Eraise (Xident id, None) ->
         fprintf fmt (protect_on paren "raise %a") (print_uident info) id
     | Eraise (Xident id, Some e1) ->
@@ -1018,6 +1041,11 @@ end
 
 let extract_filename ?fname th =
   (modulename ?fname th.th_path th.th_name.Ident.id_string) ^ ".ml"
+
+(*
+let arith_meta = register_meta "ocaml arithmetic" [MTstring]
+  ~desc:"Specify@ OCaml@ arithmetic:@ 32, 64, or unsafe"
+*)
 
 let extract_theory drv ?old ?fname fmt th =
   ignore (old); ignore (fname);

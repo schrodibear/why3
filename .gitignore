@@ -132,13 +132,15 @@ why3.conf
 # /share/
 /share/emacs/semantic.cache
 /share/Makefile.config
+/share/drivers
+/share/modules
+/share/theories
 
 # /src/
 /src/config.sh
 
 # Coq tactic
-/src/coq-tactic/coqCompat.ml
-/src/coq-tactic/g_why3tac.ml
+/src/coq-tactic/why3tac.ml
 /src/coq-tactic/.why3-vo-*
 
 # PVS
@@ -242,6 +244,8 @@ pvsbin/
 /examples/euler001/*__*.ml
 /examples/sudoku/*__*.ml
 /examples/sudoku/jsmain.js
+/examples/in_progress/sudoku_reloaded/*__*.ml
+/examples/in_progress/sudoku_reloaded/jsmain.js
 /examples/gcd/*__*.ml
 /examples/gcd/jsmain.js
 /examples/defunctionalization/*__*.ml
@@ -268,13 +272,12 @@ pvsbin/
 /src/jessie/Jessie3_DEP
 /src/jessie/autom4te.cache/
 /src/jessie/config.log
-/src/jessie/config.status
 /src/jessie/Makefile
 /src/jessie/literals.ml
-/src/jessie/ptests_local_config.ml
-/src/jessie/tests/basic/frama_c_journal.ml
+/src/jessie/tests/ptests_config
 /src/jessie/tests/basic/result/*.log
 /src/jessie/tests/demo/result/*.log
+
 /trash
 
 # Eclipse OcaIDE auxiliary files

@@ -1,13 +1,15 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
 (*  on linking described in file LICENSE.                           *)
 (*                                                                  *)
 (********************************************************************)
+
+open Model_parser
 
 (** Call provers and parse their outputs *)
 
@@ -17,9 +19,11 @@ type prover_answer =
   | Invalid
       (** The task is invalid *)
   | Timeout
-      (** the task timeout, ie it takes more time than specified *)
+      (** the task timeouts, ie it takes more time than specified *)
   | OutOfMemory
-      (** the task timeout, ie it takes more time than specified *)
+      (** the task runs out of memory *)
+  | StepsLimitExceeded
+      (** the task required more steps than the limit provided *)
   | Unknown of string
       (** The prover can't determine if the task is valid *)
   | Failure of string
@@ -39,6 +43,8 @@ type prover_result = {
   (** The time taken by the prover *)
   pr_steps  : int;
   (** The number of steps taken by the prover (-1 if not available) *)
+  (** The model produced by a the solver *)
+  pr_model  : model_element list;
 }
 
 val print_prover_answer : Format.formatter -> prover_answer -> unit
@@ -57,14 +63,24 @@ val debug : Debug.flag
 type timeregexp
 (** The type of precompiled regular expressions for time parsing *)
 
+type stepsregexp
+(** The type of precompiled regular expressions for parsing of steps *)
+
 val timeregexp : string -> timeregexp
 (** Converts a regular expression with special markers '%h','%m',
     '%s','%i' (for milliseconds) into a value of type [timeregexp] *)
 
+val stepsregexp : string -> int -> stepsregexp
+(** stepsregexp s n creates a regular expression for matching number of steps.
+s is regular expression, n is a group number with steps information *)
+
 type prover_result_parser = {
   prp_regexps     : (Str.regexp * prover_answer) list;
   prp_timeregexps : timeregexp list;
+  prp_stepsregexp : stepsregexp list;
   prp_exitcodes   : (int * prover_answer) list;
+  (* The parser for a model returned by the solver. *)
+  prp_model_parser : Model_parser.model_parser;
 }
 
 type prover_call
@@ -82,6 +98,7 @@ val call_on_file :
   ?memlimit   : int ->
   ?stepslimit : int ->
   res_parser  : prover_result_parser ->
+  printer_mapping : Printer.printer_mapping ->
   ?cleanup    : bool ->
   ?inplace    : bool ->
   ?redirect   : bool ->
@@ -94,6 +111,7 @@ val call_on_buffer :
   ?stepslimit : int ->
   res_parser  : prover_result_parser ->
   filename    : string ->
+  printer_mapping : Printer.printer_mapping ->
   ?inplace    : bool ->
   Buffer.t -> pre_prover_call
 (** Call a prover on the task printed in the {!type: Buffer.t} given.

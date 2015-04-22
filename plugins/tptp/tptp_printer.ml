@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -19,13 +19,15 @@ open Term
 open Decl
 open Printer
 
+let bls = ["true";"false"]
+
 let ident_printer =
   let san = sanitizer char_to_alpha char_to_alnumus in
-  create_ident_printer [] ~sanitizer:san
+  create_ident_printer bls ~sanitizer:san
 
 let pr_printer =
   let san = sanitizer char_to_lalpha char_to_alnumus in
-  create_ident_printer [] ~sanitizer:san
+  create_ident_printer bls ~sanitizer:san
 
 let print_symbol fmt id =
   let san = String.uncapitalize in

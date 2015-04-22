@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -33,7 +33,7 @@ type driver = {
   drv_blacklist   : string list;
   drv_meta        : (theory * Stdecl.t) Mid.t;
   drv_res_parser  : prover_result_parser;
-  drv_tag         : int
+  drv_tag         : int;
 }
 
 (** parse a driver file *)
@@ -73,8 +73,10 @@ let load_driver = let driver_tag = ref (-1) in fun env file extra_files ->
   let exitcodes = ref [] in
   let filename  = ref None in
   let printer   = ref None in
+  let model_parser = ref "no_model" in
   let transform = ref [] in
   let timeregexps = ref [] in
+  let stepsregexps = ref [] in
   let blacklist = Queue.create () in
 
   let set_or_raise loc r v error = match !r with
@@ -88,17 +90,24 @@ let load_driver = let driver_tag = ref (-1) in fun env file extra_files ->
     | RegexpInvalid s -> add_to_list regexps (Str.regexp s, Invalid)
     | RegexpTimeout s -> add_to_list regexps (Str.regexp s, Timeout)
     | RegexpOutOfMemory s -> add_to_list regexps (Str.regexp s, OutOfMemory)
+    | RegexpStepsLimitExceeded s ->
+      add_to_list regexps (Str.regexp s, StepsLimitExceeded)
     | RegexpUnknown (s,t) -> add_to_list regexps (Str.regexp s, Unknown t)
     | RegexpFailure (s,t) -> add_to_list regexps (Str.regexp s, Failure t)
     | TimeRegexp r -> add_to_list timeregexps (Call_provers.timeregexp r)
+    | StepRegexp (r,ns) ->
+      add_to_list stepsregexps (Call_provers.stepsregexp r ns)
     | ExitCodeValid s -> add_to_list exitcodes (s, Valid)
     | ExitCodeInvalid s -> add_to_list exitcodes (s, Invalid)
     | ExitCodeTimeout s -> add_to_list exitcodes (s, Timeout)
     | ExitCodeOutOfMemory s -> add_to_list exitcodes (s, OutOfMemory)
+    | ExitCodeStepsLimitExceeded s ->
+      add_to_list exitcodes (s, StepsLimitExceeded)
     | ExitCodeUnknown (s,t) -> add_to_list exitcodes (s, Unknown t)
     | ExitCodeFailure (s,t) -> add_to_list exitcodes (s, Failure t)
     | Filename s -> set_or_raise loc filename s "filename"
     | Printer s -> set_or_raise loc printer s "printer"
+    | ModelParser s -> model_parser := s
     | Transform s -> add_to_list transform s
     | Plugin files -> load_plugin (Filename.dirname file) files
     | Blacklist sl -> List.iter (fun s -> Queue.add s blacklist) sl
@@ -106,9 +115,9 @@ let load_driver = let driver_tag = ref (-1) in fun env file extra_files ->
   let f = load_file file in
   List.iter add_global f.f_global;
 
-  let thprelude = ref Mid.empty in
-  let meta      = ref Mid.empty in
-  let qualid    = ref [] in
+  let thprelude     = ref Mid.empty in
+  let meta          = ref Mid.empty in
+  let qualid        = ref [] in
 
   let find_pr th (loc,q) = try ns_find_pr th.th_export q
     with Not_found -> raise (Loc.Located (loc, UnknownProp (!qualid,q)))
@@ -145,6 +154,9 @@ let load_driver = let driver_tag = ref (-1) in fun env file extra_files ->
     | Rremovepr (q) ->
         let td = remove_prop (find_pr th q) in
         add_meta th td meta
+    | Rconverter (q,s) ->
+        let cs = syntax_converter (find_ls th q) s in
+        add_meta th cs meta
     | Rmeta (s,al) ->
         let rec ty_of_pty = function
           | PTyvar x ->
@@ -190,13 +202,15 @@ let load_driver = let driver_tag = ref (-1) in fun env file extra_files ->
     drv_thprelude   = Mid.map List.rev !thprelude;
     drv_blacklist   = Queue.fold (fun l s -> s :: l) [] blacklist;
     drv_meta        = !meta;
-    drv_res_parser = 
+    drv_res_parser =
       {
       prp_regexps     = List.rev !regexps;
       prp_timeregexps = List.rev !timeregexps;
+      prp_stepsregexp = List.rev !stepsregexps;
       prp_exitcodes   = List.rev !exitcodes;
+      prp_model_parser = Model_parser.lookup_model_parser !model_parser
     };
-    drv_tag         = !driver_tag
+    drv_tag         = !driver_tag;
   }
 
 let syntax_map drv =
@@ -231,10 +245,10 @@ let file_of_task drv input_file theory_name task =
 let file_of_theory drv input_file th =
   get_filename drv input_file th.th_name.Ident.id_string "null"
 
-let call_on_buffer ~command ?timelimit ?memlimit ?stepslimit ?inplace ~filename drv buffer =
+let call_on_buffer ~command ?timelimit ?memlimit ?stepslimit ?inplace ~filename ~printer_mapping drv buffer =
   Call_provers.call_on_buffer
     ~command ?timelimit ?memlimit ?stepslimit ~res_parser:drv.drv_res_parser
-    ~filename ?inplace buffer
+    ~filename ~printer_mapping ?inplace buffer
 
 
 (** print'n'prove *)
@@ -274,16 +288,20 @@ let print_task_prepared ?old drv fmt task =
     | None -> raise NoPrinter
     | Some p -> p
   in
-  let printer = lookup_printer p
-    { Printer.env = drv.drv_env;
+  let printer_args = { Printer.env = drv.drv_env;
       prelude     = drv.drv_prelude;
       th_prelude  = drv.drv_thprelude;
-      blacklist   = drv.drv_blacklist } in
-  fprintf fmt "@[%a@]@?" (printer ?old) task
+      blacklist   = drv.drv_blacklist;
+      printer_mapping = get_default_printer_mapping;
+    } in
+  let printer = lookup_printer p printer_args in
+  fprintf fmt "@[%a@]@?" (printer ?old) task;
+  printer_args.printer_mapping
 
 let print_task ?old drv fmt task =
   let task = prepare_task drv task in
-  print_task_prepared ?old drv fmt task
+  let _ = print_task_prepared ?old drv fmt task in
+  ()
 
 let print_theory ?old drv fmt th =
   let task = Task.use_export None th in
@@ -294,7 +312,8 @@ let prove_task_prepared
   let buf = Buffer.create 1024 in
   let fmt = formatter_of_buffer buf in
   let old_channel = Opt.map open_in old in
-  print_task_prepared ?old:old_channel drv fmt task; pp_print_flush fmt ();
+  let printer_mapping = print_task_prepared ?old:old_channel drv fmt task in
+  pp_print_flush fmt ();
   Opt.iter close_in old_channel;
   let filename = match old, inplace with
     | Some fn, Some true -> fn
@@ -307,7 +326,7 @@ let prove_task_prepared
         get_filename drv fn "T" pr.pr_name.id_string
   in
   let res =
-    call_on_buffer ~command ?timelimit ?memlimit ?stepslimit ?inplace ~filename drv buf in
+    call_on_buffer ~command ?timelimit ?memlimit ?stepslimit ?inplace ~filename ~printer_mapping drv buf in
   Buffer.reset buf;
   res
 
@@ -338,4 +357,3 @@ let () = Exn_printer.register (fun fmt exn -> match exn with
   | PSymExpected ls -> Format.fprintf fmt
       "%a is not a predicate symbol" Pretty.print_ls ls
   | e -> raise e)
-

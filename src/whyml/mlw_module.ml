@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -285,7 +285,7 @@ let add_decl uc d =
     | Decl.Dind (_,dl) -> List.fold_left add_logic uc dl
     | Decl.Dprop _ -> uc
   in
-  add_to_theory Theory.add_decl uc d
+  add_to_theory (Theory.add_decl ?warn:None) uc d
 
 let use_export_theory uc th =
   let nth = Theory.use_export uc.muc_theory th in

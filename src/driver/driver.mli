@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -41,6 +41,7 @@ val call_on_buffer :
   ?stepslimit : int ->
   ?inplace   : bool ->
   filename   : string ->
+  printer_mapping : Printer.printer_mapping ->
   driver -> Buffer.t -> Call_provers.pre_prover_call
 
 
@@ -67,7 +68,7 @@ val prepare_task : driver -> Task.task -> Task.task
 
 val print_task_prepared :
   ?old       : in_channel ->
-  driver -> Format.formatter -> Task.task -> unit
+  driver -> Format.formatter -> Task.task -> Printer.printer_mapping
 
 val prove_task_prepared :
   command    : string ->

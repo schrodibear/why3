@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -16,8 +16,6 @@ open Whyconf
 let debug = Debug.register_info_flag "ide_info"
   ~desc:"Print@ why3ide@ debugging@ messages."
 
-let () = Debug.set_flag debug
-
 (** set the exception call back handler to the Exn_printer of why3 *)
 let () = (***** TODO TODO make that work, it seems not called!!! *)
   let why3_handler exn =
@@ -31,20 +29,11 @@ let () = (***** TODO TODO make that work, it seems not called!!! *)
 
 (* config file *)
 
-(* type altern_provers = prover option Mprover.t *)
-
-(** Todo do something generic perhaps*)
-(*
-type conf_replace_prover =
-  | CRP_Ask
-  | CRP_Not_Obsolete
-*)
-
 type t =
     { mutable window_width : int;
       mutable window_height : int;
       mutable tree_width : int;
-      mutable task_height : int;
+      mutable font_size : int;
       mutable verbose : int;
       mutable default_prover : string; (* "" means none *)
       mutable default_editor : string;
@@ -78,7 +67,7 @@ type ide = {
   ide_window_width : int;
   ide_window_height : int;
   ide_tree_width : int;
-  ide_task_height : int;
+  ide_font_size : int;
   ide_verbose : int;
   ide_intro_premises : bool;
   ide_show_labels : bool;
@@ -101,20 +90,19 @@ let default_ide =
   { ide_window_width = 1024;
     ide_window_height = 768;
     ide_tree_width = 512;
-    ide_task_height = 384;
+    ide_font_size = 10;
     ide_verbose = 0;
     ide_intro_premises = true;
     ide_show_labels = false;
     ide_show_locs = false;
     ide_show_time_limit = false;
-    ide_max_boxes = 16; 
+    ide_max_boxes = 16;
     ide_saving_policy = 2;
     ide_premise_color = "chartreuse";
     ide_neg_premise_color = "pink";
     ide_goal_color = "gold";
     ide_error_color = "orange";
-    ide_iconset = "boomy";
-    (* ide_replace_prover = CRP_Ask; *)
+    ide_iconset = "fatcow";
     ide_default_prover = "";
     ide_default_editor =
       (try Sys.getenv "EDITOR" ^ " %f"
@@ -129,8 +117,8 @@ let load_ide section =
       get_int section ~default:default_ide.ide_window_height "window_height";
     ide_tree_width =
       get_int section ~default:default_ide.ide_tree_width "tree_width";
-    ide_task_height =
-      get_int section ~default:default_ide.ide_task_height "task_height";
+    ide_font_size =
+      get_int section ~default:default_ide.ide_font_size "font_size";
     ide_verbose =
       get_int section ~default:default_ide.ide_verbose "verbose";
     ide_intro_premises =
@@ -169,15 +157,6 @@ let load_ide section =
     ide_default_prover =
       get_string section ~default:default_ide.ide_default_prover
         "default_prover";
- (*
-   ide_replace_prover =
-      begin
-        match get_stringo section "replace_prover" with
-        | None -> default_ide.ide_replace_prover
-        | Some "never not obsolete" -> CRP_Not_Obsolete
-        | Some "ask" | Some _ -> CRP_Ask
-      end;
- *)
     ide_hidden_provers = get_stringl ~default:default_ide.ide_hidden_provers section "hidden_prover";
   }
 
@@ -192,40 +171,18 @@ let set_locs_flag =
   fun b ->
     (if b then Debug.set_flag else Debug.unset_flag) fl
 
-(* dead code
-let load_altern alterns (_,section) =
-  let unknown =
-    {prover_name = get_string section "unknown_name";
-     prover_version = get_string section "unknown_version";
-     prover_altern = get_string ~default:"" section "unknown_alternative"
-    } in
-  let name = get_stringo section "known_name" in
-  let known = match name with
-    | None -> None
-    | Some name ->
-      Some
-        {prover_name = name;
-         prover_version = get_string section "known_version";
-         prover_altern = get_string ~default:"" section "known_alternative";
-        } in
-  Mprover.add unknown known alterns
-*)
-
 let load_config config original_config env =
   let main = get_main config in
   let ide  = match Whyconf.get_section config "ide" with
     | None -> default_ide
     | Some s -> load_ide s
   in
-  (* let alterns = *)
-  (*   List.fold_left load_altern *)
-  (*     Mprover.empty (get_family config "alternative_prover") in *)
   set_labels_flag ide.ide_show_labels;
   set_locs_flag ide.ide_show_locs;
   { window_height = ide.ide_window_height;
     window_width  = ide.ide_window_width;
     tree_width    = ide.ide_tree_width;
-    task_height   = ide.ide_task_height;
+    font_size     = ide.ide_font_size;
     verbose       = ide.ide_verbose;
     intro_premises= ide.ide_intro_premises ;
     show_labels   = ide.ide_show_labels ;
@@ -243,42 +200,11 @@ let load_config config original_config env =
     config         = config;
     original_config = original_config;
     env            = env;
-    (* altern_provers = alterns; *)
-    (* replace_prover = ide.ide_replace_prover; *)
     hidden_provers = ide.ide_hidden_provers;
     session_time_limit = Whyconf.timelimit main;
     session_mem_limit = Whyconf.memlimit main;
     session_nb_processes = Whyconf.running_provers_max main;
 }
-
-
-(*
-
-  let save_altern unknown known (id,family) =
-  let alt = empty_section in
-  let alt = set_string alt "unknown_name" unknown.prover_name in
-  let alt = set_string alt "unknown_version" unknown.prover_version in
-  let alt =
-    set_string ~default:"" alt "unknown_alternative" unknown.prover_altern in
-  let alt = match known with
-    | None -> alt
-    | Some known ->
-      let alt = set_string alt "known_name" known.prover_name in
-      let alt = set_string alt "known_version" known.prover_version in
-      set_string ~default:"" alt "known_alternative" known.prover_altern in
-  (id+1,(sprintf "alt%i" id,alt)::family)
-
-  *)
-
-(*
-let debug_save_config n c =
-  let coq = { prover_name = "Coq" ; prover_version = "8.3pl3";
-              prover_altern = "" } in
-  let p = Mprover.find coq (get_provers c) in
-  let time = Whyconf.timelimit (Whyconf.get_main c) in
-  Format.eprintf "[debug] save_config %d: timelimit=%d ; editor for Coq=%s@."
-    n time p.editor
-*)
 
 let save_config t =
   Debug.dprintf debug "[GUI config] saving IDE config file@.";
@@ -299,7 +225,7 @@ let save_config t =
   let ide = set_int ide "window_height" t.window_height in
   let ide = set_int ide "window_width" t.window_width in
   let ide = set_int ide "tree_width" t.tree_width in
-  let ide = set_int ide "task_height" t.task_height in
+  let ide = set_int ide "font_size" t.font_size in
   let ide = set_int ide "verbose" t.verbose in
   let ide = set_bool ide "intro_premises" t.intro_premises in
   let ide = set_bool ide "print_labels" t.show_labels in
@@ -332,6 +258,11 @@ let save_config () = save_config (config ())
 
 let get_main () = (get_main (config ()).config)
 
+let incr_font_size n =
+  let c = config () in
+  let s = max (c.font_size + n) 4 in
+  c.font_size <- s;
+  s
 
 (*
 
@@ -349,12 +280,14 @@ let image_unknown = ref !image_default
 let image_invalid = ref !image_default
 let image_timeout = ref !image_default
 let image_outofmemory = ref !image_default
+let image_stepslimitexceeded = ref !image_default
 let image_failure = ref !image_default
 let image_valid_obs = ref !image_default
 let image_unknown_obs = ref !image_default
 let image_invalid_obs = ref !image_default
 let image_timeout_obs = ref !image_default
 let image_outofmemory_obs = ref !image_default
+let image_stepslimitexceeded_obs = ref !image_default
 let image_failure_obs = ref !image_default
 let image_yes = ref !image_default
 let image_no = ref !image_default
@@ -394,12 +327,14 @@ let iconname_unknown = ref ""
 let iconname_invalid = ref ""
 let iconname_timeout = ref ""
 let iconname_outofmemory = ref ""
+let iconname_stepslimitexceeded = ref ""
 let iconname_failure = ref ""
 let iconname_valid_obs = ref ""
 let iconname_unknown_obs = ref ""
 let iconname_invalid_obs = ref ""
 let iconname_timeout_obs = ref ""
 let iconname_outofmemory_obs = ref ""
+let iconname_stepslimitexceeded_obs = ref ""
 let iconname_failure_obs = ref ""
 let iconname_yes = ref ""
 let iconname_no = ref ""
@@ -416,16 +351,27 @@ let iconname_reload = ref ""
 let iconname_remove = ref ""
 let iconname_cleaning = ref ""
 
+let iconsets () =
+  let main = get_main () in
+  let dir = Filename.concat (datadir main) "images" in
+  let n = Filename.concat dir "icons.rc"
+  in
+  let d = Rc.from_file n in
+  (dir, Rc.get_family d "iconset")
+
 let load_icon_names () =
   let ide = config () in
   let iconset = ide.iconset in
-  let main = get_main () in
-  let n =
-    Filename.concat (datadir main) (Filename.concat "images" "icons.rc")
+  let _,iconsets = iconsets () in
+  let d =
+    try
+      List.assoc iconset iconsets
+    with Not_found ->
+      try
+        List.assoc "fatcow" iconsets
+      with Not_found ->
+        failwith "No icon set found"
   in
-  let d = Rc.from_file n in
-  let d = Rc.get_family d "iconset" in
-  let d = List.assoc iconset d in
   let get_icon_name n =
     Filename.concat iconset (get_string ~default:"default" d n)
   in
@@ -438,12 +384,14 @@ let load_icon_names () =
   iconname_invalid := get_icon_name "invalid";
   iconname_timeout := get_icon_name "timeout";
   iconname_outofmemory := get_icon_name "outofmemory";
+  iconname_stepslimitexceeded := get_icon_name "stepslimitexceeded";
   iconname_failure := get_icon_name "failure";
   iconname_valid_obs := get_icon_name "valid_obs";
   iconname_unknown_obs := get_icon_name "unknown_obs";
   iconname_invalid_obs := get_icon_name "invalid_obs";
   iconname_timeout_obs := get_icon_name "timeout_obs";
   iconname_outofmemory_obs := get_icon_name "outofmemory_obs";
+  iconname_stepslimitexceeded_obs := get_icon_name "stepslimitexceeded_obs";
   iconname_failure_obs := get_icon_name "failure_obs";
   iconname_yes := get_icon_name "yes";
   iconname_no := get_icon_name "no";
@@ -471,12 +419,14 @@ let resize_images size =
   image_invalid := image ~size !iconname_invalid;
   image_timeout := image ~size !iconname_timeout;
   image_outofmemory := image ~size !iconname_outofmemory;
+  image_stepslimitexceeded := image ~size !iconname_stepslimitexceeded;
   image_failure := image ~size !iconname_failure;
   image_valid_obs := image ~size !iconname_valid_obs;
   image_unknown_obs := image ~size !iconname_unknown_obs;
   image_invalid_obs := image ~size !iconname_invalid_obs;
   image_timeout_obs := image ~size !iconname_timeout_obs;
   image_outofmemory_obs := image ~size !iconname_outofmemory_obs;
+  image_stepslimitexceeded_obs := image ~size !iconname_stepslimitexceeded_obs;
   image_failure_obs := image ~size !iconname_failure_obs;
   image_yes := image ~size !iconname_yes;
   image_no := image ~size !iconname_no;
@@ -542,6 +492,8 @@ let show_legend_window () =
   i "   External prover reached the time limit\n";
   ib image_outofmemory;
   i "   External prover ran out of memory\n";
+  ib image_stepslimitexceeded;
+  i "   External prover exceeded the steps limit\n";
   ib image_unknown;
   i "   External prover answer not conclusive\n";
   ib image_failure;
@@ -577,7 +529,9 @@ let show_about_window () =
                 "Sylvie Boldo";
                 "Martin Clochard";
                 "Simon Cruanes";
+                "Clément Fumex";
                 "Leon Gondelman";
+                "David Hauzar";
                 "Daisuke Ishii";
                 "Johannes Kanig";
                 "David Mentré";
@@ -588,8 +542,8 @@ let show_about_window () =
                 "Piotr Trojanek";
                 "Makarius Wenzel";
                ]
-      ~copyright:"Copyright 2010-2014 Inria, CNRS, Paris-Sud University"
-      ~license:"GNU Lesser General Public License version 2.1"
+      ~copyright:"Copyright 2010-2015 Inria, CNRS, Paris-Sud University"
+      ~license:("See file " ^ Filename.concat Config.datadir "LICENSE")
       ~website:"http://why3.lri.fr"
       ~website_label:"http://why3.lri.fr"
       ~version:Config.version
@@ -620,19 +574,19 @@ let general_settings (c : t) (notebook:GPack.notebook) =
       (fun () -> c.verbose <- 1 - c.verbose)
   in
 *)
+  let page_pack = page#pack ?from:None ?expand:None ?fill:None ?padding:None in
   let external_processes_options_frame =
-    GBin.frame ~label:"External provers options"
-      ~packing:page#pack ()
+    GBin.frame ~label:"External provers options" ~packing:page_pack ()
   in
   let vb = GPack.vbox ~homogeneous:false
     ~packing:external_processes_options_frame#add ()
   in
   (* time limit *)
-  let width = 200 and xalign = 0.0 in
-  let hb = GPack.hbox ~homogeneous:false ~packing:vb#add ()
-  in
+  let width = 300 and xalign = 0.0 in
+  let hb = GPack.hbox ~homogeneous:false ~packing:vb#add () in
+  let hb_pack = hb#pack ~expand:false ?from:None ?fill:None ?padding:None in
   let _ = GMisc.label ~text:"Time limit (in sec.): " ~width ~xalign
-    ~packing:(hb#pack ~expand:false) () in
+    ~packing:hb_pack () in
   let timelimit_spin = GEdit.spin_button ~digits:0 ~packing:hb#add () in
   timelimit_spin#adjustment#set_bounds ~lower:0. ~upper:86_400. ~step_incr:5. ();
   timelimit_spin#adjustment#set_value (float_of_int c.session_time_limit);
@@ -641,10 +595,10 @@ let general_settings (c : t) (notebook:GPack.notebook) =
       (fun () -> c.session_time_limit <- timelimit_spin#value_as_int)
   in
   (* mem limit *)
-  let hb = GPack.hbox ~homogeneous:false ~packing:vb#add ()
-  in
+  let hb = GPack.hbox ~homogeneous:false ~packing:vb#add () in
+  let hb_pack = hb#pack ~expand:false ?from:None ?fill:None ?padding:None in
   let _ = GMisc.label ~text:"Memory limit (in Mb): " ~width ~xalign
-    ~packing:(hb#pack ~expand:false) () in
+    ~packing:hb_pack () in
   let memlimit_spin = GEdit.spin_button ~digits:0 ~packing:hb#add () in
   memlimit_spin#adjustment#set_bounds ~lower:0. ~upper:16_000. ~step_incr:500. ();
   memlimit_spin#adjustment#set_value (float_of_int c.session_mem_limit);
@@ -653,10 +607,10 @@ let general_settings (c : t) (notebook:GPack.notebook) =
       (fun () -> c.session_mem_limit <- memlimit_spin#value_as_int)
   in
   (* nb of processes *)
-  let hb = GPack.hbox ~homogeneous:false ~packing:vb#add ()
-  in
+  let hb = GPack.hbox ~homogeneous:false ~packing:vb#add () in
+  let hb_pack = hb#pack ~expand:false ?from:None ?fill:None ?padding:None in
   let _ = GMisc.label ~text:"Nb of processes: " ~width ~xalign
-    ~packing:(hb#pack ~expand:false) () in
+    ~packing:hb_pack () in
   let nb_processes_spin = GEdit.spin_button ~digits:0 ~packing:hb#add () in
   nb_processes_spin#adjustment#set_bounds
     ~lower:1. ~upper:64. ~step_incr:1. ();
@@ -666,39 +620,83 @@ let general_settings (c : t) (notebook:GPack.notebook) =
     nb_processes_spin#connect#value_changed ~callback:
       (fun () -> c.session_nb_processes <- nb_processes_spin#value_as_int)
   in
-  let hb = GPack.hbox ~homogeneous:false ~packing:vb#add () in
-  let save_for_future = ref false in
-  let save =
-    GButton.check_button
-      ~label:"save settings above for future sessions"
-      ~packing:hb#add ()
-      ~active:false
+  (* session saving policy *)
+  let set_saving_policy n () = c.saving_policy <- n in
+  let saving_policy_frame =
+    GBin.frame ~label:"Session saving policy"
+      ~packing:page_pack ()
+  in
+  let saving_policy_box =
+    GPack.button_box
+      `VERTICAL ~border_width:5 ~spacing:5
+      ~packing:saving_policy_frame#add ()
+  in
+  let saving_policy_box_pack =
+    saving_policy_box#pack ?from:None ?expand:None ?fill:None ?padding:None
+  in
+  let choice0 =
+    GButton.radio_button
+      ~label:"always save on exit"
+      ~active:(c.saving_policy = 0)
+      ~packing:saving_policy_box_pack ()
+  in
+  let choice1 =
+    GButton.radio_button
+      ~label:"never save on exit" ~group:choice0#group
+      ~active:(c.saving_policy = 1)
+      ~packing:saving_policy_box_pack ()
+  in
+  let choice2 =
+    GButton.radio_button
+      ~label:"ask whether to save on exit" ~group:choice0#group
+      ~active:(c.saving_policy = 2)
+      ~packing:saving_policy_box_pack ()
   in
   let (_ : GtkSignal.id) =
-    save#connect#toggled ~callback:
-      (fun () -> save_for_future := not !save_for_future)
+    choice0#connect#toggled ~callback:(set_saving_policy 0)
   in
+  let (_ : GtkSignal.id) =
+    choice1#connect#toggled ~callback:(set_saving_policy 1)
+  in
+  let (_ : GtkSignal.id) =
+    choice2#connect#toggled ~callback:(set_saving_policy 2)
+  in
+  let (_ : GPack.box) =
+    GPack.vbox ~packing:page_pack ()
+  in
+  ()
+
+(** Appearance *)
+
+let appearance_settings (c : t) (notebook:GPack.notebook) =
+  let label = GMisc.label ~text:"Appearance" () in
+  let page =
+    GPack.vbox ~homogeneous:false ~packing:
+      (fun w -> ignore(notebook#append_page ~tab_label:label#coerce w)) ()
+  in
+  let page_pack = page#pack ?from:None ?expand:None ?fill:None ?padding:None in
   let display_options_frame =
-    GBin.frame ~label:"Display options"
-      ~packing:page#pack ()
+    GBin.frame ~label:"Display options" ~packing:page_pack ()
   in
-  (* options for task display *)
-  let display_options_box =
-    GPack.button_box `VERTICAL ~border_width:5 ~spacing:5
-      ~packing:display_options_frame#add ()
+  let vb = GPack.vbox ~homogeneous:false
+    ~packing:display_options_frame#add ()
   in
   (* max boxes *)
-  let width = 200 and xalign = 0.0 in
-  let hb = GPack.hbox ~homogeneous:false ~packing:display_options_box#add ()
-  in
-  let _ = GMisc.label ~text:"Max boxes: " ~width ~xalign
-    ~packing:(hb#pack ~expand:false) () in
+  let width = 300 and xalign = 0.0 in
+  let hb = GPack.hbox ~homogeneous:false ~packing:vb#add () in
+  let hb_pack = hb#pack ~expand:false ?fill:None ?from:None ?padding:None in
+  let _ = GMisc.label ~text:"Use ellipsis for terms deeper than: " ~width ~xalign ~packing:hb_pack () in
   let max_boxes_spin = GEdit.spin_button ~digits:0 ~packing:hb#add () in
   max_boxes_spin#adjustment#set_bounds ~lower:0. ~upper:1000. ~step_incr:1. ();
   max_boxes_spin#adjustment#set_value (float_of_int c.max_boxes);
   let (_ : GtkSignal.id) =
     max_boxes_spin#connect#value_changed ~callback:
       (fun () -> c.max_boxes <- max_boxes_spin#value_as_int)
+  in
+  (* options for task display *)
+  let display_options_box =
+    GPack.button_box `VERTICAL ~border_width:5 ~spacing:5
+      ~packing:vb#add ()
   in
   let intropremises =
     GButton.check_button ~label:"introduce premises"
@@ -744,48 +742,71 @@ let general_settings (c : t) (notebook:GPack.notebook) =
       (fun () ->
          c.show_time_limit <- not c.show_time_limit)
   in
-  (* session saving policy *)
-  let set_saving_policy n () = c.saving_policy <- n in
-  let saving_policy_frame =
-    GBin.frame ~label:"Session saving policy"
-      ~packing:page#pack ()
+  (* icon sets *)
+  let icon_sets_frame =
+    GBin.frame ~label:"Change icon family (needs save & restart)"
+      ~packing:page_pack ()
   in
-  let saving_policy_box =
+  let icon_sets_box =
     GPack.button_box
       `VERTICAL ~border_width:5 ~spacing:5
-      ~packing:saving_policy_frame#add ()
+      ~packing:icon_sets_frame#add ()
   in
-  let choice0 =
-    GButton.radio_button
-      ~label:"always save on exit"
-      ~active:(c.saving_policy = 0)
-      ~packing:saving_policy_box#pack ()
+  let icon_sets_box_pack =
+    icon_sets_box#pack ?from:None ?expand:None ?fill:None ?padding:None
   in
-  let choice1 =
-    GButton.radio_button
-      ~label:"never save on exit" ~group:choice0#group
-      ~active:(c.saving_policy = 1)
-      ~packing:saving_policy_box#pack ()
+  let dir,iconsets = iconsets () in
+  let set_icon_set s () = c.iconset <- s in
+  let (_,choices) = List.fold_left
+    (fun (acc,l) (s,fields) ->
+      let name = Rc.get_string ~default:s fields "name" in
+      let license = Rc.get_string ~default:"" fields "license" in
+      let acc,choice =
+        match acc with
+        | None ->
+          let choice =
+            GButton.radio_button
+              ~label:name
+              ~active:(c.iconset = s)
+              ~packing:icon_sets_box_pack ()
+          in
+          (Some choice,choice)
+        | Some c0 ->
+          let choice =
+            GButton.radio_button
+              ~label:name
+              ~active:(c.iconset = s)
+              ~group:c0#group
+              ~packing:icon_sets_box_pack ()
+          in (acc,choice)
+      in
+      if license <> "" then
+        begin
+          let f = Filename.concat (Filename.concat dir s) license in
+          let c = Sysutil.file_contents f in
+          let text = "See license in " ^ f ^ ":\n\n" in
+          let l = String.length c in
+          let text =
+            if l >= 256 then
+              text ^ String.sub c 0 255 ^ "\n[...]"
+            else
+              text ^ c
+          in
+          choice#misc#set_tooltip_markup text
+        end;
+      (acc,(s,choice)::l))
+    (None,[]) iconsets
   in
-  let choice2 =
-    GButton.radio_button
-      ~label:"ask whether to save on exit" ~group:choice0#group
-      ~active:(c.saving_policy = 2)
-      ~packing:saving_policy_box#pack ()
-  in
-  let (_ : GtkSignal.id) =
-    choice0#connect#toggled ~callback:(set_saving_policy 0)
-  in
-  let (_ : GtkSignal.id) =
-    choice1#connect#toggled ~callback:(set_saving_policy 1)
-  in
-  let (_ : GtkSignal.id) =
-    choice2#connect#toggled ~callback:(set_saving_policy 2)
-  in
+  List.iter
+    (fun (s,c) ->
+      let (_ : GtkSignal.id) =
+        c#connect#toggled ~callback:(set_icon_set s)
+      in ())
+    choices;
   let (_ : GPack.box) =
-    GPack.vbox ~packing:(page#pack ~expand:true) ()
+    GPack.vbox ~packing:page_pack ()
   in
-  save_for_future
+  ()
 
 (* Page "Provers" *)
 
@@ -795,19 +816,23 @@ let provers_page c (notebook:GPack.notebook) =
     GPack.vbox ~homogeneous:false ~packing:
       (fun w -> ignore(notebook#append_page ~tab_label:label#coerce w)) ()
   in
-  let hbox = GPack.hbox ~packing:(page#pack ~fill:true ~expand:true) () in
+  let page_pack = page#pack ~fill:true ~expand:true ?from:None ?padding:None in
+  let hbox = GPack.hbox ~packing:page_pack () in
+  let hbox_pack = hbox#pack ~fill:true ~expand:true ?from:None ?padding:None in
   let scrollview =
   try
     GBin.scrolled_window ~hpolicy:`NEVER ~vpolicy:`AUTOMATIC
-      ~packing:(hbox#pack ~fill:true ~expand:true) ()
+      ~packing:hbox_pack ()
   with Gtk.Error _ -> assert false
   in let () = scrollview#set_shadow_type `OUT in
   let vbox = GPack.vbox ~packing:scrollview#add_with_viewport () in
-  let hbox = GPack.hbox ~packing:(vbox#pack ~fill:true ~expand:true) () in
+  let vbox_pack = vbox#pack ~fill:true ~expand:true ?from:None ?padding:None in
+  let hbox = GPack.hbox ~packing:vbox_pack () in
+  let hbox_pack = hbox#pack ~fill:true ~expand:true ?from:None ?padding:None in
   (* show/hide provers *)
   let frame =
-    GBin.frame ~label:"Prover button in the left toolbar"
-      ~packing:(hbox#pack ~fill:true ~expand:true) () in
+    GBin.frame ~label:"Prover button in the left toolbar" ~packing:hbox_pack ()
+  in
   let provers_box =
     GPack.button_box `VERTICAL ~border_width:5 ~spacing:5
       ~packing:frame#add () in
@@ -832,8 +857,7 @@ let provers_page c (notebook:GPack.notebook) =
     (Whyconf.get_provers c.config);
   (* default prover *)
   let frame2 =
-    GBin.frame ~label:"Default prover"
-      ~packing:(hbox#pack ~fill:true ~expand:true) () in
+    GBin.frame ~label:"Default prover" ~packing:hbox_pack () in
   let provers_box =
     GPack.button_box `VERTICAL ~border_width:5 ~spacing:5
       ~packing:frame2#add () in
@@ -862,9 +886,9 @@ let alternatives_frame c (notebook:GPack.notebook) =
     GPack.vbox ~homogeneous:false ~packing:
       (fun w -> ignore(notebook#append_page ~tab_label:label#coerce w)) ()
   in
+  let page_pack = page#pack ?fill:None ?expand:None ?from:None ?padding:None in
   let frame =
-    GBin.frame ~label:"Click to remove a setting"
-      ~packing:page#pack ()
+    GBin.frame ~label:"Click to remove a setting" ~packing:page_pack ()
   in
   let box =
     GPack.button_box `VERTICAL ~border_width:5 ~spacing:5
@@ -889,9 +913,8 @@ let alternatives_frame c (notebook:GPack.notebook) =
     in ()
   in
   Mprover.iter iter (get_policies c.config);
-  let _fillbox =
-    GPack.vbox ~packing:(page#pack ~expand:true) ()
-  in
+  let page_pack = page#pack ?fill:None ~expand:true ?from:None ?padding:None in
+  let _fillbox = GPack.vbox ~packing:page_pack () in
   ()
 
 let editors_page c (notebook:GPack.notebook) =
@@ -900,14 +923,17 @@ let editors_page c (notebook:GPack.notebook) =
     GPack.vbox ~homogeneous:false ~packing:
       (fun w -> ignore(notebook#append_page ~tab_label:label#coerce w)) ()
   in
-  let hbox = GPack.hbox ~packing:(page#pack ~expand:true ~fill:true) () in
+  let page_pack = page#pack ~fill:true ~expand:true ?from:None ?padding:None in
+  let hbox = GPack.hbox ~packing:page_pack () in
+  let hbox_pack = hbox#pack ~fill:true ~expand:true ?from:None ?padding:None in
   let scrollview =
     GBin.scrolled_window ~hpolicy:`NEVER ~vpolicy:`AUTOMATIC
-      ~packing:(hbox#pack ~fill:true ~expand:true) ()
+      ~packing:hbox_pack ()
   in
   let vbox = GPack.vbox ~packing:scrollview#add_with_viewport () in
+  let vbox_pack = vbox#pack ?fill:None ?expand:None ?from:None ?padding:None in
   let default_editor_frame =
-    GBin.frame ~label:"Default editor" ~packing:vbox#pack ()
+    GBin.frame ~label:"Default editor" ~packing:vbox_pack ()
   in
   let editor_entry =
    GEdit.entry ~text:c.default_editor ~packing:default_editor_frame#add ()
@@ -916,11 +942,9 @@ let editors_page c (notebook:GPack.notebook) =
     editor_entry#connect#changed ~callback:
       (fun () -> c.default_editor <- editor_entry#text)
   in
-  let frame =
-    GBin.frame ~label:"Specific editors"
-      ~packing:vbox#pack ()
-  in
+  let frame = GBin.frame ~label:"Specific editors" ~packing:vbox_pack () in
   let box = GPack.vbox ~border_width:5 ~packing:frame#add () in
+  let box_pack = box#pack ?fill:None ?expand:None ?from:None ?padding:None in
   let editors = Whyconf.get_editors c.config in
   let _,strings,indexes,map =
     Meditor.fold
@@ -932,11 +956,15 @@ let editors_page c (notebook:GPack.notebook) =
   let strings = "(default)" :: "--" :: (List.rev strings) in
   let add_prover p pi =
     let text = Pp.string_of_wnl Whyconf.print_prover p in
-    let hb = GPack.hbox ~homogeneous:false ~packing:box#pack () in
+    let hb = GPack.hbox ~homogeneous:false ~packing:box_pack () in
+    let hb_pack_fill_expand =
+      hb#pack ~fill:true ~expand:true ?from:None ?padding:None
+    in
+    let hb_pack = hb#pack ?fill:None ?expand:None ?from:None ?padding:None in
     let _ = GMisc.label ~width:150 ~xalign:0.0 ~text
-      ~packing:(hb#pack ~fill:true ~expand:true) () in
+      ~packing:hb_pack_fill_expand () in
     let (combo, ((_ : GTree.list_store), column)) =
-      GEdit.combo_box_text ~packing:hb#pack ~strings ()
+      GEdit.combo_box_text ~packing:hb_pack ~strings ()
     in
     combo#set_row_separator_func
       (Some (fun m row -> m#get ~row ~column = "--"));
@@ -977,7 +1005,9 @@ let preferences (c : t) =
   let vbox = dialog#vbox in
   let notebook = GPack.notebook ~packing:vbox#add () in
   (** page "general settings" **)
-  let save_for_future_session = general_settings c notebook in
+  general_settings c notebook;
+  (** page "appearance" **)
+  appearance_settings c notebook;
   (*** page "editors" **)
   editors_page c notebook;
   (** page "Provers" **)
@@ -999,18 +1029,18 @@ let preferences (c : t) =
   in
 *)
   (** bottom button **)
+  dialog#add_button "Save&Close" `SAVE ;
   dialog#add_button "Close" `CLOSE ;
-  let ( _ : GWindow.Buttons.about) = dialog#run () in
-  (* let config = set_main config *)
-  (*   (set_limits (get_main config) *)
-  (*      t.time_limit t.mem_limit t.max_running_processes) *)
-  (* in *)
-
-  if !save_for_future_session then
-    c.config <- Whyconf.set_main c.config
-      (Whyconf.set_limits (Whyconf.get_main c.config)
-         c.session_time_limit c.session_mem_limit c.session_nb_processes);
-  save_config ();
+  let ( answer : [`SAVE | `CLOSE | `DELETE_EVENT ]) = dialog#run () in
+  begin
+    match answer with
+    | `SAVE ->
+      c.config <- Whyconf.set_main c.config
+        (Whyconf.set_limits (Whyconf.get_main c.config)
+           c.session_time_limit c.session_mem_limit c.session_nb_processes);
+      save_config ()
+    | `CLOSE | `DELETE_EVENT -> ()
+  end;
   dialog#destroy ()
 
 (*
@@ -1038,15 +1068,33 @@ let uninstalled_prover c eS unknown =
       ~title:"Why3: Uninstalled prover" ()
     in
     let vbox = dialog#vbox in
+(* Does not work: why ??
+    let vbox_pack = vbox#pack ~fill:true ~expand:true ?from:None ?padding:None in
+    let hbox = GPack.hbox ~packing:vbox_pack () in
+    let hbox_pack = hbox#pack ~fill:true ~expand:true ?from:None ?padding:None in
+    let scrollview =
+      GBin.scrolled_window ~hpolicy:`NEVER ~vpolicy:`AUTOMATIC
+        ~packing:hbox_pack ()
+    in
+    let () = scrollview#set_shadow_type `OUT in
+    let vbox = GPack.vbox ~packing:scrollview#add_with_viewport () in
+*)
+    (* header *)
     let hb = GPack.hbox ~packing:vbox#add () in
     let _ = GMisc.image ~stock:`DIALOG_WARNING ~packing:hb#add () in
-    let text =
-      Pp.sprintf "The prover %a is not installed"
-        Whyconf.print_prover unknown
+    let _ =
+      let text =
+        Pp.sprintf "The prover %a is not installed"
+          Whyconf.print_prover unknown
+      in
+      GMisc.label ~ypad:20 ~text ~xalign:0.5 ~packing:hb#add ()
     in
-    let _ = GMisc.label ~ypad:20 ~text ~xalign:0.5 ~packing:hb#add () in
+    (* choices *)
+    let vbox_pack =
+      vbox#pack ~fill:true ~expand:true ?from:None ?padding:None
+    in
     let label = "Please select a policy for associated proof attempts" in
-    let policy_frame = GBin.frame ~label ~packing:vbox#add () in
+    let policy_frame = GBin.frame ~label ~packing:vbox_pack () in
     let choice = ref 0 in
     let prover_choosed = ref None in
     let set_prover prover () = prover_choosed := Some prover in
@@ -1072,7 +1120,7 @@ let uninstalled_prover c eS unknown =
         let frame = GBin.frame ~label ~packing:vbox#add () in
         let box =
           GPack.button_box `VERTICAL ~border_width:5 ~spacing:5
-            ~packing:(vbox#pack ~fill:true ~expand:true) ()
+            ~packing:frame#add ()
         in
         let iter_alter prover =
           let choice =
@@ -1119,86 +1167,6 @@ let uninstalled_prover c eS unknown =
     in
     c.config <- set_prover_upgrade_policy c.config unknown policy;
     policy
-(*
-let unknown_prover c eS unknown =
-  let others,names,versions = Session_tools.unknown_to_known_provers
-  (Whyconf.get_provers eS.Session.whyconf) unknown in
-  let dialog = GWindow.dialog ~title:"Why3: Unknown prover" () in
-  let vbox = dialog#vbox in
-  let text = Pp.sprintf "The prover %a is unknown. Could you please choose \
-an alternative?" Whyconf.print_prover unknown in
-  let _label1 = GMisc.label ~text ~packing:vbox#add () in
-  let frame = vbox in
-  let prover_choosed = ref None in
-  let set_prover prover () = prover_choosed := Some prover in
-  let box =
-    GPack.button_box `VERTICAL ~border_width:5 ~spacing:5
-      ~packing:frame#add ()
-  in
-  let choice0 = GButton.radio_button
-    ~label:"ignore this prover"
-    ~active:true
-    ~packing:box#add () in
-  ignore (choice0#connect#toggled
-            ~callback:(fun () -> prover_choosed := None));
-  let alternatives_section text alternatives =
-    if alternatives <> [] then
-    let _label1 = GMisc.label ~text ~packing:frame#add () in
-    let box =
-      GPack.button_box `VERTICAL ~border_width:5 ~spacing:5
-        ~packing:frame#add ()
-    in
-    let iter_alter prover =
-      let choice = GButton.radio_button
-        ~label:(Pp.string_of_wnl print_prover prover)
-        ~group:choice0#group
-        ~active:false
-        ~packing:box#add () in
-      ignore (choice#connect#toggled ~callback:(set_prover prover))
-    in
-    List.iter iter_alter alternatives in
-  alternatives_section "Same name and same version:" versions;
-  alternatives_section "Same name and different version:" names;
-  alternatives_section "Different name and different version:" others;
-  let save =
-    GButton.check_button
-      ~label:"always use this association"
-      ~packing:frame#add ()
-      ~active:true
-  in
-  dialog#add_button "Ok" `CLOSE ;
-  ignore (dialog#run ());
-  dialog#destroy ();
-  if save#active then
-    c.altern_provers <- Mprover.add unknown !prover_choosed c.altern_provers;
-  !prover_choosed
-*)
-
-(* obsolete dialog
-let replace_prover c to_be_removed to_be_copied =
-  if not to_be_removed.Session.proof_obsolete &&
-    c.replace_prover = CRP_Not_Obsolete
-  then false
-  else
-  let dialog = GWindow.dialog ~title:"Why3: replace proof" () in
-  let vbox = dialog#vbox in
-  let text = Pp.sprintf
-    "Do you want to replace the external proof %a by the external proof %a \
-     (with the prover of the first)"
-    Session.print_external_proof to_be_removed
-    Session.print_external_proof to_be_copied in
-  let _label1 = GMisc.label ~text ~line_wrap:true ~packing:vbox#add () in
-  dialog#add_button "Replace" `Replace;
-  dialog#add_button "Keep" `Keep;
-  dialog#add_button "Never replace an external proof valid and not obsolete"
-    `Never;
-  let res = match dialog#run () with
-    | `Replace -> true
-    | `Never   -> c.replace_prover <- CRP_Not_Obsolete; false
-    | `DELETE_EVENT | `Keep -> false in
-  dialog#destroy ();
-  res
-*)
 
 (*
 Local Variables:

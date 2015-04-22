@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2014   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -28,11 +28,17 @@ type blacklist = string list
 
 type 'a pp = Pp.formatter -> 'a -> unit
 
+type printer_mapping = {
+  lsymbol_m     : string -> Term.lsymbol;
+  queried_terms : Term.term list;
+}
+
 type printer_args = {
   env        : Env.env;
   prelude    : prelude;
   th_prelude : prelude_map;
   blacklist  : blacklist;
+  mutable printer_mapping : printer_mapping; 
 }
 
 type printer = printer_args -> ?old:in_channel -> task pp
@@ -43,6 +49,11 @@ let printers : reg_printer Hstr.t = Hstr.create 17
 
 exception KnownPrinter of string
 exception UnknownPrinter of string
+
+let get_default_printer_mapping = {
+  lsymbol_m = (function _ -> raise Not_found);
+  queried_terms = [];
+}
 
 let register_printer ~desc s p =
   if Hstr.mem printers s then raise (KnownPrinter s);
@@ -206,6 +217,7 @@ let print_prelude_for_theory th fmt pm =
 
 exception KnownTypeSyntax of tysymbol
 exception KnownLogicSyntax of lsymbol
+exception KnownConverterSyntax of lsymbol
 
 let meta_syntax_type = register_meta "syntax_type" [MTtysymbol; MTstring]
   ~desc:"Specify@ the@ syntax@ used@ to@ pretty-print@ a@ type@ symbol.@ \
@@ -217,9 +229,14 @@ let meta_syntax_logic = register_meta "syntax_logic" [MTlsymbol; MTstring]
          Can@ be@ specified@ in@ the@ driver@ with@ the@ 'syntax function'@ \
          or@ 'syntax predicate'@ rules."
 
+let meta_syntax_converter = register_meta "syntax_converter" [MTlsymbol; MTstring]
+  ~desc:"Specify@ the@ syntax@ used@ to@ pretty-print@ a@ converter@ \ symbol.@ \
+         Can@ be@ specified@ in@ the@ driver@ with@ the@ 'syntax converter'@ \
+         rules."
+
 let meta_remove_prop = register_meta "remove_prop" [MTprsymbol]
-  ~desc:"Remove@ a@ logical@ proposition@ from@ proof@ obligations.@ \
-         Can@ be@ specified@ in@ the@ driver@ with@ the@ 'remove prop'@ rule."
+    ~desc:"Remove@ a@ logical@ proposition@ from@ proof@ obligations.@ \
+           Can@ be@ specified@ in@ the@ driver@ with@ the@ 'remove prop'@ rule."
 
 let meta_remove_type = register_meta "remove_type" [MTtysymbol]
   ~desc:"Remove@ a@ type@ symbol@ from@ proof@ obligations.@ \
@@ -243,10 +260,15 @@ let syntax_logic ls s =
   check_syntax_logic ls s;
   create_meta meta_syntax_logic [MAls ls; MAstr s]
 
+let syntax_converter ls s =
+  check_syntax_logic ls s;
+  create_meta meta_syntax_converter [MAls ls; MAstr s]
+
 let remove_prop pr =
   create_meta meta_remove_prop [MApr pr]
 
 type syntax_map = string Mid.t
+type converter_map = string Mls.t
 
 let sm_add_ts sm = function
   | [MAts ts; MAstr rs] -> Mid.add_new (KnownTypeSyntax ts) ts.ts_name rs sm
@@ -260,6 +282,10 @@ let sm_add_pr sm = function
   | [MApr pr] -> Mid.add pr.pr_name "" sm
   | _ -> assert false
 
+let cm_add_ls cm = function
+  | [MAls ls; MAstr rs] -> Mls.add_new (KnownConverterSyntax ls) ls rs cm
+  | _ -> assert false
+
 let get_syntax_map task =
   let sm = Mid.empty in
   let sm = Task.on_meta meta_syntax_type sm_add_ts sm task in
@@ -267,13 +293,22 @@ let get_syntax_map task =
   let sm = Task.on_meta meta_remove_prop sm_add_pr sm task in
   sm
 
+let get_converter_map task =
+  Task.on_meta meta_syntax_converter cm_add_ls Mls.empty task
+
 let add_syntax_map td sm = match td.td_node with
-  | Meta (m, args) when meta_equal m meta_syntax_type  -> sm_add_ts sm args
-  | Meta (m, args) when meta_equal m meta_syntax_logic -> sm_add_ls sm args
-  | Meta (m, args) when meta_equal m meta_remove_prop  -> sm_add_pr sm args
+  | Meta (m, args) when meta_equal m meta_syntax_type      -> sm_add_ts sm args
+  | Meta (m, args) when meta_equal m meta_syntax_logic     -> sm_add_ls sm args
+  | Meta (m, args) when meta_equal m meta_remove_prop      -> sm_add_pr sm args
   | _ -> sm
 
+let add_converter_map td cm = match td.td_node with
+  | Meta (m, args) when meta_equal m meta_syntax_converter -> cm_add_ls cm args
+  | _ -> cm
+
 let query_syntax sm id = Mid.find_opt id sm
+
+let query_converter cm ls = Mls.find_opt ls cm
 
 let on_syntax_map fn =
   Trans.on_meta meta_syntax_type (fun sts ->
@@ -284,6 +319,10 @@ let on_syntax_map fn =
     let sm = List.fold_left sm_add_ls sm sls in
     let sm = List.fold_left sm_add_pr sm spr in
     fn sm)))
+
+let on_converter_map fn =
+  Trans.on_meta meta_syntax_converter (fun scs ->
+    fn (List.fold_left cm_add_ls Mls.empty scs))
 
 let sprint_tdecl (fn : 'a -> Format.formatter -> tdecl -> 'a * string list) =
   let buf = Buffer.create 2048 in
@@ -309,6 +348,7 @@ let sprint_decl (fn : 'a -> Format.formatter -> decl -> 'a * string list) =
 
 exception UnsupportedType of ty   * string
 exception UnsupportedTerm of term * string
+exception UnsupportedPattern of pattern * string
 exception UnsupportedDecl of decl * string
 exception NotImplemented  of        string
 exception Unsupported     of        string
@@ -317,6 +357,7 @@ exception Unsupported     of        string
 
 let unsupportedType e s = raise (UnsupportedType (e,s))
 let unsupportedTerm e s = raise (UnsupportedTerm (e,s))
+let unsupportedPattern p s = raise (UnsupportedPattern (p,s))
 let unsupportedDecl e s = raise (UnsupportedDecl (e,s))
 let notImplemented    s = raise (NotImplemented s)
 let unsupported       s = raise (Unsupported s)
@@ -341,6 +382,9 @@ let () = Exn_printer.register (fun fmt exn -> match exn with
   | KnownLogicSyntax ls ->
       fprintf fmt "Syntax for logical symbol %a is already defined"
         Pretty.print_ls ls
+  | KnownConverterSyntax ls ->
+      fprintf fmt "Converter syntax for logical symbol %a is already defined"
+        Pretty.print_ls ls
   | BadSyntaxIndex i ->
       fprintf fmt "Bad argument index %d, must start with 1" i
   | BadSyntaxArity (i1,i2) ->
@@ -353,10 +397,12 @@ let () = Exn_printer.register (fun fmt exn -> match exn with
   | UnsupportedTerm (e,s) ->
       fprintf fmt "@[@[<hov 3> This expression isn't supported:@\n%a@]@\n %s@]"
         Pretty.print_term e s
+  | UnsupportedPattern (p,s) ->
+      fprintf fmt "@[@[<hov 3> This pattern isn't supported:@\n%a@]@\n %s@]"
+        Pretty.print_pat p s
   | UnsupportedDecl (d,s) ->
       fprintf fmt "@[@[<hov 3> This declaration isn't supported:@\n%a@]@\n %s@]"
         Pretty.print_decl d s
   | NotImplemented (s) ->
       fprintf fmt "@[<hov 3> Unimplemented feature:@\n%s@]" s
   | e -> raise e)
-
