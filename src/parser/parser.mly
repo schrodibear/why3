@@ -912,6 +912,7 @@ lident_op:
 | op_symbol               { infix $1 }
 | op_symbol UNDERSCORE    { prefix $1 }
 | EQUAL                   { infix "=" }
+| LTGT                    { infix "<>" }
 | OPPREF                  { prefix $1 }
 | LEFTSQ RIGHTSQ          { mixfix "[]" }
 | LEFTSQ LARROW RIGHTSQ   { mixfix "[<-]" }
