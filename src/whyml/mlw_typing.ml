@@ -428,6 +428,8 @@ let rec dexpr ({uc = uc} as lenv) denv {expr_desc = desc; expr_loc = loc} =
         "unexpected exception symbol %a" print_xs xs
   in
   let qualid_app q el = match q with
+    | Qident ({id_str = "infix <>"} as op) | Qdot (_, ({id_str = "infix <>"} as op)) ->
+        DEnot (Mlw_dexpr.dexpr (qualid_app (Qident { op with id_str = "infix =" }) el))
     | Qident {id_str = n} ->
         (match denv_get_opt denv n with
         | Some d -> expr_app d el

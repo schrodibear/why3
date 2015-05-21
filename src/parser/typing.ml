@@ -231,8 +231,8 @@ let rec dterm uc gvars denv {term_desc = desc; term_loc = loc} =
         apply_ls (qloc q) ls [] ls.ls_args el
   in
   let qualid_app q el = match q with
-    | Qident ({id_str = "infix <>"} as op) ->
-      DTnot (Dterm.dterm ~loc (qualid_app (Qident { op with id_str = "infix =" }) el))
+    | Qident ({id_str = "infix <>"} as op) | Qdot (_, ({id_str = "infix <>"} as op)) ->
+        DTnot (Dterm.dterm ~loc (qualid_app (Qident { op with id_str = "infix =" }) el))
     | Qident {id_str = n} ->
         (match denv_get_opt denv n with
         | Some d -> func_app d el
