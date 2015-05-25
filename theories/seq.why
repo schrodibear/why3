@@ -33,9 +33,12 @@ theory Seq
 
   (** n-th element *)
 
-  function ([]) (seq 'a) int : 'a
-    (** [s[i]] is the ([i]+1)-th element of sequence [s]
+  function get (seq 'a) int : 'a
+    (** [get s i] is the ([i]+1)-th element of sequence [s]
         (the first element has index 0) *)
+
+  function ([]) (s: seq 'a) (i: int) : 'a =
+    get s i
 
   (** equality *)
 
@@ -164,6 +167,9 @@ end
 
   - UNPLEASANT: we cannot write s[1..] because 1. is recognized as a float
     so we have to write s[1 ..]
+
+  - UNPLEASANT: when using both arrays and sequences, the lack of overloading
+    is a pain; see for instance vstte12_ring_buffer.mlw
 
 *)
 

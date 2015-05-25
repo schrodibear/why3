@@ -342,15 +342,25 @@ let output_page,output_tab =
   3, GPack.vbox ~homogeneous:false ~packing:
     (fun w -> ignore(notebook#append_page ~tab_label:label#coerce w)) ()
 
+(*
 let counterexample_page,counterexample_tab =
   let label = GMisc.label ~text:"Counter-example" () in
-  3, GPack.vbox ~homogeneous:false ~packing:
+  4, GPack.vbox ~homogeneous:false ~packing:
     (fun w -> ignore(notebook#append_page ~tab_label:label#coerce w)) ()
-
+*)
 
 let (_ : GPack.box) =
   GPack.hbox ~packing:(source_tab#pack ~expand:false ?from:None ?fill:None
                          ?padding:None) ()
+
+let () =
+  notebook#goto_page gconfig.current_tab;
+  let page_selected n = gconfig.current_tab <- n in
+  let (_ : GtkSignal.id) =
+    notebook#connect#switch_page ~callback:page_selected
+  in ()
+
+
 
 (******************)
 (* views          *)
@@ -392,6 +402,7 @@ let output_view =
     ~packing:scrolled_output_view#add
     ()
 
+(*
 let scrolled_counterexample_view =
   GBin.scrolled_window
     ~hpolicy: `AUTOMATIC ~vpolicy: `AUTOMATIC
@@ -403,11 +414,15 @@ let counterexample_view =
     ~show_line_numbers:true
     ~packing:scrolled_counterexample_view#add
     ()
+*)
 
 let modifiable_sans_font_views = ref [goals_view#misc]
 let modifiable_mono_font_views =
   ref [task_view#misc;edited_view#misc;output_view#misc;
-       counterexample_view#misc]
+(*
+       counterexample_view#misc
+*)
+]
 let () = task_view#source_buffer#set_language why_lang
 let () = task_view#set_highlight_current_line true
 
@@ -431,9 +446,9 @@ let image_of_result ~obsolete result =
             if obsolete then !image_timeout_obs else !image_timeout
         | Call_provers.OutOfMemory ->
             if obsolete then !image_outofmemory_obs else !image_outofmemory
-        | Call_provers.StepsLimitExceeded ->
-            if obsolete then !image_stepslimitexceeded_obs
-            else !image_stepslimitexceeded
+        | Call_provers.StepLimitExceeded ->
+            if obsolete then !image_steplimitexceeded_obs
+            else !image_steplimitexceeded
         | Call_provers.Unknown _ ->
             if obsolete then !image_unknown_obs else !image_unknown
         | Call_provers.Failure _ ->
@@ -639,6 +654,7 @@ let update_tabs a =
       (Pp.string_of (Pp.hov 2 print) m.S.metas_added)
     | _ -> ""
  in
+(*
   let counterexample_text =
     match a with
     | S.Proof_attempt a ->
@@ -650,13 +666,16 @@ let update_tabs a =
       end
     | _ -> ""
   in
+*)
  task_view#source_buffer#set_text task_text;
  task_view#scroll_to_mark `INSERT;
  edited_view#source_buffer#set_text edited_text;
  edited_view#scroll_to_mark `INSERT;
  output_view#source_buffer#set_text output_text;
- counterexample_view#source_buffer#set_text counterexample_text
-
+(*
+ counterexample_view#source_buffer#set_text counterexample_text;
+*)
+  ()
 
 
 
@@ -912,7 +931,7 @@ let () =
   if C.Mprover.is_empty (C.get_provers gconfig.Gconfig.config) then
     begin
       info_window `ERROR
-        "No prover configured.\nPlease run 'why3config --detect-provers' first"
+        "No prover configured.\nPlease run 'why3 config --detect-provers' first"
         ~callback:GMain.quit;
       GMain.main ();
       exit 2;
@@ -1101,7 +1120,7 @@ let bisect_proof_attempt pa =
         M.schedule_proof_attempt
           ~timelimit:!timelimit
           ~memlimit:pa.S.proof_memlimit
-	  ~stepslimit:(-1)
+	  ~steplimit:(-1)
           ?old:(S.get_edited_as_abs eS.S.session pa)
           (** It is dangerous, isn't it? to be in place for bisecting? *)
           ~inplace:lp.S.prover_config.C.in_place
@@ -1139,7 +1158,7 @@ let bisect_proof_attempt pa =
             M.schedule_proof_attempt
               ~timelimit:!timelimit
               ~memlimit:pa.S.proof_memlimit
-	      ~stepslimit:(-1)
+	      ~steplimit:(-1)
               ?old:(S.get_edited_as_abs eS.S.session pa)
               ~inplace:lp.S.prover_config.C.in_place
               ~command:(C.get_complete_command lp.S.prover_config (-1))
