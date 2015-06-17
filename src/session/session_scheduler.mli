@@ -132,6 +132,7 @@ module Make(O: OBSERVER) : sig
   val run_prover :
     O.key env_session -> t ->
     context_unproved_goals_only:bool ->
+    cntexample : bool ->
     timelimit:int -> memlimit:int ->
     Whyconf.prover -> O.key any -> unit
     (** [run_prover es sched p a] runs prover [p] on all goals under [a]
@@ -139,15 +140,23 @@ module Make(O: OBSERVER) : sig
         will be started asynchronously when processors are available.
 
         ~context_unproved_goals_only indicates if prover must be run
-        on already proved goals or not *)
+        on already proved goals or not 
+	~cntexample indicates if prover should be asked to get counter-example
+	model
+    *)
 
 
   val run_external_proof :
     O.key env_session -> t ->
+    ?cntexample : bool ->
     ?callback:(O.key proof_attempt -> proof_attempt_status -> unit) ->
     O.key proof_attempt -> unit
-  (** [run_external_proof es sched ?callback p] reruns an existing
-      proof attempt [p] *)
+  (** [run_external_proof es sched ?cntexample ?callback p] reruns an existing
+      proof attempt [p] 
+
+      ~cntexample indicates if prover should be asked to get counter-example
+	model
+  *)
 
 
   type run_external_status =
@@ -158,24 +167,33 @@ module Make(O: OBSERVER) : sig
 
   val run_external_proof_v3 :
     O.key Session.env_session -> t -> O.key Session.proof_attempt ->
+    ?cntexample : bool ->
     (O.key Session.proof_attempt -> Whyconf.prover ->
      int * int * int -> Call_provers.prover_result option -> run_external_status -> unit) ->
-    unit
-  (** [run_external_proof_v3 env_session sched pa callback] the
+     unit
+  (** [run_external_proof_v3 env_session sched pa ?cntexample callback] the
       callback is applied with [callback pa p limits old_result
       status]. run_external_proof_v3 don't change the existing proof
       attempt just can add new by O.uninstalled_prover. Be aware since
       the session is not modified there is no test to see if the
-      proof_attempt had already been started *)
+      proof_attempt had already been started 
+      
+      ?cntexample indicates if prover should be asked to get counter-example
+	model
+  *)
 
 
   val prover_on_goal :
     O.key env_session -> t ->
     ?callback:(O.key proof_attempt -> proof_attempt_status -> unit) ->
+    ?cntexample : bool ->
     timelimit:int -> memlimit:int ->
     Whyconf.prover -> O.key goal -> unit
-  (** [prover_on_goal es sched ?timelimit p g] same as
+  (** [prover_on_goal es sched ?cntexample ?timelimit p g] same as
       {!redo_external_proof} but creates or reuses existing proof_attempt
+      
+      ?cntexample indicates if prover should be asked to get counter-example
+	model
   *)
 
 
@@ -213,12 +231,14 @@ module Make(O: OBSERVER) : sig
         must be applied also on alreadt proved goals *)
 
   val edit_proof :
+    cntexample:bool ->
     O.key env_session -> t ->
     default_editor:string ->
     O.key proof_attempt -> unit
   (** edits the given proof attempt using the appropriate editor *)
 
   val edit_proof_v3 :
+    cntexample:bool ->
     O.key env_session -> t ->
     default_editor:string ->
     callback:(O.key Session.proof_attempt ->  unit) ->
@@ -284,6 +304,7 @@ module Make(O: OBSERVER) : sig
     *)
 
   val schedule_proof_attempt:
+    cntexample:bool ->
     timelimit:int ->
     memlimit:int ->
     steplimit:int ->

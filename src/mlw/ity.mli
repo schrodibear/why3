@@ -93,7 +93,7 @@ val ity_hash : ity -> int
 val reg_hash : region -> int
 val pv_hash  : pvsymbol -> int
 
-exception ImpurePrivateField of ity
+exception ImpureField of ity
 exception DuplicateRegion of region
 exception UnboundRegion of region
 
@@ -110,13 +110,12 @@ val create_itysymbol_alias : preid -> tvsymbol list -> ity -> itysymbol
 (** [create_itysymbol_alias id args def] creates a new type alias. *)
 
 val create_itysymbol_rich :
-  preid -> tvsymbol list -> bool -> Spv.t -> Spv.t -> itysymbol
-(** [create_itysymbol_rich id args privmut mfields ifields] creates
-    a new type symbol. Every mutable and immutable field is represented
-    by a [pvsymbol] of the corresponding ghost status in the [mfields]
-    or [ifields] set, respectively. The variables from [mfields] are
-    stored in the created type symbol and used in effects. If [privmut]
-    is [true], then all types in [mfields] and [ifields] must be pure. *)
+  preid -> tvsymbol list -> bool -> bool Mpv.t -> itysymbol
+(** [create_itysymbol_rich id args privmut fields] creates a new type symbol.
+    Each field is represented by a [pvsymbol] mapped to its mutability status
+    in [fields]. The variables corresponding to mutable fields are stored in
+    the created type symbol and used in effects. If [privmut] is [true],
+    then all types in [fields] must be pure. *)
 
 val restore_its : tysymbol -> itysymbol
 (** raises [Not_found] if the argument is not a [its_ts] *)
@@ -339,24 +338,29 @@ type cty = private {
   cty_pre    : pre list;
   cty_post   : post list;
   cty_xpost  : post list Mexn.t;
+  cty_oldies : pvsymbol Mpv.t;
   cty_effect : effect;
   cty_result : ity;
   cty_freeze : ity_subst;
 }
 
 val create_cty : pvsymbol list ->
-  pre list -> post list -> post list Mexn.t -> effect -> ity -> cty
-(** [create_cty args pre post xpost effect result] creates a cty.
+  pre list -> post list -> post list Mexn.t ->
+  pvsymbol Mpv.t -> effect -> ity -> cty
+(** [create_cty args pre post xpost oldies effect result] creates a cty.
     The [cty_xpost] field does not have to cover all raised exceptions.
     [cty_effect.eff_reads] is completed wrt the specification and [args].
     [cty_freeze] freezes every unbound pvsymbol in [cty_effect.eff_reads].
     All effects on regions outside [cty_effect.eff_reads] are removed.
     Fresh regions in [result] are reset. Every type variable in [pre],
-    [post], and [xpost] must come from [cty_reads], [args] or [result]. *)
+    [post], and [xpost] must come from [cty_reads], [args] or [result].
+    [oldies] maps ghost pure snapshots of the parameters and external
+    reads to the original pvsymbols: these snaphosts are removed from
+    [cty_effect.eff_reads] and replaced with the originals. *)
 
 val cty_apply : cty -> pvsymbol list -> ity list -> ity -> cty
 (** [cty_apply cty pvl rest res] instantiates [cty] up to the types in
-    [pvl], [rest] and [res], then applies it to the arguments in [pvl],
+    [pvl], [rest], and [res], then applies it to the arguments in [pvl],
     and returns the computation type of the result, [rest -> res],
     with every type variable and region in [pvl] being frozen. *)
 

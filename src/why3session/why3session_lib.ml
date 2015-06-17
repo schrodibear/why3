@@ -94,7 +94,9 @@ let read_opt_prover s =
   try
     let l = Strings.rev_split ',' s in
     match l with
-    | [altern;version;name] when List.for_all (fun s -> s.[0] <> '^') l ->
+    (** A prover specified uniquely *)
+    | [altern;version;name]
+      when List.for_all (fun s -> s = "" || s.[0] <> '^') l ->
       Prover {Whyconf.prover_name = name;
               prover_version = version;
               prover_altern = altern}
@@ -249,7 +251,7 @@ let rec ask_yn () =
 
 let ask_yn_nonblock ~callback =
   let b = Buffer.create 3 in
-  let s = String.create 1 in
+  let s = Strings.create 1 in
   Format.printf "(y/n)@.";
   fun () ->
     match Unix.select [Unix.stdin] [] [] 0. with

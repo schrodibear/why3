@@ -101,7 +101,7 @@ type prover_result = {
   pr_output : string;
   pr_time   : float;
   pr_steps  : int;		(* -1 if unknown *)
-  pr_model  : model_element list;
+  pr_model  : model;
 }
 
 type prover_result_parser = {
@@ -133,8 +133,12 @@ let print_steps fmt s =
   if s >= 0 then fprintf fmt ", %d steps)" s
 
 let print_prover_result fmt
-  {pr_answer=ans; pr_status=status; pr_output=out; pr_time=t; pr_steps=s} =
+  {pr_answer=ans; pr_status=status; pr_output=out; pr_time=t; pr_steps=s; pr_model=m} =
   fprintf fmt "%a (%.2fs%a)" print_prover_answer ans t print_steps s;
+  if m <> Model_parser.empty_model then begin
+    fprintf fmt "\nCounter-example model:";
+    Model_parser.print_model fmt m
+  end;
   if ans == HighFailure then
     fprintf fmt "@\nProver exit status: %a@\nProver output:@\n%s@."
       print_prover_status status out
@@ -163,22 +167,9 @@ type pre_prover_call = unit -> prover_call
 
 let save f = f ^ ".save"
 
-let rec debug_print_model_with_loc model =
-  match model with
-  | [] -> ()
-  | m_element::t -> begin
-    let loc_string = match m_element.me_location with
-      | None -> "\"no location\""
-      | Some loc -> begin
-	Loc.report_position str_formatter loc;
-	flush_str_formatter ()
-      end in
-
-    Debug.dprintf debug "Call_provers: %s = %s@." m_element.me_name m_element.me_value;
-    Debug.dprintf debug "  Call_provers: At %s" loc_string;
-
-    debug_print_model_with_loc t
-  end
+let debug_print_model model =
+  Debug.dprintf debug "Call_provers: %s@." (Model_parser.model_to_string model)
+  
 
 let parse_prover_run res_parser time out ret on_timelimit timelimit ~printer_mapping =
   let ans = match ret with
@@ -203,7 +194,7 @@ let parse_prover_run res_parser time out ret on_timelimit timelimit ~printer_map
   in
   let model = res_parser.prp_model_parser out printer_mapping in
   Debug.dprintf debug "Call_provers: model:@.";
-  debug_print_model_with_loc model;
+  debug_print_model model;
   { pr_answer = ans;
     pr_status = ret;
     pr_output = out;

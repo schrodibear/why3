@@ -426,7 +426,7 @@ let load_shortcut acc section =
     let shortcuts = get_stringl section "shortcut" in
     let prover = { prover_name = name;
                    prover_version = version;
-                   prover_altern= altern} in
+                   prover_altern = altern} in
     add_prover_shortcuts acc prover shortcuts
   with MissingField s ->
     Warning.emit "[Warning] cannot load shortcut: missing field '%s'@." s;

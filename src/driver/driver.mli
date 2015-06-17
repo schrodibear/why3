@@ -15,7 +15,7 @@
 
 type driver
 
-val load_driver : Env.env -> string -> string list -> driver
+val load_driver :  Env.env -> string -> string list -> driver
 (** loads a driver from a file
     @param env    environment to interpret theories
     @param string driver file name
@@ -47,6 +47,7 @@ val call_on_buffer :
 
 val print_task :
   ?old       : in_channel ->
+  ?cntexample : bool ->
   driver -> Format.formatter -> Task.task -> unit
 
 val print_theory :
@@ -56,6 +57,7 @@ val print_theory :
 
 val prove_task :
   command    : string ->
+  ?cntexample : bool ->
   ?timelimit : int ->
   ?memlimit  : int ->
   ?steplimit : int ->
@@ -64,7 +66,7 @@ val prove_task :
   driver -> Task.task -> Call_provers.pre_prover_call
 
 (** Split the previous function in two simpler functions *)
-val prepare_task : driver -> Task.task -> Task.task
+val prepare_task : cntexample:bool -> driver -> Task.task -> Task.task
 
 val print_task_prepared :
   ?old       : in_channel ->
