@@ -684,9 +684,6 @@ let merge_config config filename =
   let prover_modifiers =
     List.map (fun sec -> create_filter_prover sec, sec) prover_modifiers in
   (** add provers *)
-  let provers,shortcuts =
-    List.fold_left (load_prover dirname)
-      (config.provers, config.prover_shortcuts) (get_simple_family rc "prover") in
   let provers = List.fold_left
     (fun provers (fp, section) ->
       Mprover.mapi (fun p c  ->
@@ -699,7 +696,10 @@ let merge_config config filename =
             extra_options = opt @ c.extra_options;
             extra_drivers = drv @ c.extra_drivers })
         provers
-    ) provers prover_modifiers in
+    ) config.provers prover_modifiers in
+  let provers,shortcuts =
+    List.fold_left (load_prover dirname)
+      (provers,config.prover_shortcuts) (get_simple_family rc "prover") in
   (** modify editors *)
   let editor_modifiers = get_family rc "editor_modifiers" in
   let editors = List.fold_left
