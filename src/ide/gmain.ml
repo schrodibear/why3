@@ -878,8 +878,9 @@ let notify any =
         update_tabs any
       | _ -> ()
   end;
-  if expanded then goals_view#expand_to_path @@ view_path_of_model_path row#path else
-    goals_view#collapse_row @@ view_path_of_model_path row#path;
+  if goals_model#get ~row:row#iter ~column:visible_column then
+    if expanded then goals_view#expand_to_path @@ view_path_of_model_path row#path else
+      goals_view#collapse_row @@ view_path_of_model_path row#path;
   match any with
     | S.Goal g ->
         set_row_status row g.S.goal_verified
