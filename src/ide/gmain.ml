@@ -1514,16 +1514,21 @@ let (_ : GMenu.image_menu_item) =
   view_factory#add_image_item ~key:GdkKeysyms._E
     ~label:"Expand all" ~callback:(fun () -> goals_view#expand_all ()) ()
 
-let rec collapse_verified = function
+let rec collapse_verified =
+  let is_visible row = goals_model#get ~row:row#iter ~column:visible_column in
+  function
   | S.Goal g when Opt.inhabited g.S.goal_verified ->
     let row = g.S.goal_key in
-    goals_view#collapse_row @@ view_path_of_model_path row#path
+    if is_visible row then
+      goals_view#collapse_row @@ view_path_of_model_path row#path
   | S.Theory th when Opt.inhabited th.S.theory_verified ->
     let row = th.S.theory_key in
-    goals_view#collapse_row @@ view_path_of_model_path row#path
+    if is_visible row then
+      goals_view#collapse_row @@ view_path_of_model_path row#path
   | S.File f when Opt.inhabited f.S.file_verified ->
     let row = f.S.file_key in
-    goals_view#collapse_row @@ view_path_of_model_path row#path
+    if is_visible row then
+      goals_view#collapse_row @@ view_path_of_model_path row#path
   | any -> S.iter collapse_verified any
 
 let collapse_all_verified_things () =
