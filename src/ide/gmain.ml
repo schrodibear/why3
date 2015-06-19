@@ -423,7 +423,126 @@ let modifiable_mono_font_views =
 ]
 let () = task_view#source_buffer#set_language why_lang
 let () = task_view#set_highlight_current_line true
-
+let () =
+  let buf = task_view#buffer in
+  let occurrence_tag = buf#create_tag [`BACKGROUND gconfig.goal_color] in
+  let current_text = ref None in
+  let same_text text =
+    match !current_text with
+    | Some text' when text' = text -> true
+    | None -> false
+    | Some _ -> false
+  in
+  let clear_occurrences () =
+    buf#remove_tag occurrence_tag ~start:buf#start_iter ~stop:buf#end_iter;
+    current_text := None
+  in
+  let is_start, is_end =
+    let is_nw iter =
+      let c = iter#char in
+      not (Glib.Unichar.isalnum c) && not (c = int_of_char '_' || c = int_of_char '\'')
+    in
+    (fun iter -> iter#starts_line || is_nw iter#backward_char),
+    fun iter -> iter#backward_char#ends_line || is_nw iter
+  in
+  let search ~which text iter =
+    GSourceView2.(match which with `First | `Next -> iter_forward_search | `Previous -> iter_backward_search)
+      iter
+      [`TEXT_ONLY]
+      ~start:buf#start_iter
+      ~stop:buf#end_iter
+      text
+  in
+  let mark_occurrences text =
+    if not (same_text text) then begin
+      clear_occurrences ();
+      let search_before = search ~which:`Previous text in
+      let rec loop iter =
+        match search_before iter with
+        | Some (start, stop) ->
+          if is_start start && is_end stop then
+            buf#apply_tag occurrence_tag ~start ~stop;
+          loop start#backward_char
+        | None -> ()
+      in
+      loop buf#end_iter;
+      current_text := Some text
+    end
+  in
+  let on_selection =
+    let is_ident s =
+      let is_alphanum_or_underscore =
+        function
+        | 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' -> true
+        | _ -> false
+      in
+      let is_ident_char c = is_alphanum_or_underscore c || c = '\'' || c = '.' in
+      String.length s > 0 && is_alphanum_or_underscore s.[0] &&
+      (try String.iter (fun c -> if not (is_ident_char c) then raise Exit) s; true with Exit -> false)
+    in
+    fun f ->
+      let start, stop = buf#selection_bounds in
+      if start#compare stop <> 0 && is_start start && is_end stop then
+        let text = task_view#buffer#get_text ~start ~stop () in
+        if is_ident text then f text
+  in
+  let goto_occurrence ~which () =
+    on_selection @@ fun text ->
+    let search = search ~which text in
+    let rec loop iter =
+      match search iter with
+      | Some (start, stop) when is_start start && is_end stop ->
+        buf#select_range start stop;
+        ignore @@ task_view#scroll_to_iter ~within_margin:0.1 start;
+        if not (same_text text) then clear_occurrences ();
+        mark_occurrences text
+      | Some (start, stop) ->
+        loop
+          (match which with
+           | `Next | `First -> stop#forward_char
+           | `Previous -> start#backward_char)
+      | None -> ()
+    in
+    loop
+      (match which with
+       | `First -> buf#start_iter
+       | `Next -> (snd buf#selection_bounds)#forward_char
+       | `Previous -> (fst buf#selection_bounds)#backward_char)
+  in
+  let mark_occurrences () = on_selection mark_occurrences in
+  let menu_items () =
+    let open GMenu in
+    match
+      List.map
+        (fun stock -> (image_menu_item ~stock () :> menu_item))
+        [`FIND; `GOTO_FIRST; `GO_FORWARD; `GO_BACK; `CLEAR]
+    with
+    | [find; first; next; prev; clear] ->
+      List.iter
+        (fun (o, modi, key) -> (o : menu_item)#add_accelerator ~group:accel_group ~modi ~flags:[`VISIBLE] key)
+        GdkKeysyms.[find, [`CONTROL], _M;
+                    first, [`CONTROL], _F;
+                    next, [`CONTROL], _G;
+                    prev, [`CONTROL; `SHIFT], _G;
+                    clear, [], _Escape];
+      List.iter
+        (fun (o, callback) -> ignore @@ o#connect#activate ~callback)
+        [find, mark_occurrences;
+         first, goto_occurrence ~which:`First;
+         next, goto_occurrence ~which:`Next;
+         prev, goto_occurrence ~which:`Previous;
+         clear, clear_occurrences];
+      [find, 6; first, 7; next, 8; prev, 9; clear, 10]
+    | _ -> assert false
+  in
+  ignore @@
+  task_view#connect#populate_popup
+    ~callback:(fun menu ->
+        List.iter (fun (o, pos) -> (new GMenu.menu menu)#insert o ~pos) @@ menu_items ());
+  let menu = GMenu.menu_bar ~packing:(fun o -> task_tab#pack o) () in
+  task_tab#reorder_child menu#coerce ~pos:0;
+  let edit_menu = (new GMenu.factory menu)#add_submenu "Edit" in
+  List.iter (fun (o, _) -> edit_menu#append o) @@ menu_items ()
 
 let clear model = model#clear ()
 
