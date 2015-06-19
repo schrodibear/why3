@@ -516,11 +516,17 @@ let () =
   let mark_occurrences () = on_selection mark_occurrences in
   let menu_items () =
     let open GMenu in
-    match
       List.map
-        (fun stock -> (image_menu_item ~stock () :> menu_item))
-        [`FIND; `GOTO_FIRST; `GO_FORWARD; `GO_BACK; `CLEAR]
-    with
+        (fun (label, stock) ->
+           let o = image_menu_item ~label () in
+           o#set_image (GMisc.image ~stock ())#coerce;
+           (o :> menu_item))
+        ["Mark occurrences", `FIND;
+         "Find first occurrence", `GOTO_FIRST;
+         "Find next", `GO_FORWARD;
+         "Find previous", `GO_BACK;
+         "Clear marks", `CLEAR]
+    |> function
     | [find; first; next; prev; clear] ->
       List.iter
         (fun (o, modi, key) -> (o : menu_item)#add_accelerator ~group:accel_group ~modi ~flags:[`VISIBLE] key)
