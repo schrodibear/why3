@@ -684,6 +684,7 @@ let row_expanded b iter _path =
     | S.Metas m ->
         S.set_metas_expanded m b;
         if b then expand_g m.S.metas_goal
+    | exception Invalid_argument _ -> ()
 
 let current_selected_row = ref None
 let current_env_session = ref None
@@ -816,6 +817,7 @@ module MA = struct
        in
        let iter = goals_model#append ?parent () in
        goals_model#set ~row:iter ~column:index_column (-1);
+       goals_model#set ~row:iter ~column:visible_column true;
        goals_model#get_row_reference (goals_model#get_path iter)
 
      let keygen = create
@@ -878,9 +880,8 @@ let notify any =
         update_tabs any
       | _ -> ()
   end;
-  if goals_model#get ~row:row#iter ~column:visible_column then
-    if expanded then goals_view#expand_to_path @@ view_path_of_model_path row#path else
-      goals_view#collapse_row @@ view_path_of_model_path row#path;
+  if expanded then goals_view#expand_to_path @@ view_path_of_model_path row#path else
+    goals_view#collapse_row @@ view_path_of_model_path row#path;
   match any with
     | S.Goal g ->
         set_row_status row g.S.goal_verified
@@ -919,7 +920,6 @@ let init =
          | S.Proof_attempt _ -> !image_prover
          | S.Transf _ -> !image_transf
          | S.Metas _ -> !image_metas);
-    goals_model#set ~row:row#iter ~column:visible_column true;
     notify any
 
 let rec init_any any =
