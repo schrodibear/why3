@@ -1553,7 +1553,7 @@ let rec handle_empty ~hide = function
 let handle_all_empty_things hide =
   S.session_iter (handle_empty ~hide) (env_session()).S.session
 
-let (_ : GMenu.check_menu_item) =
+let hide_empty_item =
   view_factory#add_check_item
     ~active:true
     ~key:GdkKeysyms._H
@@ -2208,6 +2208,7 @@ let reload () =
         old_session gconfig.env gconfig.Gconfig.config
     in
     current_env_session := Some new_env_session;
+    handle_all_empty_things hide_empty_item#active;
     display_warnings ()
   with
     | e ->
@@ -2571,7 +2572,7 @@ let (_:GtkSignal.id) =
 let () = Debug.set_flag (Debug.lookup_flag "transform")
 *)
 
-let () = handle_all_empty_things true
+let () = handle_all_empty_things hide_empty_item#active
 
 let () = display_warnings ()
 
