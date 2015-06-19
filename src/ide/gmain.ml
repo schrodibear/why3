@@ -269,6 +269,7 @@ let icon_column = cols#add Gobject.Data.gobject
 let status_column = cols#add Gobject.Data.gobject
 let time_column = cols#add Gobject.Data.string
 let index_column = cols#add Gobject.Data.int
+let visible_column = cols#add Gobject.Data.boolean
 
 let name_renderer = GTree.cell_renderer_text [`XALIGN 0.]
 let renderer = GTree.cell_renderer_text [`XALIGN 0.]
@@ -305,18 +306,21 @@ let () =
   view_time_column#set_resizable false;
   view_time_column#set_visible true
 
-let goals_model,goals_view =
+let goals_model, goals_view, goals_filter =
   Debug.dprintf debug "[GUI] Creating tree model...@?";
   let model = GTree.tree_store cols in
-  let view = GTree.view ~model ~packing:scrollview#add () in
+  let filter = GTree.model_filter model in
+  let view = GTree.view ~model:filter ~packing:scrollview#add () in
   let () = view#selection#set_mode (* `SINGLE *) `MULTIPLE in
   let () = view#set_rules_hint true in
   ignore (view#append_column view_name_column);
   ignore (view#append_column view_status_column);
   ignore (view#append_column view_time_column);
+  filter#set_visible_column visible_column;
   Debug.dprintf debug " done@.";
-  model,view
+  model, view, filter
 
+let view_path_of_model_path = goals_filter#convert_child_path_to_path
 
 (******************************)
 (*    notebook on the right   *)
@@ -645,15 +649,15 @@ let get_any_from_row_reference r = get_any_from_iter r#iter
 
 let get_selected_row_references () =
   List.map
-    (fun path -> goals_model#get_row_reference path)
+    (fun path -> goals_model#get_row_reference @@ goals_filter#convert_path_to_child_path path)
     goals_view#selection#get_selected_rows
 
 let row_expanded b iter _path =
   session_needs_saving := true;
-  let expand_g g = goals_view#expand_row g.S.goal_key#path in
-  let expand_tr _ tr = goals_view#expand_row tr.S.transf_key#path in
-  let expand_m _ m = goals_view#expand_row m.S.metas_key#path in
-  match get_any_from_iter iter with
+  let expand_g g = goals_view#expand_row (view_path_of_model_path g.S.goal_key#path) in
+  let expand_tr _ tr = goals_view#expand_row (view_path_of_model_path tr.S.transf_key#path) in
+  let expand_m _ m = goals_view#expand_row (view_path_of_model_path m.S.metas_key#path) in
+  match get_any_from_iter @@ goals_filter#convert_iter_to_child_iter iter with
     | S.File f ->
         S.set_file_expanded f b
     | S.Theory t ->
@@ -868,8 +872,8 @@ let notify any =
         update_tabs any
       | _ -> ()
   end;
-  if expanded then goals_view#expand_to_path row#path else
-    goals_view#collapse_row row#path;
+  if expanded then goals_view#expand_to_path @@ view_path_of_model_path row#path else
+    goals_view#collapse_row @@ view_path_of_model_path row#path;
   match any with
     | S.Goal g ->
         set_row_status row g.S.goal_verified
@@ -908,6 +912,7 @@ let init =
          | S.Proof_attempt _ -> !image_prover
          | S.Transf _ -> !image_transf
          | S.Metas _ -> !image_metas);
+    goals_model#set ~row:row#iter ~column:visible_column true;
     notify any
 
 let rec init_any any =
@@ -1506,13 +1511,13 @@ let (_ : GMenu.image_menu_item) =
 let rec collapse_verified = function
   | S.Goal g when Opt.inhabited g.S.goal_verified ->
     let row = g.S.goal_key in
-    goals_view#collapse_row row#path
+    goals_view#collapse_row @@ view_path_of_model_path row#path
   | S.Theory th when Opt.inhabited th.S.theory_verified ->
     let row = th.S.theory_key in
-    goals_view#collapse_row row#path
+    goals_view#collapse_row @@ view_path_of_model_path row#path
   | S.File f when Opt.inhabited f.S.file_verified ->
     let row = f.S.file_key in
-    goals_view#collapse_row row#path
+    goals_view#collapse_row @@ view_path_of_model_path row#path
   | any -> S.iter collapse_verified any
 
 let collapse_all_verified_things () =
@@ -1523,6 +1528,26 @@ let (_ : GMenu.image_menu_item) =
     ~label:"Collapse proved goals"
     ~callback:collapse_all_verified_things
     ()
+
+let rec handle_empty ~hide = function
+  | S.Goal _ -> ()
+  | S.Theory ({ S.theory_goals = []; _ } as th) ->
+    let row = th.S.theory_key in
+    goals_model#set ~row:row#iter ~column:visible_column (not hide)
+  | S.File f when List.for_all (fun { S.theory_goals = gs } -> gs = []) f.S.file_theories ->
+    let row = f.S.file_key in
+    goals_model#set ~row:row#iter ~column:visible_column (not hide)
+  | any -> S.iter (handle_empty ~hide) any
+
+let handle_all_empty_things hide =
+  S.session_iter (handle_empty ~hide) (env_session()).S.session
+
+let (_ : GMenu.check_menu_item) =
+  view_factory#add_check_item
+    ~active:true
+    ~key:GdkKeysyms._H
+    "Hide theories/modules without goals"
+    ~callback:handle_all_empty_things
 
 (*
 let rec hide_proved_in_goal g =
@@ -2534,6 +2559,8 @@ let (_:GtkSignal.id) =
 (*
 let () = Debug.set_flag (Debug.lookup_flag "transform")
 *)
+
+let () = handle_all_empty_things true
 
 let () = display_warnings ()
 
