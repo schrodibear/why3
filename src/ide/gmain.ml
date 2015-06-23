@@ -600,6 +600,12 @@ let modifiable_mono_font_views =
 ]
 let () = task_view#source_buffer#set_language why_lang
 let () = task_view#set_highlight_current_line true
+
+(* Search in task view *)
+let task_menu = GMenu.menu_bar ~packing:(fun o -> task_tab#pack o) ()
+let task_menu_factory = new GMenu.factory task_menu
+let () = task_tab#reorder_child task_menu#coerce ~pos:0
+let task_edit_menu = task_menu_factory#add_submenu "Edit"
 let () =
   let buf = task_view#buffer in
   let occurrence_tag = buf#create_tag [`BACKGROUND gconfig.goal_color] in
@@ -607,20 +613,23 @@ let () =
   let same_text text =
     match !current_text with
     | Some text' when text' = text -> true
-    | None -> false
     | Some _ -> false
+    | None -> false
   in
   let clear_occurrences () =
     buf#remove_tag occurrence_tag ~start:buf#start_iter ~stop:buf#end_iter;
     current_text := None
   in
-  let is_start, is_end =
-    let is_nw iter =
-      let c = iter#char in
-      not (Glib.Unichar.isalnum c) && not (c = int_of_char '_' || c = int_of_char '\'')
+  let is_word =
+    let is_nw =
+      let __ = int_of_char '_' and _' = int_of_char '\'' in
+      fun iter ->
+        let c = iter#char in
+        not (Glib.Unichar.isalnum c || c = __ || c = _')
     in
-    (fun iter -> iter#starts_line || is_nw iter#backward_char),
-    fun iter -> iter#backward_char#ends_line || is_nw iter
+    fun ~start ~stop ->
+     (start#starts_line || is_nw start#backward_char) &&
+     (stop#ends_line || is_nw stop)
   in
   let search ~which text iter =
     GSourceView2.(match which with `First | `Next -> iter_forward_search | `Previous -> iter_backward_search)
@@ -637,7 +646,7 @@ let () =
       let rec loop iter =
         match search_before iter with
         | Some (start, stop) ->
-          if is_start start && is_end stop then
+          if is_word ~start ~stop then
             buf#apply_tag occurrence_tag ~start ~stop;
           loop start#backward_char
         | None -> ()
@@ -659,7 +668,7 @@ let () =
     in
     fun f ->
       let start, stop = buf#selection_bounds in
-      if start#compare stop <> 0 && is_start start && is_end stop then
+      if start#compare stop <> 0 && is_word ~start ~stop then
         let text = task_view#buffer#get_text ~start ~stop () in
         if is_ident text then f text
   in
@@ -668,7 +677,7 @@ let () =
     let search = search ~which text in
     let rec loop iter =
       match search iter with
-      | Some (start, stop) when is_start start && is_end stop ->
+      | Some (start, stop) when is_word ~start ~stop ->
         buf#select_range start stop;
         ignore @@ task_view#scroll_to_iter ~within_margin:0.1 start;
         if not (same_text text) then clear_occurrences ();
@@ -702,7 +711,8 @@ let () =
     |> function
     | [find; first; next; prev; clear] ->
       List.iter
-        (fun (o, modi, key) -> (o : menu_item)#add_accelerator ~group:accel_group ~modi ~flags:[`VISIBLE] key)
+        (fun (o, modi, key) ->
+           (o : menu_item)#add_accelerator ~group:accel_group ~modi ~flags:[`VISIBLE] key)
         GdkKeysyms.[find, [`CONTROL], _M;
                     first, [`CONTROL], _F;
                     next, [`CONTROL], _G;
@@ -721,11 +731,9 @@ let () =
   ignore @@
   task_view#connect#populate_popup
     ~callback:(fun menu ->
-        List.iter (fun (o, pos) -> (new GMenu.menu menu)#insert o ~pos) @@ menu_items ());
-  let menu = GMenu.menu_bar ~packing:(fun o -> task_tab#pack o) () in
-  task_tab#reorder_child menu#coerce ~pos:0;
-  let edit_menu = (new GMenu.factory menu)#add_submenu "Edit" in
-  List.iter (fun (o, _) -> edit_menu#append o) @@ menu_items ()
+        let menu = new GMenu.menu menu in
+        List.iter (fun (o, pos) -> menu#insert o ~pos) @@ menu_items ());
+  List.iter (fun (o, _) -> task_edit_menu#append o) @@ menu_items ()
 
 let clear model = model#clear ()
 
