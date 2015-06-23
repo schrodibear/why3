@@ -803,9 +803,9 @@ let set_proof_state a =
           Format.sprintf "%.2f" time
        in
        if steps >= 0 then
-	 Format.sprintf "%s (steps: %d)" s steps
+         Format.sprintf "%s (steps: %d)" s steps
        else
-	 s
+         s
     | S.Unedited -> "(not yet edited)"
     | S.JustEdited -> "(edited)"
     | S.InternalFailure _ -> "(internal failure)"
@@ -953,17 +953,17 @@ let update_tabs a =
     | S.Proof_attempt a ->
       begin
         match a.S.proof_state with
-	  | S.Done r ->
-	    if r.Call_provers.pr_model <> Model_parser.empty_model then begin
-	      Model_parser.model_to_string r.Call_provers.pr_model ^ "\n" ^
-		Model_parser.model_to_string_json r.Call_provers.pr_model ^ "\n\n" ^
-		(Model_parser.interleave_with_source 
-		   r.Call_provers.pr_model
-		   !current_file
-		   (Sysutil.file_contents !current_file))
-	    end else
-	      ""
-	  | _ -> ""
+          | S.Done r ->
+            if r.Call_provers.pr_model <> Model_parser.empty_model then begin
+              Model_parser.model_to_string r.Call_provers.pr_model ^ "\n" ^
+                Model_parser.model_to_string_json r.Call_provers.pr_model ^ "\n\n" ^
+                (Model_parser.interleave_with_source 
+                   r.Call_provers.pr_model
+                   !current_file
+                   (Sysutil.file_contents !current_file))
+            end else
+              ""
+          | _ -> ""
       end
     | _ -> ""
   in
@@ -1425,10 +1425,10 @@ let bisect_proof_attempt pa =
       | Eliminate_definition.BSstep (t,c) ->
         assert (not lp.S.prover_config.C.in_place); (* TODO do this case *)
         M.schedule_proof_attempt
-	  ~cntexample:!opt_cntexmp
+          ~cntexample:!opt_cntexmp
           ~timelimit:!timelimit
           ~memlimit:pa.S.proof_memlimit
-	  ~steplimit:(-1)
+          ~steplimit:(-1)
           ?old:(S.get_edited_as_abs eS.S.session pa)
           (** It is dangerous, isn't it? to be in place for bisecting? *)
           ~inplace:lp.S.prover_config.C.in_place
@@ -1464,10 +1464,10 @@ let bisect_proof_attempt pa =
             dprintf debug "Prover can't be loaded.@."
           | Some lp ->
             M.schedule_proof_attempt
-	      ~cntexample:!opt_cntexmp
+              ~cntexample:!opt_cntexmp
               ~timelimit:!timelimit
               ~memlimit:pa.S.proof_memlimit
-	      ~steplimit:(-1)
+              ~steplimit:(-1)
               ?old:(S.get_edited_as_abs eS.S.session pa)
               ~inplace:lp.S.prover_config.C.in_place
               ~command:(C.get_complete_command lp.S.prover_config (-1))
