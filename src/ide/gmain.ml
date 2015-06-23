@@ -306,11 +306,182 @@ let () =
   view_time_column#set_resizable false;
   view_time_column#set_visible true
 
+module Model :
+sig
+  open GTree
+
+  type path
+  type iter
+  type hidden_path
+  type hidden_iter
+  type row_reference
+  type row = < as_ref : row_reference; iter : iter; path : path; valid : bool >
+
+  module GTree :
+  sig
+    class model :
+      ([> `treemodel ] as 'a) Gtk.obj ->
+      object
+        val id : int
+        val obj : 'a Gtk.obj
+        method as_model : Gtk.tree_model
+        method coerce : model
+        method flags : GtkEnums.tree_model_flags list
+        method foreach : (path -> iter -> bool) -> unit
+        method get : row:iter -> column:'b column -> 'b
+        method get_column_type : int -> Gobject.g_type
+        method get_iter : path -> iter
+        method get_iter_first : iter option
+        method get_path : iter -> path
+        method get_row_reference : path -> row
+        method iter_children : ?nth:int -> iter option -> iter
+        method iter_has_child : iter -> bool
+        method iter_n_children : iter option -> int
+        method iter_next : iter -> bool
+        method iter_parent : iter -> iter option
+        method misc : GObj.gobject_ops
+        method n_columns : int
+        method row_changed : path -> iter -> unit
+      end
+
+    class tree_sortable_signals :
+      [> `treemodel | `treesortable ] Gtk.obj ->
+      object ('a)
+        method after : 'a
+        method row_changed : callback:(path -> iter -> unit) -> GtkSignal.id
+        method row_deleted : callback:(path -> unit) -> GtkSignal.id
+        method row_has_child_toggled : callback:(path -> iter -> unit) -> GtkSignal.id
+        method row_inserted : callback:(path -> iter -> unit) -> GtkSignal.id
+        method rows_reordered : callback:(path -> iter -> unit) -> GtkSignal.id
+        method sort_column_changed : callback:(unit -> unit) -> GtkSignal.id
+      end
+
+    class tree_store :
+      Gtk.tree_store ->
+      object
+        inherit model
+        val id : int
+        val obj : Gtk.tree_store
+        method append : ?parent:iter -> unit -> iter
+        method clear : unit -> unit
+        method connect : tree_sortable_signals
+        method get_sort_column_id : (int * Gtk.Tags.sort_type) option
+        method has_default_sort_func : bool
+        method insert : ?parent:iter -> int -> iter
+        method insert_after : ?parent:iter -> iter -> iter
+        method insert_before : ?parent:iter -> iter -> iter
+        method is_ancestor : iter:iter -> descendant:iter -> bool
+        method iter_depth : iter -> int
+        method iter_is_valid : iter -> bool
+        method move_after : iter:iter -> pos:iter -> bool
+        method move_before : iter:iter -> pos:iter -> bool
+        method prepend : ?parent:iter -> unit -> iter
+        method remove : iter -> bool
+        method set : row:iter -> column:'b GTree.column -> 'b -> unit
+        method set_default_sort_func : (model -> iter -> iter -> int) -> unit
+        method set_sort_column_id : int -> Gtk.Tags.sort_type -> unit
+        method set_sort_func : int -> (model -> iter -> iter -> int) -> unit
+        method sort_column_changed : unit -> unit
+        method swap : iter -> iter -> bool
+      end
+
+    class model_signals :
+      [> `treemodel ] Gtk.obj ->
+      object ('a)
+        method after : 'a
+        method row_changed : callback:(path -> iter -> unit) -> GtkSignal.id
+        method row_deleted : callback:(path -> unit) -> GtkSignal.id
+        method row_has_child_toggled : callback:(path -> iter -> unit) -> GtkSignal.id
+        method row_inserted : callback:(path -> iter -> unit) -> GtkSignal.id
+        method rows_reordered : callback:(path -> iter -> unit) -> GtkSignal.id
+      end
+
+    class model_filter :
+      Gtk.tree_model_filter ->
+      object
+        val id : int
+        val obj : Gtk.tree_model_filter
+        method as_model : Gtk.tree_model
+        method child_model : model
+        method coerce : model
+        method connect : model_signals
+        method convert_child_iter_to_iter : hidden_iter -> Gtk.tree_iter
+        method convert_child_path_to_path : hidden_path -> Gtk.tree_path
+        method convert_iter_to_child_iter : Gtk.tree_iter -> iter
+        method convert_path_to_child_path : Gtk.tree_path -> path
+        method flags : GtkEnums.tree_model_flags list
+        method foreach : (Gtk.tree_path -> Gtk.tree_iter -> bool) -> unit
+        method get : row:Gtk.tree_iter -> column:'a column -> 'a
+        method get_column_type : int -> Gobject.g_type
+        method get_iter : Gtk.tree_path -> Gtk.tree_iter
+        method get_iter_first : Gtk.tree_iter option
+        method get_path : Gtk.tree_iter -> Gtk.tree_path
+        method get_row_reference : Gtk.tree_path -> GTree.row_reference
+        method iter_children : ?nth:int -> Gtk.tree_iter option -> Gtk.tree_iter
+        method iter_has_child : Gtk.tree_iter -> bool
+        method iter_n_children : Gtk.tree_iter option -> int
+        method iter_next : Gtk.tree_iter -> bool
+        method iter_parent : Gtk.tree_iter -> Gtk.tree_iter option
+        method misc : GObj.gobject_ops
+        method n_columns : int
+        method refilter : unit -> unit
+        method row_changed : Gtk.tree_path -> Gtk.tree_iter -> unit
+        method set_visible_column : bool GTree.column -> unit
+        method set_visible_func : (model -> iter -> bool) -> unit
+        method virtual_root : Gtk.tree_path
+      end
+
+    class view : Gtk.tree_view Gtk.obj -> GTree.view
+
+    val tree_store : column_list -> tree_store
+    val model_filter : ?virtual_root:path -> #model -> model_filter
+    val view : ?packing:(GObj.widget -> unit) -> model_filter -> view
+  end
+
+  open GTree
+
+  val map_row : model_filter -> default:'a -> row -> (Gtk.tree_iter -> Gtk.tree_path -> 'a) -> 'a
+  val if_visible : model_filter -> row -> (Gtk.tree_iter -> Gtk.tree_path -> unit) -> unit
+  val row : model_filter -> Gtk.tree_path -> row
+end =
+struct
+  open GTree
+
+  type iter = Gtk.tree_iter
+  type path = Gtk.tree_path
+  type hidden_iter = iter
+  type hidden_path = path
+  type row_reference = Gtk.row_reference
+  type row = < as_ref : row_reference; iter : iter; path : path; valid : bool >
+
+  module GTree =
+  struct
+    class model = GTree.model
+    class tree_sortable_signals = GTree.tree_sortable_signals
+    class tree_store  = GTree.tree_store
+    class model_signals = GTree.model_signals
+    class model_filter = GTree.model_filter
+    class view = GTree.view
+    let tree_store = GTree.tree_store
+    let model_filter = model_filter
+    let view ?packing model = view ?packing ~model ()
+  end
+
+  let map_row filter ~default row f =
+    match filter#convert_child_iter_to_iter row#iter, filter#convert_child_path_to_path row#path with
+    | iter, path -> f iter path
+    | exception Gpointer.Null -> default
+  let if_visible = map_row ~default:()
+  let row filter p = filter#child_model#get_row_reference (filter#convert_path_to_child_path p)
+end
+
+open Model
+
 let goals_model, goals_view, goals_filter =
   Debug.dprintf debug "[GUI] Creating tree model...@?";
   let model = GTree.tree_store cols in
   let filter = GTree.model_filter model in
-  let view = GTree.view ~model:filter ~packing:scrollview#add () in
+  let view = GTree.view ~packing:scrollview#add filter in
   let () = view#selection#set_mode (* `SINGLE *) `MULTIPLE in
   let () = view#set_rules_hint true in
   ignore (view#append_column view_name_column);
@@ -320,7 +491,9 @@ let goals_model, goals_view, goals_filter =
   Debug.dprintf debug " done@.";
   model, view, filter
 
-let view_path_of_model_path = goals_filter#convert_child_path_to_path
+let row = row goals_filter
+let map_row ~default = map_row goals_filter ~default
+let if_visible = if_visible goals_filter
 
 (******************************)
 (*    notebook on the right   *)
@@ -653,16 +826,14 @@ let get_any (row:Gtk.tree_path) : M.any =
 
 let get_any_from_row_reference r = get_any_from_iter r#iter
 
-let get_selected_row_references () =
-  List.map
-    (fun path -> goals_model#get_row_reference @@ goals_filter#convert_path_to_child_path path)
-    goals_view#selection#get_selected_rows
+let get_selected_row_references () = List.map row goals_view#selection#get_selected_rows
 
 let row_expanded b iter _path =
   session_needs_saving := true;
-  let expand_g g = goals_view#expand_row (view_path_of_model_path g.S.goal_key#path) in
-  let expand_tr _ tr = goals_view#expand_row (view_path_of_model_path tr.S.transf_key#path) in
-  let expand_m _ m = goals_view#expand_row (view_path_of_model_path m.S.metas_key#path) in
+  let expand_if_visible row = if_visible row @@ fun _ path -> goals_view#expand_row path in
+  let expand_g g = expand_if_visible g.S.goal_key in
+  let expand_tr _ tr = expand_if_visible tr.S.transf_key in
+  let expand_m _ m = expand_if_visible m.S.metas_key in
   match get_any_from_iter @@ goals_filter#convert_iter_to_child_iter iter with
     | S.File f ->
         S.set_file_expanded f b
@@ -806,7 +977,7 @@ let update_tabs a =
 
 
 module MA = struct
-     type key = GTree.row_reference
+     type key = Model.row
 
      let create ?parent () =
        reset_gc ();
@@ -880,8 +1051,9 @@ let notify any =
         update_tabs any
       | _ -> ()
   end;
-  if expanded then goals_view#expand_to_path @@ view_path_of_model_path row#path else
-    goals_view#collapse_row @@ view_path_of_model_path row#path;
+  if_visible row @@ fun _ path ->
+  if expanded then goals_view#expand_to_path path else
+    goals_view#collapse_row path;
   match any with
     | S.Goal g ->
         set_row_status row g.S.goal_verified
@@ -1516,20 +1688,17 @@ let (_ : GMenu.image_menu_item) =
     ~label:"Expand all" ~callback:(fun () -> goals_view#expand_all ()) ()
 
 let rec collapse_verified =
-  let is_visible row = goals_model#get ~row:row#iter ~column:visible_column in
+  let collapse_if_visible row = if_visible row @@ fun _ path -> goals_view#collapse_row path in
   function
   | S.Goal g when Opt.inhabited g.S.goal_verified ->
     let row = g.S.goal_key in
-    if is_visible row then
-      goals_view#collapse_row @@ view_path_of_model_path row#path
+    collapse_if_visible row
   | S.Theory th when Opt.inhabited th.S.theory_verified ->
     let row = th.S.theory_key in
-    if is_visible row then
-      goals_view#collapse_row @@ view_path_of_model_path row#path
+    collapse_if_visible row
   | S.File f when Opt.inhabited f.S.file_verified ->
     let row = f.S.file_key in
-    if is_visible row then
-      goals_view#collapse_row @@ view_path_of_model_path row#path
+    collapse_if_visible row
   | any -> S.iter collapse_verified any
 
 let collapse_all_verified_things () =
