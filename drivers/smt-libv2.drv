@@ -156,8 +156,6 @@ theory map.Map
 
   meta "encoding:ignore_polymorphism_pr" prop Select_eq
   meta "encoding:ignore_polymorphism_pr" prop Select_neq
-  remove prop Select_eq
-  remove prop Select_neq
 end
 
 theory map.Const
