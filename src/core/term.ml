@@ -1471,7 +1471,7 @@ let t_implies_simp f1 f2 = match f1.t_node, f2.t_node with
   | Ttrue, _  when can_simp f1 -> f2
   | _, Ttrue  when can_simp f1 -> f2
   | Tfalse, _ when can_simp f2 -> t_label_copy f1 t_true
-  | _, Tfalse when can_simp f2 -> t_not_simp f1
+  | _, Tfalse when can_simp f2 -> t_label_copy f1 (t_not_simp f1)
   | _, _ when t_equal f1 f2    -> t_label_copy f1 t_true
   | _, _ -> t_implies f1 f2
 

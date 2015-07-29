@@ -2331,21 +2331,28 @@ let rec color_locs ~color f =
 (* FIXME: we shouldn't open binders _every_time_ we redraw screen!!!
    No t_fold, no t_open_quant! *)
 let rec color_t_locs f =
-  let premise_tag = function
-    | { Term. t_node = Term.Tnot _; t_loc = None } -> neg_premise_tag
-    | _ -> premise_tag
+  let rec tag ?(neg=false) =
+    let neg, pos = if not neg then neg_premise_tag, premise_tag else premise_tag, neg_premise_tag in
+    function
+    | { Term. t_node = Term.Tnot ({ Term. t_node = Term.Tnot _; t_loc = None; _ } as t); _ } -> tag ~neg:true t
+    | { Term. t_node = Term.Tnot _; t_loc = None; _ } -> neg
+    | _ -> pos
   in
   match f.Term.t_node with
     | Term.Tbinop (Term.Timplies,f1,f2) ->
-        let b = color_locs ~color:(premise_tag f1) f1 in
+        let b = color_locs ~color:(tag f1) f1 in
         color_t_locs f2 || b
     | Term.Tlet (t,fb) ->
         let _,f1 = Term.t_open_bound fb in
-        let b = color_locs ~color:(premise_tag t) t in
+        let b = color_locs ~color:(tag t) t in
         color_t_locs f1 || b
     | Term.Tquant (Term.Tforall,fq) ->
         let _,_,f1 = Term.t_open_quant fq in
         color_t_locs f1
+    | Term.Tif (f1, f2, f3) ->
+        let b = color_locs ~color:(tag f1) f1 in
+        let r = color_t_locs f3 in
+        color_t_locs f2 || r || b
     | _ ->
         color_locs ~color:goal_tag f
 
