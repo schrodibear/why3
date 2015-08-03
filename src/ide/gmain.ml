@@ -1109,7 +1109,6 @@ module M = Session_scheduler.Make(MA)
 
 
 let () = w#add_accel_group accel_group
-let () = w#show ()
 
 (********************)
 (* opening database *)
@@ -2779,6 +2778,8 @@ let () = Debug.set_flag (Debug.lookup_flag "transform")
 *)
 
 let () = handle_all_empty_things hide_empty_item#active
+
+let () = w#show ()
 
 let () = display_warnings ()
 
