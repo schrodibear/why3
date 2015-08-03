@@ -2330,26 +2330,49 @@ let rec color_locs ~color f =
 
 (* FIXME: we shouldn't open binders _every_time_ we redraw screen!!!
    No t_fold, no t_open_quant! *)
-let rec color_t_locs f =
+let rec color_t_locs ?(env=Ident.Mid.empty) f =
+  let color_t_locs ?(env=env) = color_t_locs ~env in
+  let open Term in
+  let open Ident in
   let pos_premise_tag = premise_tag in
   let rec premise_tag ?(neg=false) =
+    let color = if not neg then pos_premise_tag else neg_premise_tag in
     function
-    | { Term. t_node = Term.Tnot t; t_loc = None; _ } -> premise_tag ~neg:(not neg) t
-    | _ when neg -> neg_premise_tag
-    | _ -> pos_premise_tag
+    | { t_node = Tnot t; t_loc = None; _ } -> premise_tag ~neg:(not neg) t
+    | { t_node = Tapp ({ ls_name = { id_string = "infix ="; _ }; _ }, ts) } ->
+      List.iter
+        (function
+          | { t_node = Tvar { vs_name = v; _ }; _ } when Mid.mem v env ->
+            color_loc ~color @@ Mid.find v env
+          | _ -> ())
+        ts;
+      color
+    | _ -> color
   in
-  match f.Term.t_node with
-    | Term.Tbinop (Term.Timplies,f1,f2) ->
+  match f.t_node with
+    | Tbinop (Timplies, f1, f2) ->
         let b = color_locs ~color:(premise_tag f1) f1 in
         color_t_locs f2 || b
-    | Term.Tlet (t,fb) ->
-        let _,f1 = Term.t_open_bound fb in
+    | Tlet (t, fb) ->
+        let _, f1 = t_open_bound fb in
         let b = color_locs ~color:(premise_tag t) t in
         color_t_locs f1 || b
-    | Term.Tquant (Term.Tforall,fq) ->
-        let _,_,f1 = Term.t_open_quant fq in
-        color_t_locs f1
-    | Term.Tif (f1, f2, f3) ->
+    | Tquant (Tforall, fq) ->
+      let vss, _, f1 = t_open_quant fq in
+      let env =
+        List.fold_left
+          (fun e ->
+             function
+             | { vs_name = { id_loc = Some loc; id_string = "result"; _ } as id;
+                 vs_ty = { Ty.ty_node = Ty.Tyapp ({ Ty.ts_name = { id_string = "bool"; _ }; _ }, _) }; _ } ->
+               (* such identifiers named "result" are letified postconditions of code predicates *)
+               Mid.add id loc e
+             | _ -> e)
+          env
+          vss
+      in
+      color_t_locs ~env f1
+    | Tif (f1, f2, f3) ->
         let b = color_locs ~color:(premise_tag f1) f1 in
         let r = color_t_locs f3 in
         color_t_locs f2 || r || b
