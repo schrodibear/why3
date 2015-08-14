@@ -196,6 +196,8 @@ theory ComputerDivision
           x > 0 /\ y >= 0 /\ z >= 0 ->
           mod (x * y + z) x = mod z x
 
+  lemma Div_mult_simplest: forall x y: int [div (x * y) y].
+          x >= 0 /\ y > 0 -> div (x * y) y = x
 end
 
 (** {2 Generic Exponentiation of something to an integer exponent} *)
