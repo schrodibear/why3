@@ -36,7 +36,7 @@ let rec t_replace_all env t =
 (* inline the top-most symbol *)
 
 let rec f_replace_top env f = match f.t_node with
-  | Tapp (ps,_) when ls_equal ps ps_equ ->
+  | Tapp (ps as ls,_) when ls_equal ps ps_equ || Mls.find_opt ls env = None ->
       t_map (f_replace_top env) f
   | Tapp (ls,tl) ->
       t_label_copy f (t_unfold env ls tl f.t_ty)
