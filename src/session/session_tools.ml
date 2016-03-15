@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2016   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -33,13 +33,13 @@ let convert_unknown_prover ~keygen env_session =
   let provers = get_used_provers env_session.session in
   let unknown_provers = Mprover.set_diff provers known_provers in
   if not (Sprover.is_empty unknown_provers) then begin
-    (** construct the list of compatible provers for each unknown provers *)
+    (* construct the list of compatible provers for each unknown provers *)
     let unknown_provers =
       Mprover.mapi (utkp known_provers) unknown_provers in
     session_iter_proof_attempt (fun pr ->
       let pks = Mprover.find_def [] pr.proof_prover unknown_provers in
       List.iter (fun pk ->
-        (** If such a prover already exists we add nothing *)
+        (* If such a prover already exists we add nothing *)
         if not (PHprover.mem pr.proof_parent.goal_external_proofs pk) then
           ignore (copy_external_proof ~keygen ~prover:pk pr)
       ) pks;

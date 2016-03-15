@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2016   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -21,7 +21,7 @@ let () = (***** TODO TODO make that work, it seems not called!!! *)
   let why3_handler exn =
     Format.eprintf "@[Why3ide callback raised an exception:@\n%a@]@.@."
       Exn_printer.exn_printer exn;
-    (** print the stack trace if asked to (can't be done by the usual way) *)
+    (* print the stack trace if asked to (can't be done by the usual way) *)
     if Debug.test_flag Debug.stack_trace then
       Printf.eprintf "Backtrace:\n%t\n%!" Printexc.print_backtrace
   in
@@ -283,7 +283,7 @@ let incr_font_size n =
 *)
 
 let image_default = ref (GdkPixbuf.create ~width:1 ~height:1 ())
-(** dumb pixbuf *)
+(* dumb pixbuf *)
 let image_undone = ref !image_default
 let image_scheduled = ref !image_default
 let image_running = ref !image_default
@@ -363,13 +363,19 @@ let iconname_reload = ref ""
 let iconname_remove = ref ""
 let iconname_cleaning = ref ""
 
-let iconsets () =
+let iconsets () : (string * Why3.Rc.family) =
   let main = get_main () in
   let dir = Filename.concat (datadir main) "images" in
-  let n = Filename.concat dir "icons.rc"
-  in
-  let d = Rc.from_file n in
-  (dir, Rc.get_family d "iconset")
+  let files = Sys.readdir dir in
+  let f = ref [] in
+  Array.iter
+    (fun fn ->
+       if Filename.check_suffix fn ".rc" then
+         let n = Filename.concat dir fn in
+         let d = Rc.from_file n in
+         f := List.rev_append (Rc.get_family d "iconset") !f)
+    files;
+  (dir, !f)
 
 let load_icon_names () =
   let ide = config () in
@@ -555,7 +561,7 @@ let show_about_window () =
                 "Piotr Trojanek";
                 "Makarius Wenzel";
                ]
-      ~copyright:"Copyright 2010-2015 Inria, CNRS, Paris-Sud University"
+      ~copyright:"Copyright 2010-2016 Inria, CNRS, Paris-Sud University"
       ~license:("See file " ^ Filename.concat Config.datadir "LICENSE")
       ~website:"http://why3.lri.fr"
       ~website_label:"http://why3.lri.fr"
@@ -1026,17 +1032,17 @@ let preferences (c : t) =
   in
   let vbox = dialog#vbox in
   let notebook = GPack.notebook ~packing:vbox#add () in
-  (** page "general settings" **)
+  (* page "general settings" **)
   general_settings c notebook;
-  (** page "appearance" **)
+  (* page "appearance" **)
   appearance_settings c notebook;
-  (*** page "editors" **)
+  (* page "editors" **)
   editors_page c notebook;
-  (** page "Provers" **)
+  (* page "Provers" **)
   provers_page c notebook;
-  (*** page "uninstalled provers" *)
+  (* page "uninstalled provers" *)
   alternatives_frame c notebook;
-  (** page "Colors" **)
+  (* page "Colors" **)
 (*
   let label2 = GMisc.label ~text:"Colors" () in
   let _color_sel = GMisc.color_selection (* ~title:"Goal color" *)
@@ -1050,7 +1056,7 @@ let preferences (c : t) =
          c)
   in
 *)
-  (** bottom button **)
+  (* bottom button **)
   dialog#add_button "Save&Close" `SAVE ;
   dialog#add_button "Close" `CLOSE ;
   let ( answer : [`SAVE | `CLOSE | `DELETE_EVENT ]) = dialog#run () in

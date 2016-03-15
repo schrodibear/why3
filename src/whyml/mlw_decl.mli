@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2016   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -40,6 +40,13 @@ and pdecl_node = private
   | PDlet  of let_defn
   | PDrec  of fun_defn list
   | PDexn  of xsymbol
+
+(** {2 Marks} *)
+
+val ts_mark : Ty.tysymbol
+val ty_mark : Ty.ty
+val ity_mark : ity
+val pv_old : pvsymbol
 
 (** {2 Declaration constructors} *)
 

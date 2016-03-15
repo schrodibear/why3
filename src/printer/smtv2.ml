@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2016   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -32,23 +32,23 @@ let ident_printer =
      "funs";"extrafuns";"extrasorts";"extrapreds";"language";
      "notes";"preds";"sorts";"status";"theory";"Int";"Real";"Bool";
      "Array";"U";"select";"store"]*)
-    (** smtlib2 V2 p71 *)
-    [(** Base SMT-LIB tokens *)
+    (* smtlib2 V2 p71 *)
+    [(* Base SMT-LIB tokens *)
       "assert"; "check-sat"; "declare-fun"; "declare-sort"; "define-fun";
       "define-sort"; "get-value"; "get-assignment"; "get-assertions";
       "get-proof"; "get-unsat-core"; "exit"; "ite"; "let"; "!"; "_";
       "set-logic"; "set-info"; "get-info"; "set-option"; "get-option";
       "push"; "pop"; "as";
 
-      (** extended commands *)
+      (* extended commands *)
       "declare-datatypes"; "get-model"; "echo"; "assert-rewrite";
       "assert-reduction"; "assert-propagation"; "declare-sorts";
       "declare-funs"; "declare-preds"; "define"; "declare-const";
       "simplify";
 
-      (** attributes *)
+      (* attributes *)
 
-      (** operators, including theory symbols *)
+      (* operators, including theory symbols *)
       "and"; "distinct"; "exists"; "forall"; "is_int"; "not"; "or"; "select";
       "store"; "to_int"; "to_real"; "xor";
 
@@ -62,7 +62,7 @@ let ident_printer =
 
       "cos"; "sin"; "tan"; "atan"; "pi";
 
-      (** Other stuff that Why3 seems to need *)
+      (* Other stuff that Why3 seems to need *)
       "DECIMAL"; "NUMERAL"; "par"; "STRING";
       "unsat";"sat";
       "Bool"; "true"; "false";
@@ -70,8 +70,8 @@ let ident_printer =
       "abs";
       "BitVec"; "extract"; "bv2nat"; "nat2bv";
 
-      (** From Z3 *)
-      "map"; "bv"; "subset"; "union"
+      (* From Z3 *)
+      "map"; "bv"; "subset"; "union"; "default"
       ]
   in
   let san = sanitizer char_to_alpha char_to_alnumus in
@@ -91,13 +91,33 @@ type vc_term_info = {
      is not generated for postcondition or precondition) *)
 }
 
-let vc_term_info = { vc_inside = false; vc_loc = None; vc_func_name = None }
-
 module TermCmp = struct
   type t = term
+
+  let before loc1 loc2 =
+  (* Return true if loc1 is strictly before loc2 *)
+    match loc1 with
+    | None -> false
+    | Some loc1 ->
+      match loc2 with
+      | None -> false
+      | Some loc2 ->
+	let (_, line1, col1, _) = Loc.get loc1 in
+	  let (_, line2, col2, _) = Loc.get loc2 in
+	  if line1 <> line2 then
+	    if line1 < line2 then true
+	    else false
+	  else
+	    if col1 < col2 then true
+	    else false
+
   let compare a b =
     if (a.t_loc = b.t_loc) && (a.t_label = b.t_label)
-    then 0 else 1
+    then 0 else
+      (* Order the terms accoridng to their source code locations  *)
+      if before a.t_loc b.t_loc then 1
+      else -1
+
 end
 
 module S = Set.Make(TermCmp)
@@ -106,6 +126,8 @@ type info = {
   info_syn        : syntax_map;
   info_converters : converter_map;
   mutable info_model : S.t;
+  mutable info_in_goal : bool;
+  info_vc_term : vc_term_info;
 }
 
 let debug_print_term message t =
@@ -154,11 +176,33 @@ let model_label = Ident.create_label "model"
 let model_vc_term_label = Ident.create_label "model_vc"
   (* This label identifies the term that triggers the VC. *)
 
+let add_model_element el info_model =
+(** Add element el (term) to info_model.
+    If an element with the same hash (the same set of labels + the same
+    location) as the element el already exists in info_model, replace it with el.
+
+    The reason is that  we do not want to display two model elements with the same
+    name in the same location and usually it is better to display the last one.
+
+    Note that two model elements can have the same name and location if why is used
+    as an intemediate language and the locations are locations in the source language.
+    Then, more why constructs (terms) can represent a single construct in the source
+    language and more terms have thus the same model name and location. This happens,
+    e.g., if why code is generated from SPARK. There, the first iteration of while
+    cycle is unrolled in some cases. If the task contains both a term representing a
+    variable in the first iteration of unrolled loop and a term representing the variable
+    in the subsequent loop iterations, only the latter is relevant for the counterexample
+    and it is the one that comes after the former one (and that is why we always keep the
+    last term).
+*)
+  let info_model = S.remove el info_model in
+  S.add el info_model
+
 let collect_model_ls info ls =
   if ls.ls_args = [] && Slab.mem model_label ls.ls_name.id_label then
     let t = t_app ls [] ls.ls_value in
     info.info_model <-
-      S.add
+      add_model_element
       (t_label ?loc:ls.ls_name.id_loc ls.ls_name.id_label t) info.info_model
 
 let model_trace_regexp = Str.regexp "model_trace:"
@@ -182,7 +226,7 @@ let add_old lab_str =
     else lab_str
   with Not_found -> lab_str ^ "@old"
 
-let model_trace_for_postcondition ~labels =
+let model_trace_for_postcondition ~labels info =
   (* Modifies the  model_trace label of a term in the postcondition:
      - if term corresponds to the initial value of a function
      parameter, model_trace label will have postfix @old
@@ -203,24 +247,25 @@ let model_trace_for_postcondition ~labels =
     (* no model_trace label => the term represents the return value *)
     Slab.add
       (Ident.create_label
-	 ("model_trace:" ^ (Opt.get_def "" vc_term_info.vc_func_name)  ^ "@result"))
+	 ("model_trace:" ^ (Opt.get_def "" info.info_vc_term.vc_func_name)  ^ "@result"))
       labels
 
 let get_fun_name name =
-  let splitted = Str.bounded_split (Str.regexp_string ":") name 2 in
+  let splitted = Strings.bounded_split ':' name 2 in
   match splitted with
   | _::[second] ->
     second
   | _ ->
     ""
 
-let check_enter_vc_term t =
+let check_enter_vc_term t info =
   (* Check whether the term that triggers VC is entered.
      If it is entered, extract the location of the term and if the VC is
      postcondition or precondition of a function, extract the name of
      the corresponding function.
   *)
-  if Slab.mem model_vc_term_label t.t_label then begin
+  if info.info_in_goal && Slab.mem model_vc_term_label t.t_label then begin
+    let vc_term_info = info.info_vc_term in
     vc_term_info.vc_inside <- true;
     vc_term_info.vc_loc <- t.t_loc;
     try
@@ -233,10 +278,10 @@ let check_enter_vc_term t =
       ()
   end
 
-let check_exit_vc_term t =
+let check_exit_vc_term t info =
   (* Check whether the term triggering VC is exited. *)
-  if Slab.mem model_vc_term_label t.t_label then begin
-    vc_term_info.vc_inside <- false;
+  if info.info_in_goal && Slab.mem model_vc_term_label t.t_label then begin
+    info.info_vc_term.vc_inside <- false;
   end
 
 (** expr *)
@@ -244,9 +289,9 @@ let rec print_term info fmt t =
   debug_print_term "Printing term: " t;
 
   if Slab.mem model_label t.t_label then
-    info.info_model <- S.add t info.info_model;
+    info.info_model <- add_model_element t info.info_model;
 
-  check_enter_vc_term t;
+  check_enter_vc_term t info;
 
   let () = match t.t_node with
   | Tconst c ->
@@ -283,6 +328,7 @@ let rec print_term info fmt t =
         (print_type info) t fmt tl
       | None -> begin match tl with (* for cvc3 wich doesn't accept (toto ) *)
           | [] ->
+	    let vc_term_info = info.info_vc_term in
 	    if vc_term_info.vc_inside then begin
 	      match vc_term_info.vc_loc with
 	      | None -> ()
@@ -291,9 +337,11 @@ let rec print_term info fmt t =
 		  | None ->
 		    ls.ls_name.id_label
 		  | Some _ ->
-		    model_trace_for_postcondition ~labels:ls.ls_name.id_label in
-		let t_check_pos = t_label ~loc labels t in
-		info.info_model <- S.add t_check_pos info.info_model;
+		    model_trace_for_postcondition ~labels:ls.ls_name.id_label info in
+		let _t_check_pos = t_label ~loc labels t in
+		(* TODO: temporarily disable collecting variables inside the term triggering VC *)
+		(*info.info_model <- add_model_element t_check_pos info.info_model;*)
+		()
 	    end;
 	    fprintf fmt "@[%a@]" print_ident ls.ls_name
           | _ ->
@@ -329,15 +377,15 @@ let rec print_term info fmt t =
   | Tquant _ | Tbinop _ | Tnot _ | Ttrue | Tfalse -> raise (TermExpected t)
   in
 
-  check_exit_vc_term t;
+  check_exit_vc_term t info;
 
 
 and print_fmla info fmt f =
   debug_print_term "Printing formula: " f;
   if Slab.mem model_label f.t_label then
-    info.info_model <- S.add f info.info_model;
+    info.info_model <- add_model_element f info.info_model;
 
-  check_enter_vc_term f;
+  check_enter_vc_term f info;
 
   let () = match f.t_node with
   | Tapp ({ ls_name = id }, []) ->
@@ -408,7 +456,7 @@ and print_fmla info fmt f =
     end
   | Tvar _ | Tconst _ | Teps _ -> raise (FmlaExpected f) in
 
-  check_exit_vc_term f
+  check_exit_vc_term f info
 
 and print_boolean_branches info subject pr fmt bl =
   let error () = unsupportedTerm subject
@@ -516,7 +564,7 @@ let print_info_model cntexample fmt model_list info =
       info.info_model <- info_model
     end
 
-let print_prop_decl cntexample args info fmt k pr f = match k with
+let print_prop_decl vc_loc cntexample args info fmt k pr f = match k with
   | Paxiom ->
       fprintf fmt "@[<hov 2>;; %s@\n(assert@ %a)@]@\n@\n"
         pr.pr_name.id_string (* FIXME? collisions *)
@@ -528,13 +576,19 @@ let print_prop_decl cntexample args info fmt k pr f = match k with
         | None -> ()
         | Some loc -> fprintf fmt " @[;; %a@]@\n"
             Loc.gen_report_position loc);
+      info.info_in_goal <- true;
       fprintf fmt "  @[(not@ %a))@]@\n" (print_fmla info) f;
+      info.info_in_goal <- false;
       let model_list = S.elements info.info_model in
       fprintf fmt "@[(check-sat)@]@\n";
       print_info_model cntexample fmt model_list info;
+      if cntexample then begin
+	(* (get-info :reason-unknown) *)
+	fprintf fmt "@[(get-info :reason-unknown)@]@\n";
+      end;
 
       args.printer_mapping <- { lsymbol_m = args.printer_mapping.lsymbol_m;
-				vc_term_loc = vc_term_info.vc_loc;
+				vc_term_loc = vc_loc;
 				queried_terms = model_list; }
   | Plemma| Pskip -> assert false
 
@@ -561,7 +615,7 @@ let print_data_decl info fmt (ts,cl) =
     print_ident ts.ts_name
     (print_list space (print_constructor_decl info)) cl
 
-let print_decl cntexample args info fmt d = match d.d_node with
+let print_decl vc_loc cntexample args info fmt d = match d.d_node with
   | Dtype ts ->
       print_type_decl info fmt ts
   | Ddata [(ts,_)] when query_syntax info.info_syn ts.ts_name <> None -> ()
@@ -577,12 +631,19 @@ let print_decl cntexample args info fmt d = match d.d_node with
       "smtv2 : inductive definition are not supported"
   | Dprop (k,pr,f) ->
       if Mid.mem pr.pr_name info.info_syn then () else
-      print_prop_decl cntexample args info fmt k pr f
+      print_prop_decl vc_loc cntexample args info fmt k pr f
 
-let print_decls cntexample args =
+let print_decls vc_loc cntexample args =
   let print_decl (sm, cm, model) fmt d =
-    try let info = {info_syn = sm; info_converters = cm; info_model = model} in
-        print_decl cntexample args info fmt d; (sm, cm, info.info_model), []
+    try
+      let vc_term_info = { vc_inside = false; vc_loc = None; vc_func_name = None } in
+      let info = {
+	info_syn = sm;
+	info_converters = cm;
+	info_model = model;
+	info_in_goal = false;
+	info_vc_term = vc_term_info} in
+      print_decl vc_loc cntexample args info fmt d; (sm, cm, info.info_model), []
     with Unsupported s -> raise (UnsupportedDecl (d,s)) in
   let print_decl = Printer.sprint_decl print_decl in
   let print_decl task acc = print_decl task.Task.task_decl acc in
@@ -599,6 +660,7 @@ let print_task args ?old:_ fmt task =
   (* forget_all ident_printer; *)
 
   let cntexample = Prepare_for_counterexmp.get_counterexmp task in
+  let vc_loc = Intro_vc_vars_counterexmp.get_location_of_vc task in
 
   print_prelude fmt args.prelude;
   set_produce_models fmt cntexample;
@@ -606,7 +668,7 @@ let print_task args ?old:_ fmt task =
   let rec print = function
     | x :: r -> print r; Pp.string fmt x
     | [] -> () in
-  print (snd (Trans.apply (print_decls cntexample args) task));
+  print (snd (Trans.apply (print_decls vc_loc cntexample args) task));
   pp_print_flush fmt ()
 
 let () = register_printer "smtv2" print_task

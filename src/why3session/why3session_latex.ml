@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2016   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -107,8 +107,9 @@ let print_head n depth provers fmt =
 
 let print_tabular_head n depth provers fmt =
   fprintf fmt "\\begin{tabular}";
-  fprintf fmt "{| l |";
-  for _i = 0 to (List.length provers) + depth do fprintf fmt "c |" done;
+  fprintf fmt "{|l|";
+  for _i = 0 to depth do fprintf fmt "l|" done;
+  for _i = 1 to (List.length provers) do fprintf fmt "c|" done;
   fprintf fmt "}@.";
   print_head n depth provers fmt
 
@@ -130,9 +131,11 @@ let print_result_prov proofs prov fmt=
 		| Call_provers.Invalid ->
                   fprintf fmt "& \\invalid{%.2f} " res.Call_provers.pr_time
 		| Call_provers.Timeout ->
-                  fprintf fmt "& \\timeout{%ds} " pr.S.proof_timelimit
+                  fprintf fmt "& \\timeout{%ds} "
+                    (Call_provers.get_time pr.S.proof_limit)
 		| Call_provers.OutOfMemory ->
-                  fprintf fmt "& \\outofmemory{%dM} " pr.S.proof_memlimit
+                  fprintf fmt "& \\outofmemory{%dM} "
+                    (Call_provers.get_mem pr.S.proof_limit)
 		| Call_provers.StepLimitExceeded ->
                   fprintf fmt "& \\steplimitexceeded "
 		| Call_provers.Unknown _ ->
@@ -299,19 +302,19 @@ let latex_longtable n fmt depth name provers t=
   fprintf fmt "{| l |";
   for _i = 0 to (List.length provers) + depth do fprintf fmt "c |" done;
   fprintf fmt "}@.";
-  (** First head *)
+  (* First head *)
   print_head n depth provers fmt;
   fprintf fmt "\\hline \\endfirsthead @.";
-  (** Other heads : "Continued... " added *)
+  (* Other heads : "Continued... " added *)
   fprintf fmt "\\multicolumn{%d}{r}{\\textit{Continued from previous page}} \
 \\\\ @." (List.length provers + 1) ;
   fprintf fmt "\\hline @.";
   print_head n depth provers fmt;
   fprintf fmt "\\hline \\endhead @.";
-  (** Other foots : "Continued..." added *)
+  (* Other foots : "Continued..." added *)
   fprintf fmt "\\hline \\multicolumn{%d}{r}{\\textit{Continued on next page}} \
 \\\\ @." (List.length provers);
-  (** Last foot : nothing *)
+  (* Last foot : nothing *)
   fprintf fmt "\\endfoot \\endlastfoot @.";
   if n == 1 then
     List.iter (goal_latex_stat fmt provers 0 depth 0) t.S.theory_goals

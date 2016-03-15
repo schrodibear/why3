@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2016   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -26,6 +26,41 @@ val lab_equal : label -> label -> bool
 val lab_hash : label -> int
 
 val create_label : string -> label
+
+(* functions for working with counterexample model labels *)
+
+val remove_model_labels : labels : Slab.t -> Slab.t
+(** Returns a copy of labels without labels "model" and "model_projected". *)
+
+val append_to_model_trace_label : labels : Slab.t ->
+  to_append : string ->
+  Slab.t
+(** The returned set of labels will contain the same set of labels
+    as argument labels except that a label of the form "model_trace:*"
+    will be "model_trace:*to_append."*)
+
+val append_to_model_element_name : labels : Slab.t ->
+  to_append : string ->
+  Slab.t
+(** The returned set of labels will contain the same set of labels
+    as argument labels except that a label of the form "model_trace:name@context"
+    will be "model_trace:nameto_append@context."*)
+
+val get_model_element_name : labels : Slab.t -> string
+(** If labels contain a label of the form "model_trace:name@*",
+    return name.
+    Throws Not_found if there is no element name (there is no
+    label of the form "model_trace:+". *)
+
+val get_model_trace_string : labels : Slab.t -> string
+(** If labels contain a label of the form "model_trace:mt_string*",
+    return mt_string.
+    Throws Not_found if there is no mt_string (there is no
+    label of the form "model_trace:*". *)
+
+val get_model_trace_label : labels : Slab.t -> Slab.elt
+(** Return label of the for "model_trace:*".
+    Throws Not_found if there is no such label.*)
 
 (** {2 Identifiers} *)
 
@@ -60,6 +95,9 @@ val id_fresh : ?label:Slab.t -> ?loc:Loc.position -> string -> preid
 
 (* create a localized pre-ident *)
 val id_user : ?label:Slab.t -> string -> Loc.position -> preid
+
+(* create a duplicate pre-ident with given labels *)
+val id_lab : Slab.t -> ident -> preid
 
 (* create a duplicate pre-ident *)
 val id_clone : ?label:Slab.t -> ident -> preid
@@ -107,4 +145,3 @@ val char_to_alnum : char -> string
 val char_to_lalnum : char -> string
 val char_to_alnumus : char -> string
 val char_to_lalnumus : char -> string
-

@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2016   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -36,9 +36,7 @@ val file_of_theory : driver -> string -> Theory.theory -> string
 
 val call_on_buffer :
   command    : string ->
-  ?timelimit : int ->
-  ?memlimit  : int ->
-  ?steplimit : int ->
+  limit      : Call_provers.resource_limit ->
   ?inplace   : bool ->
   filename   : string ->
   printer_mapping : Printer.printer_mapping ->
@@ -57,10 +55,8 @@ val print_theory :
 
 val prove_task :
   command    : string ->
+  limit      : Call_provers.resource_limit ->
   ?cntexample : bool ->
-  ?timelimit : int ->
-  ?memlimit  : int ->
-  ?steplimit : int ->
   ?old       : string ->
   ?inplace   : bool ->
   driver -> Task.task -> Call_provers.pre_prover_call
@@ -74,9 +70,7 @@ val print_task_prepared :
 
 val prove_task_prepared :
   command    : string ->
-  ?timelimit : int ->
-  ?memlimit  : int ->
-  ?steplimit : int ->
+  limit      : Call_provers.resource_limit ->
   ?old       : string ->
   ?inplace   : bool ->
   driver -> Task.task -> Call_provers.pre_prover_call

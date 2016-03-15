@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2016   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -114,12 +114,12 @@ let plugins_auto_detection config =
   set_main config main
 
 let main () =
-  (** Parse the command line *)
+  (* Parse the command line *)
   Arg.parse option_list anon_file usage_msg;
 
   let opt_list = ref false in
 
-  (** Debug flag *)
+  (* Debug flag *)
   Debug.Args.set_flags_selected ();
 
   if !opt_list_prover_ids then begin
@@ -132,7 +132,7 @@ let main () =
   opt_list :=  Debug.Args.option_list () || !opt_list;
   if !opt_list then exit 0;
 
-  (** Main *)
+  (* Main *)
   let config =
     try
       read_config !conf_file
@@ -180,4 +180,3 @@ let () =
   with e when not (Debug.test_flag Debug.stack_trace) ->
     eprintf "Error: %a@." Exn_printer.exn_printer e;
     exit 1
-

@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2016   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -96,7 +96,7 @@ let () = try
   let extra_help fmt () = extra_help fmt (available_commands ()) in
   let config,_,_ = Args.initialize ~extra_help option_list command usage_msg in
 
-  (** listings *)
+  (* listings *)
 
   let sort_pair (x,_) (y,_) = String.compare x y in
   let opt_list = ref false in

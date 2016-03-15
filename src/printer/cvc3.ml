@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2016   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -27,16 +27,16 @@ let ident_printer =
      "funs";"extrafuns";"extrasorts";"extrapreds";"language";
      "notes";"preds";"sorts";"status";"theory";"Int";"Real";"Bool";
      "Array";"U";"select";"store"]*)
-    (** smtlib2 V2 p71 *)
-    [(** General: *)
+    (* smtlib2 V2 p71 *)
+    [(* General: *)
       "!";"_"; "as"; "DECIMAL"; "exists"; "forall"; "let"; "NUMERAL";
       "par"; "STRING";
-       (**Command names:*)
+       (* Command names: *)
       "assert";"check-sat"; "declare-sort";"declare-fun";"define-sort";
       "define-fun";"exit";"get-assertions";"get-assignment"; "get-info";
       "get-option"; "get-proof"; "get-unsat-core"; "get-value"; "pop"; "push";
       "set-logic"; "set-info"; "set-option";
-       (** for security *)
+       (* for security *)
       "BOOLEAN";"unsat";"sat";"TRUE";"FALSE";
       "TRUE";"CHECK";"QUERY";"ASSERT";"TYPE";"SUBTYPE"]
   in

@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2016   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -10,7 +10,7 @@
 (********************************************************************)
 
 %{
-module Incremental = struct
+module Increment = struct
   let stack = Stack.create ()
   let open_file inc = Stack.push inc stack
   let close_file () = ignore (Stack.pop stack)
@@ -36,12 +36,14 @@ end
   let floc s e = Loc.extract (s,e)
 
   let model_label = Ident.create_label "model"
+  let model_projected = Ident.create_label "model_projected"
 
   let is_model_label l =
     match l with
     | Lpos _ -> false
     | Lstr lab ->
-      lab = model_label
+      (lab = model_label) || (lab = model_projected)
+
 
   let model_lab_present labels =
     try
@@ -156,11 +158,11 @@ end
 
 (* keywords *)
 
-%token AS AXIOM CLONE COINDUCTIVE CONSTANT
+%token AS AXIOM BY CLONE COINDUCTIVE CONSTANT
 %token ELSE END EPSILON EXISTS EXPORT FALSE FORALL FUNCTION
 %token GOAL IF IMPORT IN INDUCTIVE LEMMA
 %token LET MATCH META NAMESPACE NOT PROP PREDICATE
-%token THEN THEORY TRUE TYPE USE WITH
+%token SO THEN THEORY TRUE TYPE USE WITH
 
 (* program keywords *)
 
@@ -199,6 +201,7 @@ end
 %nonassoc COLON
 
 %right ARROW LRARROW
+%right BY SO
 %right OR BARBAR
 %right AND AMPAMP
 %nonassoc NOT
@@ -222,43 +225,43 @@ end
 
 open_file:
 (* Dummy token. Menhir does not accept epsilon. *)
-| EOF { Incremental.open_file }
+| EOF { Increment.open_file }
 
 logic_file:
-| theory* EOF   { Incremental.close_file () }
+| theory* EOF   { Increment.close_file () }
 
 program_file:
-| theory_or_module* EOF { Incremental.close_file () }
+| theory_or_module* EOF { Increment.close_file () }
 
 theory:
-| theory_head theory_decl* END  { Incremental.close_theory () }
+| theory_head theory_decl* END  { Increment.close_theory () }
 
 theory_or_module:
 | theory                        { () }
-| module_head module_decl* END  { Incremental.close_module () }
+| module_head module_decl* END  { Increment.close_module () }
 
 theory_head:
-| THEORY labels(uident)  { Incremental.open_theory $2 }
+| THEORY labels(uident)  { Increment.open_theory $2 }
 
 module_head:
-| MODULE labels(uident)  { Incremental.open_module $2 }
+| MODULE labels(uident)  { Increment.open_module $2 }
 
 theory_decl:
-| decl            { Incremental.new_decl  (floc $startpos $endpos) $1 }
-| use_clone       { Incremental.use_clone (floc $startpos $endpos) $1 }
+| decl            { Increment.new_decl  (floc $startpos $endpos) $1 }
+| use_clone       { Increment.use_clone (floc $startpos $endpos) $1 }
 | namespace_head theory_decl* END
-    { Incremental.close_namespace (floc $startpos($1) $endpos($1)) $1 }
+    { Increment.close_namespace (floc $startpos($1) $endpos($1)) $1 }
 
 module_decl:
-| decl            { Incremental.new_decl  (floc $startpos $endpos) $1 }
-| pdecl           { Incremental.new_pdecl (floc $startpos $endpos) $1 }
-| use_clone       { Incremental.use_clone (floc $startpos $endpos) $1 }
+| decl            { Increment.new_decl  (floc $startpos $endpos) $1 }
+| pdecl           { Increment.new_pdecl (floc $startpos $endpos) $1 }
+| use_clone       { Increment.use_clone (floc $startpos $endpos) $1 }
 | namespace_head module_decl* END
-    { Incremental.close_namespace (floc $startpos($1) $endpos($1)) $1 }
+    { Increment.close_namespace (floc $startpos($1) $endpos($1)) $1 }
 
 namespace_head:
 | NAMESPACE boption(IMPORT) uident
-   { Incremental.open_namespace $3.id_str; $2 }
+   { Increment.open_namespace $3.id_str; $2 }
 
 (* Use and clone *)
 
@@ -622,6 +625,8 @@ triggers:
 | BARBAR  { Tor_asym }
 | AND     { Tand }
 | AMPAMP  { Tand_asym }
+| BY      { Tby }
+| SO      { Tso }
 
 quant:
 | FORALL  { Tforall }

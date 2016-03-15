@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2016   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -69,10 +69,10 @@ let process () =
       List.fold_left
         (get_prover ACSLtoWhy3.config ACSLtoWhy3.env)
         []
-        [ "Z432", "Z3,4.3.2";
-          "Z32 ", "Z3,3.2";
-          "C241", "CVC3,2.4.1";
-          "C414", "CVC4,1.4";
+        [ "Z432", "Z3,4.3.2,";
+          "Z440", "Z3,4.4.0,";
+          "C241", "CVC3,2.4.1,";
+          "C414", "CVC4,1.4,";
           "A991", "Alt-Ergo,0.99.1,";
         ]
     with e ->
@@ -84,7 +84,7 @@ let process () =
       ACSLtoWhy3.Self.result "Translating to Why3...";
       ACSLtoWhy3.prog prog
     with e ->
-      ACSLtoWhy3.Self.fatal "Exception raised when loading prover drivers:@ %a"
+      ACSLtoWhy3.Self.fatal "Exception raised while translating to Why3:@ %a"
         Exn_printer.exn_printer e
   in
   try

@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2016   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -120,7 +120,7 @@ type config_prover = {
   extra_drivers: string list;
 }
 
-val get_complete_command : config_prover -> int -> string
+val get_complete_command : config_prover -> with_steps:bool -> string
 (** add the extra_options to the command *)
 
 val get_provers : config -> config_prover Mprover.t

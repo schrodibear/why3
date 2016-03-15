@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2016   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -937,7 +937,7 @@ let check_user_effect ?ps e spec args dsp =
     Loc.errorm ?loc:(e_find_loc (fun e -> has_write reg e.e_effect) e)
       "this@ expression@ produces@ an@ unlisted@ write@ effect" in
   if dsp.ds_checkrw then begin
-    let reads = Spv.remove Mlw_wp.pv_old e.e_syms.syms_pv in
+    let reads = Spv.remove Mlw_decl.pv_old e.e_syms.syms_pv in
     let reads = Spv.diff reads (spec_pvset Spv.empty spec) in
     Spv.iter check_read (Spv.diff reads args);
     Sreg.iter check_write eeff.eff_writes;

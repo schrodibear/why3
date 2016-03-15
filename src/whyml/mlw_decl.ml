@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2016   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -39,10 +39,17 @@ and pdecl_node =
 
 let pd_equal : pdecl -> pdecl -> bool = (==)
 
+let ts_mark = create_tysymbol (id_fresh "'mark") [] None
+let ty_mark = ty_app ts_mark []
+let ity_mark = ity_pur ts_mark []
+
+let pv_old = create_pvsymbol ~ghost:true (id_fresh "%old") ity_mark
+
 let mk_decl =
   let r = ref 0 in
   fun node syms news ->
     incr r;
+    let syms = Sid.remove pv_old.pv_vs.vs_name syms in
     { pd_node = node; pd_syms = syms; pd_news = news; pd_tag = !r; }
 
 let news_id s id = Sid.add_new (Decl.ClashIdent id) id s

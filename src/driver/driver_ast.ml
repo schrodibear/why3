@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2016   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -28,11 +28,12 @@ type metarg =
 
 type th_rule =
   | Rprelude   of string
-  | Rsyntaxts  of qualid * string
-  | Rsyntaxfs  of qualid * string
-  | Rsyntaxps  of qualid * string
-  | Rconverter of qualid * string
+  | Rsyntaxts  of qualid * string * bool
+  | Rsyntaxfs  of qualid * string * bool
+  | Rsyntaxps  of qualid * string * bool
+  | Rconverter of qualid * string * bool
   | Rremovepr  of qualid
+  | Rremoveall
   | Rmeta      of string * metarg list
 
 type theory_rules = {

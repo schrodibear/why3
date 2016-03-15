@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2016   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -11,8 +11,18 @@
 
 (** Explanations *)
 
+val arg_extra_expl_prefix : string * Arg.spec * string
+
 val goal_expl_task:
   root:bool -> Task.task -> Ident.ident * string option * Task.task
+
+val search_labels :
+  (Ident.Slab.t -> 'a list) -> Term.term -> 'a list
+  (* [search_labels callback f] traverses [f] in a top-down manner and calls the
+     [callback] on the label set of all encountered nodes. As soon as the
+     callback returns a non-empty list, the traversal is stopped and that list
+     is returned. Raises exception Exit if the entire term has been traversed.
+   *)
 
 (** Shapes *)
 

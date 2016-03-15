@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2016   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -171,7 +171,8 @@ and rewriteF kn state av sign f = match f.t_node with
                       (rewriteF kn state Svs.empty sign) tr in
       let av = List.fold_left (fun s v -> Svs.add v s) av vl in
       let f1 = rewriteF kn state av sign f1 in
-      t_quant_simp q (close vl tr f1)
+      (* Preserve labels and location of f *)
+      t_label_copy f (t_quant_simp q (close vl tr f1))
   | Tbinop (o, _, _) when (o = Tand && sign) || (o = Tor && not sign) ->
       TermTF.t_map_sign (Util.const (rewriteT kn state))
         (rewriteF kn state av) sign f

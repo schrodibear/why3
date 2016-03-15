@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2016   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -66,17 +66,17 @@ val meta_remove_logic : meta
 val meta_remove_type : meta
 val meta_realized_theory : meta
 
-val syntax_type : tysymbol -> string -> tdecl
-val syntax_logic : lsymbol -> string -> tdecl
-val syntax_converter : lsymbol -> string -> tdecl
+val syntax_type : tysymbol -> string -> bool -> tdecl
+val syntax_logic : lsymbol -> string -> bool -> tdecl
+val syntax_converter : lsymbol -> string -> bool -> tdecl
 val remove_prop : prsymbol -> tdecl
 
 val check_syntax_type: tysymbol -> string -> unit
 val check_syntax_logic: lsymbol -> string -> unit
 
-type syntax_map = string Mid.t
+type syntax_map = (string*int) Mid.t
 (* [syntax_map] maps the idents of removed props to "" *)
-type converter_map = string Mls.t
+type converter_map = (string*int) Mls.t
 
 val get_syntax_map : task -> syntax_map
 val add_syntax_map : tdecl -> syntax_map -> syntax_map

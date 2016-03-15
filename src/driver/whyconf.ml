@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2016   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -34,7 +34,7 @@ let magicnumber = 14
 
 exception WrongMagicNumber
 
-let why3_regexp_of_string s = (** define a regexp in why3 *)
+let why3_regexp_of_string s = (* define a regexp in why3 *)
   if s = "" then Str.regexp "^$" else
   if s.[0] = '^' then Str.regexp s else
   Str.regexp ("^" ^ Str.quote s ^ "$")
@@ -209,8 +209,8 @@ let cntexample m = m.cntexample
 
 exception StepsCommandNotSpecified of string
 
-let get_complete_command pc steplimit =
-  let comm = if steplimit < 0 then pc.command
+let get_complete_command pc ~with_steps =
+  let comm = if not with_steps then pc.command
     else
       match pc.command_steps with
       | None -> raise (StepsCommandNotSpecified
@@ -264,7 +264,7 @@ let empty_main =
     memlimit = 1000; (* 1 Mb *)
     running_provers_max = 2; (* two provers run in parallel *)
     plugins = [];
-    cntexample = true;
+    cntexample = false;  (* no counter-examples by default *)
   }
 
 let default_main =
@@ -323,15 +323,15 @@ let set_prover_shortcuts rc shortcuts =
   set_simple_family rc "shortcut" family
 
 let set_provers_shortcuts rc shortcuts provers =
-  (** inverse the shortcut map *)
+  (* inverse the shortcut map *)
   let shortcuts = Mstr.fold (fun shortcut prover acc ->
     Mprover.change (function
     | None -> Some [shortcut]
     | Some l -> Some (shortcut::l)) prover acc) shortcuts Mprover.empty in
-  (** the shortcut to unknown prover *)
+  (* the shortcut to unknown prover *)
   let shortcuts_prover_unknown = Mprover.set_diff shortcuts provers in
   let rc = set_prover_shortcuts rc shortcuts_prover_unknown in
-  (** merge the known *)
+  (* merge the known *)
   let _,shortcuts_provers_known =
     Mprover.mapi_fold (fun k v acc ->
       let acc = Mprover.next_ge_enum k acc in
@@ -664,7 +664,7 @@ let merge_config config filename =
   Format.eprintf "[Config] reading extra configuration file %s@." filename;
   let dirname = get_dirname filename in
   let rc = Rc.from_file filename in
-  (** modify main *)
+  (* modify main *)
   let main = match get_section rc "main" with
     | None -> config.main
     | Some rc ->
@@ -673,12 +673,12 @@ let merge_config config filename =
       let plugins =
         (get_stringl ~default:[] rc "plugin") @ config.main.plugins in
       { config.main with loadpath = loadpath; plugins = plugins } in
-  (** get more strategies *)
+  (* get more strategies *)
   let more_strategies = get_strategies rc in
   let strategies =
     List.fold_left load_strategy config.strategies more_strategies
   in
-  (** modify provers *)
+  (* modify provers *)
   let create_filter_prover section =
     try
       let name = get_string section "name" in
@@ -692,7 +692,7 @@ let merge_config config filename =
   let prover_modifiers = get_simple_family rc "prover_modifiers" in
   let prover_modifiers =
     List.map (fun sec -> create_filter_prover sec, sec) prover_modifiers in
-  (** add provers *)
+  (* add provers *)
   let provers = List.fold_left
     (fun provers (fp, section) ->
       Mprover.mapi (fun p c  ->
@@ -709,7 +709,7 @@ let merge_config config filename =
   let provers,shortcuts =
     List.fold_left (load_prover dirname)
       (provers,config.prover_shortcuts) (get_simple_family rc "prover") in
-  (** modify editors *)
+  (* modify editors *)
   let editor_modifiers = get_family rc "editor_modifiers" in
   let editors = List.fold_left
     (fun editors (id, section) ->
@@ -719,7 +719,7 @@ let merge_config config filename =
         let opt = get_stringl ~default:[] section "option" in
         Some { c with editor_options = opt @ c.editor_options }) id  editors
     ) config.editors editor_modifiers in
-  (** add editors *)
+  (* add editors *)
   let editors = List.fold_left load_editor editors (get_family rc "editor") in
   { config with main = main; provers = provers; strategies = strategies;
     prover_shortcuts = shortcuts; editors = editors }

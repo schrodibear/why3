@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2016   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -16,10 +16,12 @@
 *)
 type model_value =
  | Integer of string
+ | Decimal of (string * string)
  | Array of model_array
+ | Bitvector of string
  | Unparsed of string
 and  arr_index = {
-  arr_index_key : int;
+  arr_index_key : model_value;
   arr_index_value : model_value;
 }
 and model_array = {
@@ -55,21 +57,29 @@ val print_model_value : Format.formatter -> model_value -> unit
 ***************************************************************
 *)
 
-type model_element_type =
+type model_element_kind =
 | Result
   (* Result of a function call (if the counter-example is for postcondition)  *)
 | Old
-  (* Old value of function argument (if the counter-example is for postcondition)  *)
+  (* Old value of function argument (if the counter-example is for postcondition) *)
+| Error_message
+  (* The model element represents error message, not source-code element.
+     The error message is saved in the name of the model element.*)
 | Other
 
+(** Information about the name of the model element *)
+type model_element_name = {
+  men_name   : string;
+    (** The name of the source-code element.  *)
+  men_kind   : model_element_kind;
+    (** The kind of model element. *)
+}
 
 (** Counter-example model elements. Each element represents
     a counter-example for a single source-code element.*)
 type model_element = {
-  me_name     : string;
-    (** The name of the source-code element.  *)
-  me_type     : model_element_type;
-    (** The type of model element. *)
+  me_name     : model_element_name;
+    (** Information about the name of the model element  *)
   me_value    : model_value;
     (** Counter-example value for the element. *)
   me_location : Loc.position option;
@@ -111,27 +121,26 @@ val default_model : model
 *)
 
 val print_model :
-  ?me_name_trans:((string * model_element_type) -> string) ->
+  ?me_name_trans:(model_element_name -> string) ->
   Format.formatter ->
   model ->
   unit
 (** Prints the counter-example model
 
     @param me_name_trans the transformation of the model elements
-      names. The input is a pair consisting of the name of model
-      element and type of the model element. The output is the
-      name of the model element that should be displayed.
+      names. The input is information about model element name. The
+      output is the name of the model element that should be displayed.
     @param model the counter-example model to print
 *)
 
 val model_to_string :
-  ?me_name_trans:((string * model_element_type) -> string) ->
+  ?me_name_trans:(model_element_name -> string) ->
   model ->
   string
 (** See print_model  *)
 
 val print_model_vc_term :
-  ?me_name_trans: ((string * model_element_type) -> string) ->
+  ?me_name_trans: (model_element_name -> string) ->
   ?sep: string ->
   Format.formatter ->
   model ->
@@ -145,7 +154,7 @@ val print_model_vc_term :
 *)
 
 val model_vc_term_to_string :
-  ?me_name_trans: ((string * model_element_type) -> string) ->
+  ?me_name_trans: (model_element_name -> string) ->
   ?sep: string ->
   model ->
   string
@@ -155,18 +164,65 @@ val model_vc_term_to_string :
 *)
 
 val print_model_json :
-  ?me_name_trans:((string * model_element_type) -> string) ->
+  ?me_name_trans:(model_element_name -> string) ->
+  ?vc_line_trans:(int -> string) ->
   Format.formatter ->
   model ->
   unit
 (** Prints counter-example model to json format.
 
     @param me_name_trans see print_model
+    @param vc_line_trans the transformation from the line number corresponding
+      to the term that triggers VC before splitting VC to the name of JSON field
+      storing counterexample information related to this term. By default, this
+      information is stored in JSON field corresponding to this line, i.e.,
+      the transformation is string_of_int.
+      Note that the exact line of the construct that triggers VC may not be
+      known. This can happen if the term that triggers VC spans multiple lines
+      and it is splitted.
+      This transformation can be used to store the counterexample information
+      related to this term in dedicated JSON field.
     @model the counter-example model to print.
+
+    The format is the following:
+    - counterexample is JSON object with fields indexed by names of files
+      storing values of counterexample_file
+    - counterexample_file is JSON object with fields indexed by line numbers
+      storing values of counterexample_line
+    - counterexample_line is JSON array (ordered list) with elements
+      corresponding to counterexample_element
+    - counterexample_element is JSON object with following fields
+      - "name": name of counterexample element
+      - "value": value of counterexample element
+      - "kind": kind of counterexample element:
+        - "result": Result of a function call (if the counter-example is for postcondition)
+        - "old": Old value of function argument (if the counter-example is for postcondition)
+        - "error_message": The model element represents error message, not source-code element.
+            The error message is saved in the name of the model element
+        - "other"
+
+    Example:
+    {
+      "records.adb": {
+          "84": [
+            {
+              "name": "A.A",
+              "value": "255",
+              "kind": "other"
+            },
+            {
+              "name": "B.B",
+              "value": "0",
+              "kind": "other"
+            }
+          ]
+      }
+    }
 *)
 
 val model_to_string_json :
-  ?me_name_trans:((string * model_element_type) -> string) ->
+  ?me_name_trans:(model_element_name -> string) ->
+  ?vc_line_trans:(int -> string) ->
   model ->
   string
 (** See print_model_json *)
@@ -174,7 +230,7 @@ val model_to_string_json :
 val interleave_with_source :
   ?start_comment:string ->
   ?end_comment:string ->
-  ?me_name_trans:((string * model_element_type) -> string) ->
+  ?me_name_trans:(model_element_name -> string) ->
   model ->
   filename:string ->
   source_code:string ->

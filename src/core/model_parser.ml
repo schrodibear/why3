@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2016   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -29,10 +29,12 @@ let debug = Debug.register_info_flag "model_parser"
 
 type model_value =
  | Integer of string
+ | Decimal of (string * string)
  | Array of model_array
+ | Bitvector of string
  | Unparsed of string
 and  arr_index = {
-  arr_index_key : int;
+  arr_index_key : model_value;
   arr_index_value : model_value;
 }
 and model_array = {
@@ -50,11 +52,8 @@ let array_add_element ~array ~index ~value =
   (*
      Adds the element value to the array on specified index.
   *)
-  let int_index = match index with
-    | Integer s -> int_of_string s
-    | _ -> raise Not_found in
   let arr_index = {
-    arr_index_key = int_index;
+    arr_index_key = index;
     arr_index_value = value
   } in
   {
@@ -62,28 +61,35 @@ let array_add_element ~array ~index ~value =
     arr_indices = arr_index::array.arr_indices;
   }
 
-let rec print_indices sanit_print fmt indices =
+let rec print_indices fmt indices =
   match indices with
   | [] -> ()
   | index::tail ->
-    fprintf fmt "; %d -> " index.arr_index_key;
-    print_model_value_sanit sanit_print fmt index.arr_index_value;
-    print_indices sanit_print fmt tail
+    fprintf fmt "%a => " print_model_value index.arr_index_key;
+    print_model_value fmt index.arr_index_value;
+    fprintf fmt ", ";
+    print_indices fmt tail
 and
-print_array sanit_print fmt arr =
-  fprintf fmt "{others -> ";
-  print_model_value_sanit sanit_print fmt arr.arr_others;
-  print_indices sanit_print fmt arr.arr_indices;
-  fprintf fmt "}"
+print_array fmt arr =
+  fprintf fmt "(";
+  print_indices fmt arr.arr_indices;
+  fprintf fmt "others => ";
+  print_model_value fmt arr.arr_others;
+  fprintf fmt ")"
 and
 print_model_value_sanit sanit_print fmt value =
   (* Prints model value. *)
   match value with
   | Integer s -> sanit_print fmt s
+  | Decimal (int_part, fract_part) ->
+    sanit_print fmt (int_part^"."^fract_part)
   | Unparsed s -> sanit_print fmt s
-  | Array a -> print_array sanit_print fmt a
-
-let print_model_value fmt value =
+  | Array a ->
+    print_array str_formatter a;
+    sanit_print fmt (flush_str_formatter ())
+  | Bitvector v -> sanit_print fmt v
+and
+print_model_value fmt value =
   print_model_value_sanit (fun fmt s -> fprintf fmt "%s" s) fmt value
 
 
@@ -92,37 +98,45 @@ let print_model_value fmt value =
 **  Model elements
 ***************************************************************
 *)
-type model_element_type =
+
+type model_element_kind =
 | Result
 | Old
+| Error_message
 | Other
 
+type model_element_name = {
+  men_name   : string;
+  men_kind   : model_element_kind;
+}
+
 type model_element = {
-  me_name     : string;
-  me_type     : model_element_type;
+  me_name     : model_element_name;
   me_value    : model_value;
   me_location : Loc.position option;
   me_term     : Term.term option;
 }
 
-let split_me_name name =
-  let splitted = Str.bounded_split (Str.regexp_string "@") name 2 in
+let split_model_trace_name mt_name =
+  (* Mt_name is of the form "name[@type[@*]]". Return (name, type) *)
+  let splitted = Strings.bounded_split '@' mt_name 3 in
   match splitted with
   | [first] -> (first, "")
-  | first::[second] ->
-    (first, second)
-  | _ -> (* here, "_" can only stand for [] *)
-    ("", "")
+  | first::second::_ -> (first, second)
+  | [] -> ("", "")
 
 let create_model_element ~name ~value ?location ?term () =
-  let (name, type_s) = split_me_name name in
-  let t = match type_s with
+  let (name, type_s) = split_model_trace_name name in
+  let me_kind = match type_s with
     | "result" -> Result
     | "old" -> Old
     | _ -> Other in
+  let me_name = {
+    men_name = name;
+    men_kind = me_kind;
+  } in
   {
-    me_name = name;
-    me_type = t;
+    me_name = me_name;
     me_value = value;
     me_location = location;
     me_term = term;
@@ -169,8 +183,12 @@ type raw_model_parser =  string -> model_element list
 ***************************************************************
 *)
 let print_model_element me_name_trans fmt m_element =
-  let me_name = me_name_trans (m_element.me_name, m_element.me_type) in
-  fprintf fmt  "%s = %a"
+  match m_element.me_name.men_kind with
+  | Error_message ->
+    fprintf fmt "%s" m_element.me_name.men_name
+  | _ ->
+    let me_name = me_name_trans m_element.me_name in
+    fprintf fmt  "%s = %a"
       me_name print_model_value m_element.me_value
 
 let print_model_elements ?(sep = "\n") me_name_trans fmt m_elements =
@@ -184,11 +202,11 @@ let print_model_file fmt me_name_trans filename model_file =
       print_model_elements me_name_trans fmt m_elements)
     model_file
 
-let why_name_trans (me_name, me_type) =
-  match me_type with
+let why_name_trans me_name =
+  match me_name.men_kind with
   | Result -> "result"
-  | Old -> "old" ^ " " ^ me_name
-  | Other -> me_name
+  | Old    -> "old" ^ " " ^ me_name.men_name
+  | _  -> me_name.men_name
 
 let print_model
     ?(me_name_trans = why_name_trans)
@@ -219,13 +237,14 @@ let print_model_vc_term
     ?(sep = "\n")
     fmt
     model =
-  match model.vc_term_loc with
-  | None -> ()
-  | Some pos ->
-    let (filename, line_number, _, _) = Loc.get pos in
-    let model_file = get_model_file model.model_files filename in
-    let model_elements = get_elements model_file line_number in
-    print_model_elements ~sep me_name_trans fmt model_elements
+  if not (is_model_empty model) then
+    match model.vc_term_loc with
+    | None -> fprintf fmt "error: cannot get location of the check"
+    | Some pos ->
+      let (filename, line_number, _, _) = Loc.get pos in
+      let model_file = get_model_file model.model_files filename in
+      let model_elements = get_elements model_file line_number in
+      print_model_elements ~sep me_name_trans fmt model_elements
 
 let model_vc_term_to_string
     ?(me_name_trans = why_name_trans)
@@ -270,13 +289,22 @@ let interleave_with_source
     ~filename
     ~source_code =
   try
-    let model_file = StringMap.find  filename model.model_files in
-    let lines = Str.split (Str.regexp "^") source_code in
+    let model_file = StringMap.find filename model.model_files in
+    let src_lines_up_to_last_cntexmp_el source_code model_file =
+      let (last_cntexmp_line, _) = IntMap.max_binding model_file in
+      let lines = Str.bounded_split (Str.regexp "^") source_code (last_cntexmp_line+1) in
+      let remove_last_element list =
+	let list_rev = List.rev list in
+	match list_rev with
+	| _ :: tail -> List.rev tail
+	| _ -> List.rev list_rev
+      in
+      remove_last_element lines in
     let (source_code, _) = List.fold_left
       (interleave_line
 	 start_comment end_comment me_name_trans model_file)
       ("", 1)
-      lines in
+      (src_lines_up_to_last_cntexmp_el source_code model_file) in
     source_code
   with Not_found ->
     source_code
@@ -285,47 +313,74 @@ let interleave_with_source
 (*
 **  Quering the model - json
 *)
-let print_model_value_json fmt me_value =
-  fprintf fmt "%a" (print_model_value_sanit Json.string) me_value
-
-let model_elements_to_map_bindings model_elements =
-  List.fold_left
-    (fun map_bindings me ->
-      (me, me.me_value)::map_bindings
-    )
-    []
-    model_elements
+let print_model_element_json me_name_to_str fmt me =
+  let print_value fmt =
+    fprintf fmt "%a" (print_model_value_sanit Json.string) me.me_value in
+  let print_kind fmt =
+    match me.me_name.men_kind with
+    | Result -> fprintf fmt "%a" Json.string "result"
+    | Old -> fprintf fmt "%a" Json.string "old"
+    | Error_message -> fprintf fmt "%a" Json.string "error_message"
+    | Other -> fprintf fmt "%a" Json.string "other" in
+  let print_name fmt =
+    Json.string fmt (me_name_to_str me) in
+  let print_value_or_kind_or_name fmt printer =
+    printer fmt in
+  Json.map_bindings
+    (fun s -> s)
+    print_value_or_kind_or_name
+    fmt
+    [("name", print_name);
+     ("value", print_value);
+     ("kind", print_kind)]
 
 let print_model_elements_json me_name_to_str fmt model_elements =
-  Json.map_bindings
-    me_name_to_str
-    print_model_value_json
+  Json.list
+    (print_model_element_json me_name_to_str)
     fmt
-    (model_elements_to_map_bindings model_elements)
+    model_elements
 
-let print_model_elements_on_lines_json me_name_to_str fmt model_file =
+let print_model_elements_on_lines_json model me_name_to_str vc_line_trans fmt
+    (file_name, model_file) =
   Json.map_bindings
-    (fun i -> string_of_int i)
+    (fun i ->
+      match model.vc_term_loc with
+      | None ->
+	string_of_int i
+      | Some pos ->
+	let (vc_file_name, line, _, _) = Loc.get pos in
+	if file_name = vc_file_name && i = line then
+	  vc_line_trans i
+	else
+	  string_of_int i
+    )
     (print_model_elements_json me_name_to_str)
     fmt
     (IntMap.bindings model_file)
 
 let print_model_json
     ?(me_name_trans = why_name_trans)
+    ?(vc_line_trans = (fun i -> string_of_int i))
     fmt
     model =
   let me_name_to_str = fun me ->
-    me_name_trans (me.me_name, me.me_type) in
+    me_name_trans me.me_name in
+  let model_files_bindings = List.fold_left
+    (fun bindings (file_name, model_file) ->
+      List.append bindings [(file_name, (file_name, model_file))])
+    []
+    (StringMap.bindings model.model_files) in
   Json.map_bindings
     (fun s -> s)
-    (print_model_elements_on_lines_json me_name_to_str)
+    (print_model_elements_on_lines_json model me_name_to_str vc_line_trans)
     fmt
-    (StringMap.bindings model.model_files)
+    model_files_bindings
 
 let model_to_string_json
     ?(me_name_trans = why_name_trans)
+    ?(vc_line_trans = (fun i -> string_of_int i))
     model =
-  print_model_json str_formatter ~me_name_trans model;
+  print_model_json str_formatter ~me_name_trans ~vc_line_trans model;
   flush_str_formatter ()
 
 
@@ -346,35 +401,19 @@ let add_to_model model model_element =
     let model_file = IntMap.add line_number elements model_file in
     StringMap.add filename model_file model
 
-(* Estabilish mapping to why3 code *)
-let rec extract_element_name labels raw_string regexp =
-  match labels with
-  | [] -> raw_string
-  | label::labels_tail ->
-    let l_string = label.lab_string in
-    begin
-      try
-	ignore(Str.search_forward regexp l_string 0);
-	let end_pos = Str.match_end () in
-	String.sub l_string end_pos ((String.length l_string) - end_pos)
-      with Not_found -> extract_element_name labels_tail raw_string regexp
-    end
-
-let get_element_name term raw_string  =
-  let labels = Slab.elements term.t_label in
-  let regexp = Str.regexp "model_trace:" in
-  extract_element_name labels raw_string regexp
-
-
 let rec build_model_rec raw_model terms model =
 match raw_model with
   | [] -> model
   | model_element::raw_strings_tail ->
     let (element_name, element_location, element_term, terms_tail) =
       match terms with
-      | [] -> (model_element.me_name, None, None, [])
+      | [] -> (model_element.me_name.men_name, None, None, [])
       | term::t_tail ->
-        ((get_element_name term model_element.me_name),
+	let get_element_name term raw_string  =
+	  try
+	    get_model_trace_string ~labels:term.t_label
+	  with Not_found -> raw_string in
+        ((get_element_name term model_element.me_name.men_name),
          term.t_loc,
          Some term, t_tail) in
     let new_model_element = create_model_element
@@ -389,8 +428,42 @@ match raw_model with
       terms_tail
       model
 
+let handle_contradictory_vc model_files vc_term_loc =
+  (* The VC is contradictory if the location of the term that triggers VC
+     was collected, model_files is not empty, and there are no model elements
+     in this location.
+     If this is the case, add model element saying that VC is contradictory
+     to this location. *)
+  if model_files = empty_model then
+    (* If the counterexample model was not collected, then model_files
+       is empty and this does not mean that VC is contradictory. *)
+    model_files
+  else
+    match vc_term_loc with
+    | None -> model_files
+    | Some pos ->
+      let (filename, line_number, _, _) = Loc.get pos in
+      let model_file = get_model_file model_files filename in
+      let model_elements = get_elements model_file line_number in
+      if model_elements = [] then
+      (* The vc is contradictory, add special model element  *)
+	let me_name = {
+	  men_name = "the check fails with all inputs";
+	  men_kind = Error_message;
+	} in
+	let me = {
+	  me_name = me_name;
+	  me_value = Unparsed "";
+	  me_location = Some pos;
+	  me_term = None;
+	} in
+	add_to_model model_files me
+      else
+	model_files
+
 let build_model raw_model printer_mapping =
   let model_files = build_model_rec raw_model printer_mapping.queried_terms empty_model in
+  let model_files = handle_contradictory_vc model_files printer_mapping.Printer.vc_term_loc in
   {
     vc_term_loc = printer_mapping.Printer.vc_term_loc;
     model_files = model_files;

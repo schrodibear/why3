@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2016   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -248,7 +248,7 @@ let big_int_of_const c =
 let big_int_of_value v =
   match v with
     | Vnum i -> i
-    | _ -> assert false
+    | _ -> raise NotNum
 
 let eval_true _ls _l = Vbool true
 
@@ -1346,7 +1346,7 @@ let eval_global_expr env mkm tkm _writes e =
   let add_glob _ d ((venv,renv) as acc) =
     match d.Mlw_decl.pd_node with
       | Mlw_decl.PDval (Mlw_expr.LetV pvs)
-        when not (pv_equal pvs Mlw_wp.pv_old) ->
+        when not (pv_equal pvs Mlw_decl.pv_old) ->
         let ity = pvs.pv_ity in
         let v = any_value_of_type env (ty_of_ity ity) in
         let renv,v = to_program_value env renv (VTvalue ity) v in
@@ -1373,7 +1373,7 @@ let eval_global_expr env mkm tkm _writes e =
 
 
 
-let eval_global_symbol env m d =
+let eval_global_symbol env m fmt d =
   let lam = d.Mlw_expr.fun_lambda in
   match lam.Mlw_expr.l_args with
   | [pvs] when Mlw_ty.ity_equal pvs.Mlw_ty.pv_ity Mlw_ty.ity_unit ->
@@ -1382,7 +1382,7 @@ let eval_global_symbol env m d =
       let eff = spec.Mlw_ty.c_effect in
       let writes = eff.Mlw_ty.eff_writes in
       let body = lam.Mlw_expr.l_expr in
-      printf "@[<hov 2>   type:@ %a@]@."
+      fprintf fmt "@[<hov 2>   type:@ %a@]@."
         Mlw_pretty.print_vty body.Mlw_expr.e_vty;
             (* printf "effect: %a@\n" *)
             (*   Mlw_pretty.print_effect body.Mlw_expr.e_effect; *)
@@ -1393,26 +1393,26 @@ let eval_global_symbol env m d =
       in
       match res with
         | Normal _ ->
-          printf "@[<hov 2>   result:@ %a@\nglobals:@ %a@]@."
+          fprintf fmt "@[<hov 2>   result:@ %a@\nglobals:@ %a@]@."
             print_logic_result res print_vsenv final_env
 (*
-          printf "@[<hov 2>  result:@ %a@\nstate :@ %a@]@."
+          fprintf fmt "@[<hov 2>  result:@ %a@\nstate :@ %a@]@."
             (print_result m.Mlw_module.mod_known
                m.Mlw_module.mod_theory.Theory.th_known st) res
             print_state st
 *)
         | Excep _ ->
-          printf "@[<hov 2>exceptional result:@ %a@\nglobals:@ %a@]@."
+          fprintf fmt "@[<hov 2>exceptional result:@ %a@\nglobals:@ %a@]@."
             print_logic_result res print_vsenv final_env;
 (*
-          printf "@[<hov 2>exceptional result:@ %a@\nstate:@ %a@]@."
+          fprintf fmt "@[<hov 2>exceptional result:@ %a@\nstate:@ %a@]@."
             (print_result m.Mlw_module.mod_known
                m.Mlw_module.mod_theory.Theory.th_known st) res
             print_state st;
           *)
           exit 1
         | Irred _ | Fun _ ->
-          printf "@\n@]@.";
+          fprintf fmt "@\n@]@.";
           eprintf "Execution error: %a@." print_logic_result res;
           exit 2
     end

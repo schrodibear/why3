@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2016   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -92,7 +92,7 @@ let load_driver = let driver_tag = ref (-1) in fun env file extra_files ->
     | RegexpOutOfMemory s -> add_to_list regexps (Str.regexp s, OutOfMemory)
     | RegexpStepLimitExceeded s ->
       add_to_list regexps (Str.regexp s, StepLimitExceeded)
-    | RegexpUnknown (s,t) -> add_to_list regexps (Str.regexp s, Unknown t)
+    | RegexpUnknown (s,t) -> add_to_list regexps (Str.regexp s, Unknown (t, None))
     | RegexpFailure (s,t) -> add_to_list regexps (Str.regexp s, Failure t)
     | TimeRegexp r -> add_to_list timeregexps (Call_provers.timeregexp r)
     | StepRegexp (r,ns) ->
@@ -103,7 +103,7 @@ let load_driver = let driver_tag = ref (-1) in fun env file extra_files ->
     | ExitCodeOutOfMemory s -> add_to_list exitcodes (s, OutOfMemory)
     | ExitCodeStepLimitExceeded s ->
       add_to_list exitcodes (s, StepLimitExceeded)
-    | ExitCodeUnknown (s,t) -> add_to_list exitcodes (s, Unknown t)
+    | ExitCodeUnknown (s,t) -> add_to_list exitcodes (s, Unknown (t, None))
     | ExitCodeFailure (s,t) -> add_to_list exitcodes (s, Failure t)
     | Filename s -> set_or_raise loc filename s "filename"
     | Printer s -> set_or_raise loc printer s "printer"
@@ -142,20 +142,26 @@ let load_driver = let driver_tag = ref (-1) in fun env file extra_files ->
     | Rprelude s ->
         let l = Mid.find_def [] th.th_name !thprelude in
         thprelude := Mid.add th.th_name (s::l) !thprelude
-    | Rsyntaxts (q,s) ->
-        let td = syntax_type (find_ts th q) s in
+    | Rsyntaxts (q,s,b) ->
+        let td = syntax_type (find_ts th q) s b in
         add_meta th td meta
-    | Rsyntaxfs (q,s) ->
-        let td = syntax_logic (find_fs th q) s in
+    | Rsyntaxfs (q,s,b) ->
+        let td = syntax_logic (find_fs th q) s b in
         add_meta th td meta
-    | Rsyntaxps (q,s) ->
-        let td = syntax_logic (find_ps th q) s in
+    | Rsyntaxps (q,s,b) ->
+        let td = syntax_logic (find_ps th q) s b in
         add_meta th td meta
     | Rremovepr (q) ->
         let td = remove_prop (find_pr th q) in
         add_meta th td meta
-    | Rconverter (q,s) ->
-        let cs = syntax_converter (find_ls th q) s in
+    | Rremoveall ->
+      let it key _ = match (Mid.find key th.th_known).d_node with
+        | Dprop (_,symb,_) -> add_meta th (remove_prop symb) meta
+        | _ -> ()
+      in
+      Mid.iter it th.th_local
+    | Rconverter (q,s,b) ->
+        let cs = syntax_converter (find_ls th q) s b in
         add_meta th cs meta
     | Rmeta (s,al) ->
         let rec ty_of_pty = function
@@ -245,10 +251,10 @@ let file_of_task drv input_file theory_name task =
 let file_of_theory drv input_file th =
   get_filename drv input_file th.th_name.Ident.id_string "null"
 
-let call_on_buffer ~command ?timelimit ?memlimit ?steplimit
+let call_on_buffer ~command ~limit
                    ?inplace ~filename ~printer_mapping drv buffer =
   Call_provers.call_on_buffer
-    ~command ?timelimit ?memlimit ?steplimit ~res_parser:drv.drv_res_parser
+    ~command ~limit ~res_parser:drv.drv_res_parser
     ~filename ~printer_mapping ?inplace buffer
 
 
@@ -318,7 +324,7 @@ let print_theory ?old drv fmt th =
   print_task ?old drv fmt task
 
 let prove_task_prepared
-    ~command ?timelimit ?memlimit ?steplimit ?old ?inplace drv task =
+    ~command ~limit ?old ?inplace drv task =
   let buf = Buffer.create 1024 in
   let fmt = formatter_of_buffer buf in
   let old_channel = Opt.map open_in old in
@@ -336,15 +342,14 @@ let prove_task_prepared
         get_filename drv fn "T" pr.pr_name.id_string
   in
   let res =
-    call_on_buffer ~command ?timelimit ?memlimit ?steplimit
+    call_on_buffer ~command ~limit
                    ?inplace ~filename ~printer_mapping drv buf in
   Buffer.reset buf;
   res
 
-let prove_task ~command ?(cntexample=false) ?timelimit ?memlimit ?steplimit ?old ?inplace drv task =
+let prove_task ~command ~limit ?(cntexample=false) ?old ?inplace drv task =
   let task = prepare_task ~cntexample drv task in
-  prove_task_prepared ~command ?timelimit ?memlimit
-                      ?steplimit ?old ?inplace drv task
+  prove_task_prepared ~command ~limit ?old ?inplace drv task
 
 (* exception report *)
 

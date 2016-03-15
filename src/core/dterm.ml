@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2016   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -204,9 +204,7 @@ let denv_get denv n = Mstr.find_exn (UnboundVar n) n denv
 
 let denv_get_opt denv n = Mstr.find_opt n denv
 
-let dty_of_dterm dt = match dt.dt_dty with
-  | None -> Loc.error ?loc:dt.dt_loc TermExpected
-  | Some dty -> dty
+let dty_of_dterm dt = Opt.get_def dty_bool dt.dt_dty
 
 let denv_empty = Mstr.empty
 
@@ -440,6 +438,8 @@ let check_used_var t vs =
   Warning.emit ?loc:vs.vs_name.id_loc "unused variable %s" s
 
 let check_exists_implies f = match f.t_node with
+  | Tbinop (Timplies,{ t_node = Tbinop (Tor,f,{ t_node = Ttrue }) },_)
+    when Slab.mem Term.asym_label f.t_label -> ()
   | Tbinop (Timplies,_,_) -> Warning.emit ?loc:f.t_loc
       "form \"exists x. P -> Q\" is likely an error (use \"not P \\/ Q\" if not)"
   | _ -> ()

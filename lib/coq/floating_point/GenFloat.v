@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2016   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -305,9 +305,9 @@ apply generic_format_B2R.
 apply generic_format_bpow.
 unfold FLT_exp, emin.
 zify ; generalize Hprec' Hemax' ; omega.
-apply bpow_gt_0.
 apply abs_B2R_lt_emax.
-unfold pred.
+rewrite pred_eq_pos.
+unfold pred_pos.
 rewrite ln_beta_bpow.
 ring_simplify (emax+1-1)%Z.
 rewrite Req_bool_true by easy.
@@ -322,6 +322,7 @@ simpl; ring.
 apply Zlt_le_weak.
 exact Hprec'.
 generalize Hprec' Hemax' ; omega.
+apply bpow_ge_0.
 Qed.
 
 (* Why3 goal *)

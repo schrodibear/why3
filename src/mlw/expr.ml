@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2016   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -440,7 +440,7 @@ let e_ghostify gh ({e_effect = eff} as e) =
 let c_ghostify gh ({c_cty = cty} as c) =
   if cty.cty_effect.eff_ghost || not gh then c else
   let el = match c.c_node with Cfun e -> [e] | _ -> [] in
-  mk_cexp c.c_node (try_effect el cty_ghostify gh cty)
+  mk_cexp c.c_node (try_effect el (cty_ghostify ?loc:None) gh cty)
 
 (* let-definitions *)
 

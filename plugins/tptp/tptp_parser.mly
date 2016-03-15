@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2016   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -13,6 +13,8 @@
 open Tptp_ast
 
 let mk_expr n s e = { e_node = n; e_loc = Why3.Loc.extract (s,e) }
+
+let remove_quotes s = String.sub s 1 (String.length s - 2)
 
 exception UnsupportedRole of string
 
@@ -61,7 +63,7 @@ input:
 | kind LEFTPAR name COMMA role COMMA top_formula annotation RIGHTPAR DOT
   { Formula ($1, $3, $5, $7, Why3.Loc.extract ($startpos, $endpos)) }
 | INCLUDE LEFTPAR SINGLE_QUOTED formula_selection RIGHTPAR DOT
-  { Include ($3, $4, Why3.Loc.extract ($startpos, $endpos)) }
+  { Include (remove_quotes $3, $4, Why3.Loc.extract ($startpos, $endpos)) }
 
 kind:
 | TFFK { TFF }

@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2015   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2016   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -65,8 +65,8 @@ let do_input f =
       exit 1
     | Some d ->
       try
-        printf "@[<hov 2>Execution of %s.%s ():@\n" mid name;
-        Mlw_interp.eval_global_symbol env m d;
+        printf "@[<hov 2>Execution of %s.%s ():@\n%a" mid name
+          (Mlw_interp.eval_global_symbol env m) d
       with e when Debug.test_noflag Debug.stack_trace ->
         printf "@\n@]@.";
         raise e in
