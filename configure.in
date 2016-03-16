@@ -569,7 +569,7 @@ if test "$enable_pvs_libs" = no; then
     AC_MSG_WARN(PVS support disabled)
     reason_pvs_support=" (disabled by user)"
 else
-    AC_CHECK_PROGS(PVS,pvs pvs-sbcl,no)
+    AC_CHECK_PROGS(PVS,pvs-sbcl pvs,no)
     if test "$PVS" = no ; then
         enable_pvs_support=no
         AC_MSG_WARN(Cannot find pvs.)
