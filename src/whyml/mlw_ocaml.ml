@@ -168,6 +168,8 @@ module Translate = struct
 
   open Decl
 
+  let type_unit = ML.Ttuple []
+
   let rec type_ info ty = match ty.ty_node with
     | Tyvar v ->
         ML.Tvar v.tv_name
@@ -458,7 +460,10 @@ module Translate = struct
     | _ -> assert false
 
   let pv_name pv = pv.pv_vs.vs_name
-  let pvty info pv = vsty info pv.pv_vs
+
+  let pvty info pv =
+    if pv.pv_ghost then (pv.pv_vs.vs_name, type_unit)
+    else vsty info pv.pv_vs
 
   let lv_name = function
     | LetV pv -> pv_name pv
@@ -473,12 +478,20 @@ module Translate = struct
     | _ -> true
 
   let filter_ghost_params =
+(* removal of ghost does not work
     let dummy = create_pvsymbol (Ident.id_fresh "") ity_unit in
     fun args ->
     match List.filter (fun v -> not v.Mlw_ty.pv_ghost) args with
     | [] -> [dummy]
     | l -> l
-
+*)
+    fun args -> args (* filtering ghost happens in pvty *)
+(*
+    List.map
+      (fun v -> if v.Mlw_ty.pv_ghost then
+                  create_pvsymbol (Ident.id_fresh "") ity_unit
+                else v)
+ *)
   let rec expr info e =
     assert (not e.e_ghost);
     match e.e_node with
@@ -499,6 +512,7 @@ module Translate = struct
           let n = Number.compute_int (get_int_constant e1) in
           let e1 = ML.Esyntax (BigInt.to_string n, []) in
           ML.Esyntax (s, [e1])
+(*
       | Eapp (e, v, _) when v.pv_ghost ->
          (* ghost parameters are ignored *)
          begin
@@ -506,10 +520,13 @@ module Translate = struct
            | Eapp _ -> expr info e
            | _ -> ML.Eapp (expr info e, [ML.enop])
          end
+ *)
       | Eapp (e, v, _) ->
           ML.Eapp (expr info e, [ML.Eident (pv_name v)])
-      | Elet ({ let_expr = e1 }, e2) when e1.e_ghost ->
-          expr info e2
+      | Elet ({ let_sym = lv; let_expr = e1 }, e2) when e1.e_ghost ->
+         (* TODO: remove superflous let *)
+         ML.Elet (lv_name lv, ML.enop, expr info e2)
+
       | Elet ({ let_sym = LetV pv }, e2) when ity_equal pv.pv_ity ity_mark ->
           expr info e2
       | Elet ({ let_sym = LetV pv; let_expr = e1 }, e2) when is_underscore pv ->
@@ -765,14 +782,14 @@ module Print = struct
         fprintf fmt "%s" s
       else
         let fname = if lp = [] then info.fname else None in
-        let m = String.capitalize (modulename ?fname lp t) in
+        let m = Strings.capitalize (modulename ?fname lp t) in
         fprintf fmt "%s.%s" m s
     with Not_found ->
       let s = id_unique ~sanitizer iprinter id in
       fprintf fmt "%s" s
 
-  let print_lident = print_qident ~sanitizer:String.uncapitalize
-  let print_uident = print_qident ~sanitizer:String.capitalize
+  let print_lident = print_qident ~sanitizer:Strings.uncapitalize
+  let print_uident = print_qident ~sanitizer:Strings.capitalize
 
   let print_path_id fmt = function
     | [], id -> print_ident fmt id
@@ -798,7 +815,7 @@ module Print = struct
         print_lident info fmt ts
     | Tapp (ts, [ty]) ->
         fprintf fmt (protect_on paren "%a@ %a")
-          (print_ty info) ty (print_lident info) ts
+          (print_ty ~paren:true info) ty (print_lident info) ts
     | Tapp (ts, tl) ->
         fprintf fmt (protect_on paren "(%a)@ %a")
           (print_list comma (print_ty info)) tl
@@ -950,7 +967,7 @@ module Print = struct
         fprintf fmt (protect_on paren "@[<hov 2>%a@ %a@]")
           (print_expr info) e (print_list space (print_expr_p info)) el
     | Efun (vl, e1) ->
-        fprintf fmt (protect_on paren "@[<hov 2>fun %a ->@ %a@]")
+        fprintf fmt (protect_on paren "@[<hov 2>(fun %a ->@ %a)@]")
           (print_list space (print_vs_arg info)) vl (print_expr info) e1;
         forget_vars vl
     | Econstr (c, []) ->
@@ -969,7 +986,7 @@ module Print = struct
         fprintf fmt "%a.%a" (print_expr_p info) e (print_lident info) f
     | Esetfield (e1, f, e2) ->
         fprintf fmt (protect_on paren "%a.%a <- %a")
-        (print_expr info) e1 (print_lident info) f (print_expr info) e2
+        (print_expr_p info) e1 (print_lident info) f (print_expr info) e2
     | Eblock [] ->
         fprintf fmt "()"
     | Eblock [e] ->
@@ -1005,7 +1022,7 @@ module Print = struct
         fprintf fmt (protect_on paren "raise %a") (print_uident info) id
     | Eraise (Xident id, Some e1) ->
         fprintf fmt (protect_on paren "raise (%a %a)")
-              (print_uident info) id (print_expr info) e1
+              (print_uident info) id (print_expr ~paren:true info) e1
     | Etry (e1, bl) ->
         fprintf fmt
           "@[<v>@[<hv>@[<hov 2>begin@ try@ %a@]@ with@]@\n@[<hov>%a@]@\nend@]"
@@ -1069,7 +1086,7 @@ module Print = struct
        fprintf fmt "exception %a@\n@\n" (print_uident info) xs
     | Dexn (xs, Some ty) ->
        fprintf fmt "@[<hov 2>exception %a of %a@]@\n@\n"
-               (print_uident info) xs (print_ty info) ty
+               (print_uident info) xs (print_ty ~paren:true info) ty
 
 end
 

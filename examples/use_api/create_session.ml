@@ -59,12 +59,9 @@ let dummy_keygen ?parent () = ()
 (* create an empty session in the current directory *)
 let env_session,_,_ =
   let dummy_session : unit Session.session = Session.create_session "." in
-  let ctxt = {
-    Session.allow_obsolete_goals = true;
-    Session.release_tasks = false;
-    Session.use_shapes_for_pairing_sub_goals = false;
-    Session.keygen = dummy_keygen;
-  }
+  let ctxt = Session.mk_update_context
+    ~allow_obsolete_goals:true
+    dummy_keygen
   in
   Session.update_session ~ctxt dummy_session env config
 
@@ -92,9 +89,9 @@ let add_proofs_attempts g =
           ~keygen:dummy_keygen
           ~obsolete:true
           ~archived:false
-          ~limit:{Call_provers.limit_time = Some 5;
-                               limit_steps = None;
-                               limit_mem = Some 1000 }
+          ~limit:{Call_provers.empty_limit with
+                  Call_provers.limit_time = 5;
+                               limit_mem = 1000 }
           ~edit:None
           g p.Whyconf.prover Session.Scheduled
       in ())

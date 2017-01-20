@@ -496,9 +496,9 @@ let get_used_provers_with_stats session =
           PHprover.add prover_table prover x;
           x
       in
-      let lim_time = Call_provers.get_time pa.proof_limit in
-      let lim_mem = Call_provers.get_mem pa.proof_limit in
-      let lim_steps = Call_provers.get_steps pa.proof_limit in
+      let lim_time = pa.proof_limit.Call_provers.limit_time in
+      let lim_mem = pa.proof_limit.Call_provers.limit_mem in
+      let lim_steps = pa.proof_limit.Call_provers.limit_steps in
       let tf = try Hashtbl.find timelimits lim_time with Not_found -> 0 in
       let sf = try Hashtbl.find steplimits lim_steps with Not_found -> 0 in
       let mf = try Hashtbl.find memlimits lim_mem with Not_found -> 0 in
@@ -539,9 +539,9 @@ let opt pr lab fmt = function
 
 let save_result fmt r =
   let steps = if  r.Call_provers.pr_steps >= 0 then
-		Some  r.Call_provers.pr_steps
-	      else
-		None
+                Some  r.Call_provers.pr_steps
+              else
+                None
   in
   fprintf fmt "<result@ status=\"%s\"@ time=\"%.2f\"%a/>"
     (match r.Call_provers.pr_answer with
@@ -580,9 +580,9 @@ let save_proof_attempt fmt ((id,tl,sl,ml),a) =
   fprintf fmt
     "@\n@[<h><proof@ prover=\"%i\"%a%a%a%a%a%a>"
     id
-    (save_int_def "timelimit" tl) (Call_provers.get_time a.proof_limit)
-    (save_int_def "steplimit" sl) (Call_provers.get_steps a.proof_limit)
-    (save_int_def "memlimit" ml) (Call_provers.get_mem a.proof_limit)
+    (save_int_def "timelimit" tl) (a.proof_limit.Call_provers.limit_time)
+    (save_int_def "steplimit" sl) (a.proof_limit.Call_provers.limit_steps)
+    (save_int_def "memlimit" ml) (a.proof_limit.Call_provers.limit_mem)
     (opt_string "edited") a.proof_edited_as
     (save_bool_def "obsolete" false) a.proof_obsolete
     (save_bool_def "archived" false) a.proof_archived;
@@ -987,10 +987,10 @@ let set_edited_as edited_as a = a.proof_edited_as <- edited_as
 
 let set_timelimit timelimit a =
   a.proof_limit <-
-    { a.proof_limit with Call_provers.limit_time = Some timelimit}
+    { a.proof_limit with Call_provers.limit_time = timelimit}
 let set_memlimit memlimit a =
   a.proof_limit <-
-    { a.proof_limit with Call_provers.limit_mem = Some memlimit}
+    { a.proof_limit with Call_provers.limit_mem = memlimit}
 
 let set_obsolete ?(notify=notify) a =
   a.proof_obsolete <- true;
@@ -1206,8 +1206,8 @@ let load_result r =
           Call_provers.pr_time = time;
           Call_provers.pr_output = "";
           Call_provers.pr_status = Unix.WEXITED 0;
-	  Call_provers.pr_steps = steps;
-	  Call_provers.pr_model = Model_parser.default_model;
+          Call_provers.pr_steps = steps;
+          Call_provers.pr_model = Model_parser.default_model;
         }
     | "undone" -> Interrupted
     | "unedited" -> Unedited
@@ -1291,9 +1291,11 @@ and load_proof_or_transf ctxt mg a =
           let obsolete = bool_attribute "obsolete" a false in
           let archived = bool_attribute "archived" a false in
           let timelimit = int_attribute_def "timelimit" a timelimit in
-	  let steplimit = int_attribute_def "steplimit" a steplimit in
+          let steplimit = int_attribute_def "steplimit" a steplimit in
           let memlimit = int_attribute_def "memlimit" a memlimit in
-          let limit = Call_provers.mk_limit timelimit memlimit steplimit in
+          let limit = { Call_provers.limit_time = timelimit;
+                        Call_provers.limit_mem = memlimit;
+                        Call_provers.limit_steps = steplimit } in
         (*
           if timelimit < 0 then begin
           eprintf "[Error] incorrect or unspecified  timelimit '%i'@."
@@ -1491,7 +1493,7 @@ let load_file ~keygen session old_provers f =
             let version = string_attribute "version" f in
             let altern = string_attribute_def "alternative" f "" in
             let timelimit = int_attribute_def "timelimit" f 5 in
-	    let steplimit = int_attribute_def "steplimit" f 1 in
+            let steplimit = int_attribute_def "steplimit" f 0 in
             let memlimit = int_attribute_def "memlimit" f 1000 in
             let p = {C.prover_name = name;
                      prover_version = version;
@@ -2039,9 +2041,9 @@ let print_external_proof fmt p =
   fprintf fmt "%a - %a (%i, %i, %i)%s%s%s"
     Whyconf.print_prover p.proof_prover
     print_attempt_status p.proof_state
-    (Call_provers.get_time p.proof_limit)
-    (Call_provers.get_steps p.proof_limit)
-    (Call_provers.get_mem p.proof_limit)
+    (p.proof_limit.Call_provers.limit_time)
+    (p.proof_limit.Call_provers.limit_steps)
+    (p.proof_limit.Call_provers.limit_mem)
     (if p.proof_obsolete then " obsolete" else "")
     (if p.proof_archived then " archived" else "")
     (if p.proof_edited_as <> None then " edited" else "")
@@ -2064,6 +2066,62 @@ module AssoGoals = Tc.Pairing(Goal)(Goal)
 (**********************************)
 (* merge a file into another      *)
 (**********************************)
+
+(* the import_* functions can be used to copy session items from one 'b session
+   into another 'b session. The two sessions will have different keys. This is
+   different from the copy_* functions where we have 'a = 'b.  Most import
+   functions import the entire subtree, but do not include the subtree into the
+   parent. For example, [import_theory keygen file theory] will return a new
+   theory whose parent is [file], but it will not modify [file.file_theories]
+   to contain the new theory. This is left to the caller. An exception to this
+   rule is [import_proof_attempt], because of its usage of
+   [add_external_proof]. *)
+
+let rec import_theory ~keygen file th =
+  let new_th =
+    raw_add_theory
+      ~keygen
+      ~expanded:th.theory_expanded
+      ~checksum:th.theory_checksum
+      file th.theory_name in
+  let goals =
+    List.map (import_goal ~keygen (Parent_theory new_th)) th.theory_goals in
+  new_th.theory_goals <- goals;
+  new_th
+
+and import_goal ~keygen parent g =
+  let new_goal =
+    raw_add_no_task
+      ~keygen
+      ~expanded:g.goal_expanded
+      parent g.goal_name g.goal_expl g.goal_checksum g.goal_shape in
+  PHprover.iter (fun _ v -> import_proof_attempt ~keygen new_goal v)
+  g.goal_external_proofs;
+  PHstr.iter (fun k v ->
+    let tf = import_transf ~keygen new_goal v in
+    PHstr.add new_goal.goal_transformations k tf) g.goal_transformations;
+  new_goal
+
+and import_proof_attempt ~keygen goal pa =
+    ignore (add_external_proof
+      ~keygen
+      ~obsolete:pa.proof_obsolete
+      ~archived:pa.proof_archived
+      ~limit:pa.proof_limit
+      ~edit:pa.proof_edited_as
+      goal pa.proof_prover pa.proof_state)
+
+and import_transf ~keygen goal tf =
+  let new_tf =
+    raw_add_transformation
+      ~keygen
+      ~expanded:tf.transf_expanded
+      goal
+      tf.transf_name in
+  let goals =
+    List.map (import_goal ~keygen (Parent_transf new_tf)) tf.transf_goals in
+  new_tf.transf_goals <- goals;
+  new_tf
 
 let found_obsolete = ref false
 let found_missed_goals = ref false
@@ -2233,7 +2291,22 @@ type 'key update_context =
     release_tasks : bool;
     use_shapes_for_pairing_sub_goals : bool;
     keygen : 'key keygen;
+    keep_unmatched_theories : bool;
   }
+
+let mk_update_context
+  ?(allow_obsolete_goals=false)
+  ?(release_tasks=false)
+  ?(use_shapes_for_pairing_sub_goals=false)
+  ?(keep_unmatched_theories=false)
+  keygen =
+  { allow_obsolete_goals;
+    release_tasks;
+    use_shapes_for_pairing_sub_goals;
+    keygen;
+    keep_unmatched_theories;
+  }
+
 
 let rec recover_sub_tasks ~theories env_session task g =
   g.goal_task <- Some task;
@@ -2364,9 +2437,13 @@ exception OutdatedSession
 let merge_theory ~ctxt ~theories env from_th to_th =
   found_missed_goals_in_theory := false;
   set_theory_expanded to_th from_th.theory_expanded;
+  let get_goal_name g =
+    try
+      let (_,_,l) = restore_path g.goal_name in
+      String.concat "." l
+    with Not_found -> g.goal_name.Ident.id_string in
   let from_goals = List.fold_left
-    (fun from_goals g ->
-      Mstr.add g.goal_name.Ident.id_string g from_goals)
+    (fun from_goals g -> Mstr.add (get_goal_name g) g from_goals)
     Mstr.empty from_th.theory_goals
   in
   Debug.dprintf debug
@@ -2377,16 +2454,11 @@ let merge_theory ~ctxt ~theories env from_th to_th =
   List.iter
     (fun to_goal ->
       try
-        let to_goal_name =
-          try
-            let (_,_,l) = restore_path to_goal.goal_name
-            in String.concat "." l
-          with Not_found -> to_goal.goal_name.Ident.id_string
-        in
+        let to_goal_name = get_goal_name to_goal in
         let from_goal = Mstr.find to_goal_name from_goals in
         Debug.dprintf debug
           "[Goal checksum] goal %s: old sum = %a, new sum = %a@."
-          to_goal.goal_name.Ident.id_string
+          to_goal_name
           (Pp.print_option Tc.print_checksum) from_goal.goal_checksum
           (Pp.print_option Tc.print_checksum) to_goal.goal_checksum;
         let goal_obsolete =
@@ -2445,21 +2517,30 @@ let merge_file ~ctxt ~theories env from_f to_f =
     (fun acc t -> Mstr.add t.theory_name.Ident.id_string t acc)
     Mstr.empty from_f.file_theories
   in
-  List.iter
-    (fun to_th ->
-      try
-        let from_th =
-          let name = to_th.theory_name.Ident.id_string in
-          try Mstr.find name from_theories
-          (* TODO: remove this later when all sessions are updated *)
-          with Not_found -> Mstr.find ("WP "^name) from_theories
-        in
-        merge_theory ~ctxt ~theories env from_th to_th
-      with
-        | Not_found when ctxt.allow_obsolete_goals -> ()
-        | Not_found -> raise OutdatedSession
-    )
-    to_f.file_theories;
+  let find_remove k map =
+    let elt = Mstr.find k map in
+    let acc = Mstr.remove k map in
+    elt, acc in
+  let remaining_theories =
+    List.fold_left
+      (fun acc to_th ->
+        try
+          let from_th, acc =
+            let name = to_th.theory_name.Ident.id_string in
+            find_remove name acc
+          in
+          merge_theory ~ctxt ~theories env from_th to_th;
+          acc
+        with
+          | Not_found when ctxt.allow_obsolete_goals -> acc
+          | Not_found -> raise OutdatedSession
+      )
+      from_theories to_f.file_theories in
+  if ctxt.keep_unmatched_theories then
+    Mstr.iter (fun _ v ->
+        to_f.file_theories <-
+          (import_theory ~keygen:ctxt.keygen to_f v) :: to_f.file_theories)
+      remaining_theories;
   Debug.dprintf debug "[Info] merge_file, done@\n"
 
 let rec recompute_all_shapes_goal ~release g =

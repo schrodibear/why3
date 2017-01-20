@@ -2,13 +2,14 @@
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
 "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="4">
-<prover id="0" name="Alt-Ergo" version="0.99.1" timelimit="5" steplimit="1" memlimit="1000"/>
-<prover id="1" name="CVC3" version="2.4.1" timelimit="5" steplimit="1" memlimit="1000"/>
-<prover id="2" name="CVC4" version="1.4" timelimit="5" steplimit="1" memlimit="1000"/>
-<prover id="3" name="Spass" version="3.7" timelimit="5" steplimit="1" memlimit="1000"/>
-<prover id="4" name="Eprover" version="1.8-001" timelimit="5" steplimit="1" memlimit="1000"/>
-<prover id="6" name="Coq" version="8.4pl6" timelimit="5" steplimit="1" memlimit="4000"/>
-<file name="../../../theories/list.why" expanded="true">
+<prover id="0" name="Alt-Ergo" version="0.99.1" timelimit="5" steplimit="0" memlimit="1000"/>
+<prover id="1" name="CVC3" version="2.4.1" timelimit="5" steplimit="0" memlimit="1000"/>
+<prover id="2" name="CVC4" version="1.4" timelimit="5" steplimit="0" memlimit="1000"/>
+<prover id="3" name="Spass" version="3.7" timelimit="5" steplimit="0" memlimit="1000"/>
+<prover id="4" name="Eprover" version="1.8-001" timelimit="5" steplimit="0" memlimit="1000"/>
+<prover id="5" name="Alt-Ergo" version="1.01" timelimit="6" steplimit="0" memlimit="1000"/>
+<prover id="6" name="Coq" version="8.4pl6" timelimit="5" steplimit="0" memlimit="4000"/>
+<file name="../../../theories/list.why">
 <theory name="List" sum="d41d8cd98f00b204e9800998ecf8427e">
 </theory>
 <theory name="Length" sum="05caecc0d3ea8074e1ba80a75530a754">
@@ -33,10 +34,13 @@
 </theory>
 <theory name="Mem" sum="d41d8cd98f00b204e9800998ecf8427e">
 </theory>
-<theory name="Elements" sum="9cccc6673c270c379e44a00d296242c8">
- <goal name="elements_Nil">
- <proof prover="3"><result status="valid" time="0.51"/></proof>
- <proof prover="4"><result status="valid" time="0.02"/></proof>
+<theory name="Elements" sum="8bdd844429293cfd31fd0f17ecbc15a7">
+ <goal name="elements_mem">
+ <transf name="induction_ty_lex">
+  <goal name="elements_mem.1" expl="1.">
+  <proof prover="5"><result status="valid" time="0.00" steps="57"/></proof>
+  </goal>
+ </transf>
  </goal>
 </theory>
 <theory name="Nth" sum="d41d8cd98f00b204e9800998ecf8427e">
@@ -257,13 +261,13 @@
    <proof prover="2"><result status="valid" time="0.16"/></proof>
    </goal>
    <goal name="sorted_append.1.6" expl="6.">
-   <proof prover="2"><result status="valid" time="1.62"/></proof>
+   <proof prover="2"><result status="valid" time="2.32"/></proof>
    </goal>
    <goal name="sorted_append.1.7" expl="7.">
    <proof prover="0"><result status="valid" time="0.03" steps="80"/></proof>
    </goal>
    <goal name="sorted_append.1.8" expl="8.">
-   <proof prover="1"><result status="valid" time="1.63"/></proof>
+   <proof prover="1"><result status="valid" time="2.38"/></proof>
    </goal>
   </transf>
   </goal>
@@ -308,7 +312,7 @@
    <proof prover="4"><result status="valid" time="0.54"/></proof>
    </goal>
    <goal name="rev_append_sorted_incr.1.8" expl="8.">
-   <proof prover="4"><result status="valid" time="1.13"/></proof>
+   <proof prover="4"><result status="valid" time="1.49"/></proof>
    </goal>
   </transf>
   </goal>
@@ -427,7 +431,7 @@
  <proof prover="0"><result status="valid" time="0.01" steps="10"/></proof>
  </goal>
  <goal name="Permut_length">
- <proof prover="6" edited="list_Permut_Permut_length_2.v"><result status="valid" time="2.25"/></proof>
+ <proof prover="6" edited="list_Permut_Permut_length_2.v"><result status="valid" time="2.80"/></proof>
  </goal>
 </theory>
 <theory name="Distinct" sum="e56aed12f61edef3656befad5f86e1ba">
@@ -439,7 +443,7 @@
    <proof prover="0"><result status="valid" time="0.01" steps="5"/></proof>
    </goal>
    <goal name="distinct_append.1.2" expl="2.">
-   <proof prover="2"><result status="valid" time="0.91"/></proof>
+   <proof prover="2"><result status="valid" time="1.31"/></proof>
    </goal>
   </transf>
   </goal>

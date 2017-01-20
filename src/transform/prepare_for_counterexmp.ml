@@ -32,11 +32,8 @@ let prepare_for_counterexmp2 env task =
     (* Counter-example will be queried, prepare the task *)
     Debug.dprintf debug "Get ce@.";
     let comp_trans = Trans.compose
-      (Trans.goal Introduction.intros)
-      (Trans.compose
 	 Intro_vc_vars_counterexmp.intro_vc_vars_counterexmp
 	 (Intro_projections_counterexmp.intro_projections_counterexmp env)
-      )
     in
     (Trans.apply comp_trans) task
   end
@@ -44,7 +41,7 @@ let prepare_for_counterexmp2 env task =
 let prepare_for_counterexmp env = Trans.store (prepare_for_counterexmp2 env)
 
 let () = Trans.register_env_transform "prepare_for_counterexmp" prepare_for_counterexmp
-  ~desc:"Transformation@ that@ prepares@ the@ task@ for@ quering@ for@ \
+  ~desc:"Transformation@ that@ prepares@ the@ task@ for@ querying@ for@ \
     the@ counter-example@ model.@ This@ transformation@ does@ so@ only@ \
 when@ the@ solver@ will@ be@ asked@ for@ the@ counter-example."
 

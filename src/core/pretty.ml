@@ -68,7 +68,7 @@ let print_tv fmt tv =
 
 (* logic variables always start with a lower case letter *)
 let print_vs fmt vs =
-  let sanitizer = String.uncapitalize in
+  let sanitizer = Strings.uncapitalize in
   pp_print_string fmt (id_unique iprinter ~sanitizer vs.vs_name)
 
 let forget_var vs = forget_id iprinter vs.vs_name
@@ -88,13 +88,15 @@ let extract_op ls =
 let tight_op s = let c = String.sub s 0 1 in c = "!" || c = "?"
 
 let escape_op s =
-  let s = Str.replace_first (Str.regexp "^\\*.") " \\0" s in
-  let s = Str.replace_first (Str.regexp ".\\*$") "\\0 " s in
-  s
+  let len = String.length s in
+  if len = 0 then s else
+    let s = if String.get s (len - 1) = '*' then s ^ " " else s in
+    let s = if String.get s 0 = '*' then " " ^ s else s in
+   s
 
 (* theory names always start with an upper case letter *)
 let print_th fmt th =
-  let sanitizer = String.capitalize in
+  let sanitizer = Strings.capitalize in
   fprintf fmt "%s" (id_unique iprinter ~sanitizer th.th_name)
 
 let print_ts fmt ts =
@@ -108,7 +110,7 @@ let print_ls fmt ls =
   | None   -> fprintf fmt "%s" (id_unique iprinter ls.ls_name)
 
 let print_cs fmt ls =
-  let sanitizer = String.capitalize in
+  let sanitizer = Strings.capitalize in
   fprintf fmt "%s" (id_unique iprinter ~sanitizer ls.ls_name)
 
 let print_pr fmt pr =

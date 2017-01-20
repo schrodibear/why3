@@ -127,6 +127,12 @@ AC_ARG_ENABLE(profiling,
     AS_HELP_STRING([--enable-profiling], [enable profiling]),,
     enable_profiling=no)
 
+# Emacs compilation
+
+AC_ARG_ENABLE(emacs-compilation,
+    AS_HELP_STRING([--disable-emacs-compilation], [do not compile why3.elc]),,
+    enable_emacs_compilation=yes)
+
 # either relocation or local, not both
 if test "$enable_relocation" = yes ; then
 if test "$enable_local" = yes ; then
@@ -140,23 +146,22 @@ AC_MSG_CHECKING(executable suffix)
 if uname -s | grep -q CYGWIN ; then
   EXE=.exe
   STRIP='echo "no strip "'
-  CPULIMIT=cpulimit-win
   AC_MSG_RESULT(.exe <Cygwin>)
 else
 if uname -s | grep -q MINGW ; then
   EXE=.exe
   STRIP=strip
-  CPULIMIT=cpulimit-win
   AC_MSG_RESULT(.exe <MinGW>)
 else
   EXE=
   STRIP=strip
-  CPULIMIT=cpulimit
   AC_MSG_RESULT(<none>)
 fi
 fi
 
-AC_PROG_CC()
+AC_PROG_CC
+AC_PROG_MKDIR_P
+AC_PROG_INSTALL
 
 # Check for Ocaml compilers
 
@@ -349,7 +354,13 @@ if test "$enable_html_doc" = yes ; then
 fi
 
 # checking for emacs
-AC_CHECK_PROG(EMACS,emacs,emacs,no)
+if test "$enable_emacs_compilation" = yes ; then
+   AC_CHECK_PROG(EMACS,emacs,emacs,no)
+   if test "$EMACS" = no ; then
+      enable_emacs_compilation=no
+      AC_MSG_WARN([Cannot find emacs, compilation of why3.elc disabled.])
+   fi
+fi
 
 # checking for Zarith
 if test "$enable_zarith" = yes; then
@@ -475,57 +486,67 @@ dnl AC_CHECK_PROG(OCAMLWEB,ocamlweb,ocamlweb,true)
 
 # Coq
 
+enable_coq_support=yes
 enable_coq_fp_libs=yes
 
 coq_compat_version=
 
 if test "$enable_coq_tactic" = no -a "$enable_coq_libs" = no; then
-    enable_coq_support=no
-    AC_MSG_WARN(coq support disabled)
-    reason_coq_support=" (disabled by user)"
-else
-    AC_CHECK_PROG(COQC,coqc,coqc,no)
-    if test "$COQC" = no ; then
-        enable_coq_support=no
-        AC_MSG_WARN(Cannot find coqc.)
-        reason_coq_support=" (coqc not found)"
-    else
-        COQLIB=`$COQC -where | sed -e 's|\\\|/|g' -e 's| |\\ |g'`
-        AC_MSG_CHECKING(Coq version)
-        COQVERSION=`$COQC -v | sed -n -e 's|.*version* *\([[^ ]]*\) .*$|\1|p' `
+   enable_coq_support=no
+   AC_MSG_WARN(coq support disabled)
+   reason_coq_support=" (disabled by user)"
+fi
 
-        #Even if the name of the variable is CAMLP4 the value can be camlp5
-        CAMLP4BIN=`coqtop -config | sed -n -e 's/CAMLP4BIN=\(.*\)$/\1/p'`
-        CAMLP4=`coqtop -config | sed -n -e 's/CAMLP4=\(.*\)$/\1/p'`
-        COQCAMLPLIB=`coqtop -config | sed -n -e 's/CAMLP4LIB=\(.*\)$/\1/p'`
-        COQCAMLP=${CAMLP4BIN}${CAMLP4}o
+if test "$enable_coq_support" = yes; then
+   AC_CHECK_PROG(COQC,coqc,coqc,no)
+   if test "$COQC" = no ; then
+      enable_coq_support=no
+      AC_MSG_WARN(Cannot find coqc.)
+      reason_coq_support=" (coqc not found)"
+   fi
+fi
 
-        case $COQVERSION in
-          8.4*)
-	        enable_coq_support=yes
-                coq_compat_version="COQ84"
-                COQPPLIBS="$COQLIB/parsing/grammar.cma"
-                AC_MSG_RESULT($COQVERSION)
-                ;;
-          8.5*|trunk)
-                enable_coq_support=yes
-                coq_compat_version="COQ85"
-                COQPPLIBS="$OCAMLLIB/unix.cma $OCAMLLIB/threads/threads.cma $COQLIB/grammar/grammar.cma"
-                AC_MSG_RESULT($COQVERSION)
-                ;;
-          *)
-                enable_coq_support=no
-	        AC_MSG_WARN(You need Coq 8.4 or later; Coq discarded)
-                reason_coq_support=" (version is $COQVERSION but need version 8.4 or higher)"
-                ;;
-        esac
-    fi
-    AC_CHECK_PROG(COQDEP,coqdep,coqdep,no)
-    if test "$COQDEP" = no ; then
-        enable_coq_support=no
-        AC_MSG_WARN(Cannot find coqdep.)
-        reason_coq_support=" (coqdep not found)"
-     fi
+if test "$enable_coq_support" = yes; then
+   COQLIB=`$COQC -where | sed -e 's|\\\|/|g' -e 's| |\\ |g'`
+   AC_MSG_CHECKING(Coq version)
+   COQVERSION=`$COQC -v | sed -n -e 's|.*version* *\([[^ ]]*\) .*$|\1|p' `
+
+   #Even if the name of the variable is CAMLP4 the value can be camlp5
+   CAMLP4BIN=`coqtop -config | sed -n -e 's/CAMLP4BIN=\(.*\)$/\1/p'`
+   CAMLP4=`coqtop -config | sed -n -e 's/CAMLP4=\(.*\)$/\1/p'`
+   COQCAMLPLIB=`coqtop -config | sed -n -e 's/CAMLP4LIB=\(.*\)$/\1/p'`
+
+   case $COQVERSION in
+      8.4*)
+         coq_compat_version="COQ84"
+         COQPPLIBS="$COQLIB/parsing/grammar.cma"
+         AC_MSG_RESULT($COQVERSION)
+         ;;
+      8.5*)
+         coq_compat_version="COQ85"
+         COQPPLIBS="$OCAMLLIB/unix.cma $OCAMLLIB/threads/threads.cma $COQLIB/grammar/grammar.cma"
+         AC_MSG_RESULT($COQVERSION)
+         ;;
+      8.6*|trunk)
+         coq_compat_version="COQ86"
+         COQPPLIBS="$OCAMLLIB/unix.cma $OCAMLLIB/threads/threads.cma $COQLIB/grammar/grammar.cma"
+         AC_MSG_RESULT($COQVERSION)
+         ;;
+      *)
+         enable_coq_support=no
+         AC_MSG_WARN(You need Coq 8.4 or later; Coq discarded)
+         reason_coq_support=" (version is $COQVERSION but need version 8.4 or later)"
+         ;;
+   esac
+fi
+
+if test "$enable_coq_support" = yes; then
+   AC_CHECK_PROG(COQDEP,coqdep,coqdep,no)
+   if test "$COQDEP" = no; then
+      enable_coq_support=no
+      AC_MSG_WARN(Cannot find coqdep.)
+      reason_coq_support=" (coqdep not found)"
+   fi
 fi
 
 if test "$enable_coq_support" = no; then
@@ -543,9 +564,13 @@ if test "$enable_coq_tactic" = yes; then
    fi
 fi
 
-if test "$enable_coq_tactic" = yes -a "$CAMLP5O" = no; then
-   enable_coq_tactic=no
-   reason_coq_tactic=" (camlp5o not found)"
+if test "$enable_coq_tactic" = yes; then
+   AC_PATH_PROG(COQCAMLP,${CAMLP4}o,no,$CAMLP4BIN)
+   if test "$COQCAMLP" = no; then
+      enable_coq_tactic=no
+      AC_MSG_WARN(Cannot find camlpXo.)
+      reason_coq_tactic=" (camlpXo not found)"
+   fi
 fi
 
 if test "$enable_coq_libs" = yes; then
@@ -618,9 +643,9 @@ else
         ISABELLEDETECTEDVERSION=`$ISABELLE version | sed -n -e 's|Isabelle\([[^:]]*\).*$|\1|p' `
 
         case $ISABELLEDETECTEDVERSION in
-          2015*)
+          2016-1*)
 	        enable_isabelle_support=yes
-                ISABELLEVERSION=2015
+                ISABELLEVERSION=2016-1
                 AC_MSG_RESULT($ISABELLEDETECTEDVERSION)
                 ;;
           2016*)
@@ -631,8 +656,8 @@ else
           *)
                 AC_MSG_RESULT($ISABELLEDETECTEDVERSION)
                 enable_isabelle_support=no
-	        AC_MSG_WARN(You need Isabelle 2015 or later; Isabelle discarded)
-                reason_isabelle_support=" (need version >= 2015)"
+	        AC_MSG_WARN(You need Isabelle 2016 or later; Isabelle discarded)
+                reason_isabelle_support=" (need version >= 2016)"
                 ;;
         esac
     fi
@@ -709,17 +734,13 @@ dnl AC_CHECK_PROGS(PDFVIEWER,xpdf acroread evince)
 
 VERSION=$PACKAGE_VERSION
 
-BUILDDATE="$(date)"
-
 # substitutions to perform
 AC_SUBST(VERSION)
-AC_SUBST(BUILDDATE)
 
 AC_SUBST(enable_verbose_make)
 
 AC_SUBST(EXE)
 AC_SUBST(STRIP)
-AC_SUBST(CPULIMIT)
 
 AC_SUBST(OCAMLC)
 AC_SUBST(OCAMLOPT)
@@ -791,6 +812,8 @@ AC_SUBST(enable_html_doc)
 AC_SUBST(RUBBER)
 AC_SUBST(HEVEA)
 AC_SUBST(HACHA)
+
+AC_SUBST(enable_emacs_compilation)
 AC_SUBST(EMACS)
 
 AC_SUBST(enable_frama_c)
