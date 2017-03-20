@@ -62,6 +62,9 @@ type t =
       mutable session_mem_limit : int;
       mutable session_nb_processes : int;
       mutable session_cntexample : bool;
+      mutable use_watchers : bool;
+      mutable watcher_command : string;
+      mutable show_preprocessed_c : bool
     }
 
 
@@ -87,6 +90,9 @@ type ide = {
   ide_default_editor : string;
   (* ide_replace_prover : conf_replace_prover; *)
   ide_hidden_provers : string list;
+  ide_use_watchers : bool;
+  ide_watcher_command : string;
+  ide_show_preprocessed_c : bool
 }
 
 let default_ide =
@@ -112,6 +118,9 @@ let default_ide =
       (try Sys.getenv "EDITOR" ^ " %f"
        with Not_found -> "editor %f");
     ide_hidden_provers = [];
+    ide_use_watchers = true;
+    ide_watcher_command = "inotifywait -q -m -e close_write --format \"%e\"";
+    ide_show_preprocessed_c = true
   }
 
 let load_ide section =
@@ -164,6 +173,11 @@ let load_ide section =
       get_string section ~default:default_ide.ide_default_prover
         "default_prover";
     ide_hidden_provers = get_stringl ~default:default_ide.ide_hidden_provers section "hidden_prover";
+    ide_use_watchers = get_bool ~default:default_ide.ide_use_watchers section "use_watchers";
+    ide_watcher_command =
+      get_string ~default:default_ide.ide_watcher_command section "watcher_command";
+    ide_show_preprocessed_c =
+      get_bool ~default:default_ide.ide_show_preprocessed_c section "show_preprocessed_c"
   }
 
 
@@ -212,6 +226,9 @@ let load_config config original_config env =
     session_mem_limit = Whyconf.memlimit main;
     session_nb_processes = Whyconf.running_provers_max main;
     session_cntexample = Whyconf.cntexample main;
+    use_watchers = ide.ide_use_watchers;
+    watcher_command = ide.ide_watcher_command;
+    show_preprocessed_c = ide.ide_show_preprocessed_c
 }
 
 let save_config t =
@@ -1024,11 +1041,75 @@ let editors_page c (notebook:GPack.notebook) =
   in
   Mprover.iter add_prover (Whyconf.get_provers c.config)
 
+(* Page "Front-end" *)
+
+let frontend_page (c : t) (notebook : GPack.notebook) =
+  let label = GMisc.label ~text:"Frontend" () in
+  let page =
+    GPack.vbox
+      ~homogeneous:false
+      ~packing:(fun w -> ignore @@ notebook#append_page ~tab_label:label#coerce w)
+      ()
+  in
+  let page_pack w = page#pack w in
+  let watchers_frame = GBin.frame ~label:"Watchers" ~packing:page_pack () in
+  let c_files_frame = GBin.frame ~label:"C files" ~packing:page_pack () in
+  let wb = GPack.vbox ~homogeneous:false ~packing:watchers_frame#add () in
+  let cfb = GPack.vbox ~homogeneous:false ~packing:c_files_frame#add () in
+  (* Use watchers *)
+  let use_watchers_check =
+    GButton.check_button
+      ~label:"_Watch for changes in WhyML source files"
+      ~use_mnemonic:true
+      ~packing:wb#add ()
+      ~active:c.use_watchers
+  in
+  use_watchers_check#misc#set_tooltip_markup
+    "Watch for changes using an external command and auto-reload on modification.";
+  let (_ : GtkSignal.id) =
+    use_watchers_check#connect#toggled
+      ~callback:(fun () -> c.use_watchers <- use_watchers_check#active)
+  in
+  (* Watcher command *)
+  let watcher_command_editor = GEdit.entry ~text:c.watcher_command ~packing:wb#add () in
+  let watcher_command_label =
+    GMisc.label
+      ~markup:"External watcher _command:"
+      ~use_underline:true
+      ~mnemonic_widget:watcher_command_editor
+      ~packing:wb#add
+      ()
+  in
+  watcher_command_label#set_xalign 0.0;
+  wb#reorder_child watcher_command_editor#coerce ~pos:2;
+  watcher_command_editor#misc#set_tooltip_markup
+    "The command should produce some output on every update, it will be invoked as `<tt>command <i>file</i></tt>'";
+  let (_ : GtkSignal.id) =
+    watcher_command_editor#connect#changed
+      ~callback:(fun () -> c.watcher_command <- watcher_command_editor#text)
+  in
+  (* Show proprocessed C files *)
+  let show_preprocessed_check =
+    GButton.check_button
+      ~label:"_Show the correponding *.[c/h].pp files in source view"
+      ~use_mnemonic:true
+      ~packing:cfb#add ()
+      ~active:c.show_preprocessed_c
+  in
+  show_preprocessed_check#misc#set_tooltip_markup
+    "Show the corresponding `<tt>*.[c/h].pp</tt>' files instead of the `<tt>*.c</tt>' and <tt>*.h</tt>' \
+     source files (if the `<tt>*.pp</tt>' files exist)";
+  let (_ : GtkSignal.id) =
+    show_preprocessed_check#connect#toggled
+      ~callback:(fun () -> c.show_preprocessed_c <- show_preprocessed_check#active)
+  in
+  ()
 
 let preferences (c : t) =
   let dialog = GWindow.dialog
     ~modal:true ~icon:(!why_icon)
-    ~title:"Why3: preferences" ()
+    ~title:"Why3: preferences"
+    ()
   in
   let vbox = dialog#vbox in
   let notebook = GPack.notebook ~packing:vbox#add () in
@@ -1042,6 +1123,8 @@ let preferences (c : t) =
   provers_page c notebook;
   (* page "uninstalled provers" *)
   alternatives_frame c notebook;
+  (* page "Frontend" **)
+  frontend_page c notebook;
   (* page "Colors" **)
 (*
   let label2 = GMisc.label ~text:"Colors" () in

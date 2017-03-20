@@ -1297,7 +1297,7 @@ let open_file ?(start=false) f =
   else
     try
       Debug.dprintf debug "[GUI] adding file %s in database@." f;
-      ignore (M.add_file (env_session()) ?format:!opt_parser f);
+      ignore (M.add_file (env_session()) ?format:!opt_parser f)
     with e ->
       if start
       then begin
@@ -1312,6 +1312,57 @@ let open_file ?(start=false) f =
         info_window `ERROR msg
 
 let () = Queue.iter (open_file ~start:true) files
+
+let install_watcher, uninstall_all_watchers =
+  let fd_pid_ids = ref [] in
+  let open Unix in
+  (fun ~filename ~callback ->
+     let in_fd, out_fd = pipe () in
+     let pid =
+       let command = String.split_on_char ' ' gconfig.watcher_command @ [filename] in
+       let prog, args = List.hd command, Array.of_list @@ List.tl command in
+       create_process prog args stdin out_fd stderr
+     in
+     if fst @@ waitpid [WNOHANG] pid <> 0 then
+       Debug.dprintf debug "[GUI] unsuccessful attempt to install watcher on file %s@." filename
+     else
+       let watch_id =
+         let open Glib.Io in
+         let in_ch = channel_of_descr in_fd in
+         add_watch
+           ~cond:[`IN]
+           ~callback:(
+             let len = 1024 in
+             let buf = Bytes.create len in
+             fun _ ->
+               Debug.dprintf debug "[GUI] watcher detected modification of file %s: %d bytes read@."
+                 filename
+                 (read in_ch ~buf ~pos:0 ~len);
+               !callback ();
+               true)
+           in_ch
+       in
+       fd_pid_ids := (in_fd, pid, watch_id) :: !fd_pid_ids),
+  fun () ->
+    List.iter
+      (fun (fd, pid, id) ->
+         Glib.Io.remove id;
+         kill pid Sys.sigint;
+         ignore @@ waitpid [] pid;
+         close fd)
+      !fd_pid_ids
+
+let reload_ref = ref (fun () -> ())
+
+let () =
+  if gconfig.use_watchers then
+    let install_watcher filename =
+      Debug.dprintf debug "[GUI] installing modification watcher on file %s@." filename;
+      install_watcher ~filename ~callback:reload_ref
+    in
+    S.PHstr.iter
+      (fun f _ -> install_watcher @@ Sysutil.absolutize_filename project_dir f)
+      (env_session()).S.session.S.session_files
 
 (*****************************************************)
 (* method: run a given prover on each unproved goals *)
@@ -1649,6 +1700,7 @@ let save_session () =
 
 
 let exit_function ~destroy () =
+  uninstall_all_watchers ();
   (* do not save automatically anymore Gconfig.save_config (); *)
   if not !session_needs_saving then GMain.quit () else
   match (Gconfig.config ()).saving_policy with
@@ -2311,6 +2363,14 @@ let color_loc (v:GSourceView2.source_view) ~color l b e =
   buf#apply_tag ~start ~stop color
 
 let scroll_to_file f =
+  let f' =
+    if gconfig.show_preprocessed_c &&
+       (Filename.check_suffix f ".c" || Filename.check_suffix f ".h") then
+      let pp =  Filename.(remove_extension f ^ ".pp" ^ extension f) in
+      if Sys.file_exists pp then pp else f
+    else
+      f
+  in
   if f <> !current_file then
     begin
       let lang =
@@ -2319,7 +2379,7 @@ let scroll_to_file f =
         then why_lang else any_lang f
       in
       source_view#source_buffer#set_language lang;
-      source_view#source_buffer#set_text (file_contents f);
+      source_view#source_buffer#set_text (file_contents f');
       set_current_file f;
     end
 
@@ -2451,6 +2511,8 @@ let reload () =
         let msg = flush_str_formatter () in
         file_info#set_text msg;
         info_window `ERROR msg
+
+let () = reload_ref := reload
 
 let (_ : GMenu.image_menu_item) =
   file_factory#add_image_item ~key:GdkKeysyms._R
