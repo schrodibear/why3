@@ -357,9 +357,15 @@ let generate_auto_strategies config =
        else acc) prover_auto_levels []
   in
   fprintf str_formatter "start:@\n";
-  List.iter (fun s -> fprintf str_formatter "c %s 1 1000@\n" s) provers_level1;
+  List.iter (fun s -> fprintf str_formatter "c %s 1 2000@\n" s) provers_level1;
   fprintf str_formatter "t split_goal_wp start@\n";
-  List.iter (fun s -> fprintf str_formatter "c %s 10 4000@\n" s) provers_level1;
+  fprintf str_formatter "t introduce_premises next1@\n";
+  fprintf str_formatter "next1:@\n";
+  fprintf str_formatter "t inline_goal start@\n";
+  fprintf str_formatter "t inline_all next2@\n";
+  fprintf str_formatter "next2:@\n";
+  fprintf str_formatter "t remove_triggers start@\n";
+  List.iter (fun s -> fprintf str_formatter "c %s 5 4000@\n" s) provers_level1;
   let code = flush_str_formatter () in
   let auto1 = {
       strategy_name = "Auto level 1";
@@ -367,6 +373,7 @@ let generate_auto_strategies config =
       strategy_shortcut = "1";
       strategy_code = code }
   in
+  (*
   (* Auto level 2 *)
   let provers_level2 =
     Hprover.fold
@@ -397,9 +404,15 @@ let generate_auto_strategies config =
       strategy_shortcut = "2";
       strategy_code = code }
   in
-  add_strategy
-    (add_strategy
-       (add_strategy (add_strategy config inline) split) auto1) auto2
+  *)
+  (*  add_strategy*)
+  (add_strategy
+     (add_strategy
+        (add_strategy config
+           inline)
+        split)
+     auto1)
+  (* auto2 *)
 
 let detect_exec env main data acc exec_name =
   let s = ask_prover_version env exec_name data.version_switch in
