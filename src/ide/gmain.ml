@@ -1189,7 +1189,7 @@ let install_watcher, uninstall_all_watchers =
      let in_fd, out_fd = pipe () in
      let pid =
        let command = String.split_on_char ' ' gconfig.watcher_command @ [filename] in
-       let prog, args = List.hd command, Array.of_list @@ List.tl command in
+       let prog, args = List.hd command, Array.of_list command in
        create_process prog args stdin out_fd stderr
      in
      if fst @@ waitpid [WNOHANG] pid <> 0 then
