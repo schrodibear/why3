@@ -926,8 +926,11 @@ let notify any =
   goals_model#set ~row:row#iter ~column:name_column
     (match any with
       | S.Goal g -> S.goal_expl g
-      | S.Theory th -> th.S.theory_name.Ident.id_string
-      | S.File f -> Filename.basename f.S.file_name
+      | S.Theory th ->
+        (match Termcode.(concat_expls @@ collect_expls th.S.theory_name.Ident.id_label) with
+         | Some s -> s
+         | None -> th.S.theory_name.Ident.id_string)
+      | S.File f -> Filename.(remove_extension @@ basename f.S.file_name)
       | S.Proof_attempt a ->
         let p = a.S.proof_prover in
         Pp.string_of_wnl C.print_prover p
