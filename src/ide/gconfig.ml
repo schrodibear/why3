@@ -270,6 +270,9 @@ let save_config t =
   let ide = set_string ide "default_prover" t.default_prover in
   let ide = set_string ide "default_editor" t.default_editor in
   let ide = set_stringl ide "hidden_prover" t.hidden_provers in
+  let ide = set_bool ide "use_watchers" t.use_watchers in
+  let ide = set_string ide "watcher_command" t.watcher_command in
+  let ide = set_bool ide "show_preprocessed_c" t.show_preprocessed_c in
   let config = Whyconf.set_section config "ide" ide in
   Whyconf.save_config config
 
