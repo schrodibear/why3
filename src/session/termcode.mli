@@ -13,6 +13,10 @@
 
 val arg_extra_expl_prefix : string * Arg.spec * string
 
+val collect_expls : Ident.Slab.t -> string list
+
+val concat_expls : string list -> string option
+
 val goal_expl_task:
   root:bool -> Task.task -> Ident.ident * string option * Task.task
 
