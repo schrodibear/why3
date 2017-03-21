@@ -2677,31 +2677,35 @@ let () =
 (* removing  *)
 (*************)
 
-let confirm_remove_row r =
-  match get_any_from_row_reference r with
-    | S.Goal _g ->
-        info_window `ERROR "Cannot remove a goal"
-    | S.Theory _th ->
-        info_window `ERROR "Cannot remove a theory"
-    | S.File _file ->
-        info_window `ERROR "Cannot remove a file"
+let confirm_remove_row =
+  let maybe_ask f text x =
+    let remove () = f M.remove_proof_attempt M.remove_transformation M.remove_metas x in
+    try
+      f (fun pa -> if pa.S.proof_edited_as <> None then raise Exit) ignore ignore x;
+      remove ()
+    with
+    | Exit ->
+      info_window
+        ~callback:remove
+        `QUESTION
+        ("The selected " ^ text ^ " is a parent of at least one edited proof attempt, \
+          do you really want to delete everyting below the " ^ text ^ "?")
+  in
+  fun r ->
+    match get_any_from_row_reference r with
+    | S.Goal g -> maybe_ask S.iter_goal "goal" g
+    | S.Theory th -> maybe_ask (fun pa tr me -> S.iter_theory @@ S.iter_goal pa tr me) "theory" th
+    | S.File f -> maybe_ask (fun pa tr me -> S.iter_file @@ S.iter_theory @@ S.iter_goal pa tr me) "file" f
     | S.Proof_attempt a ->
+      if a.S.proof_edited_as <> None then
         info_window
           ~callback:(fun () -> M.remove_proof_attempt a)
           `QUESTION
           "Do you really want to remove the selected proof attempt?"
-    | S.Transf tr ->
-        info_window
-          ~callback:(fun () -> M.remove_transformation tr)
-          `QUESTION
-          "Do you really want to remove the selected transformation\n\
-and all its subgoals?"
-    | S.Metas m ->
-      info_window
-        ~callback:(fun () -> M.remove_metas m)
-        `QUESTION
-        "Do you really want to remove the selected addition of metas\n\
-and all its subgoals?"
+      else
+        M.remove_proof_attempt a
+    | S.Transf tr -> M.remove_transformation tr
+    | S.Metas m -> M.remove_metas m
 
 let remove_proof r =
   match get_any_from_row_reference r with
