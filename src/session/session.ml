@@ -888,7 +888,9 @@ let goal_verified g =
     (fun _ a -> accumulate (proof_verified a))
     g.goal_external_proofs;
   PHstr.iter
-    (fun _ t -> accumulate t.transf_verified)
+    (fun _ t ->
+       if String.length t.transf_name < 14 || String.sub t.transf_name 0 14 <> "smoke_detector" then
+         accumulate t.transf_verified)
     g.goal_transformations;
   Mmetas_args.iter
       (fun _ t -> accumulate t.metas_verified)
