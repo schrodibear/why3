@@ -345,6 +345,14 @@ let generate_auto_strategies config =
       strategy_shortcut = "i";
       strategy_code = code }
   in
+  (* Inline all *)
+  let code = "t inline_all next next: t remove_triggers exit" in
+  let inline_all = {
+      strategy_name = "Inline all";
+      strategy_desc = "Inline@ all@ definitions@ in@ the@ task";
+      strategy_shortcut = "a";
+      strategy_code = code }
+  in
   (* Auto level 1 *)
   let provers_level1 =
     Hprover.fold
@@ -405,14 +413,15 @@ let generate_auto_strategies config =
       strategy_code = code }
   in
   *)
-  (*  add_strategy*)
-  (add_strategy
-     (add_strategy
-        (add_strategy config
-           inline)
-        split)
-     auto1)
-  (* auto2 *)
+  add_strategy
+    (add_strategy
+       (add_strategy
+          (add_strategy config
+             split)
+          inline)
+       inline_all)
+    auto1
+
 
 let detect_exec env main data acc exec_name =
   let s = ask_prover_version env exec_name data.version_switch in
