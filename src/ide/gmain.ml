@@ -77,7 +77,7 @@ let () =
   Debug.dprintf debug " done.@.";
   Gconfig.init ()
 
-let (why_lang, any_lang) =
+let (why_lang, acsl_lang, any_lang) =
   let main = Gconfig.get_main () in
   let load_path = Filename.concat (datadir main) "lang" in
   let languages_manager =
@@ -85,18 +85,22 @@ let (why_lang, any_lang) =
   in
   languages_manager#set_search_path
     (load_path :: languages_manager#search_path);
-  let why_lang =
-    match languages_manager#language "why3" with
-    | None ->
-        eprintf "language file for 'why3' not found in directory %s@."
-          load_path;
+  let why_lang, acsl_lang =
+    match languages_manager#language "why3", languages_manager#language "acsl" with
+    | (None as why,   None)
+    | (Some _ as why, None)
+    | (None as why,   Some _) ->
+      eprintf "language file for '%s' not found in directory %s@."
+        (match why with None -> "why3" | Some _ -> "acsl")
+        load_path;
         exit 1
-    | Some _ as l -> l in
+    | Some _ as why, (Some _ as acsl) -> why, acsl
+  in
   let any_lang filename =
     match languages_manager#guess_language ~filename ~content_type:"text/plain" () with
     | None -> why_lang
     | Some _ as l -> l in
-  (why_lang, any_lang)
+  (why_lang, acsl_lang, any_lang)
 
 (* Borrowed from Frama-C src/gui/source_manager.ml:
 Try to convert a source file either as UTF-8 or as locale. *)
@@ -2419,7 +2423,12 @@ let scroll_to_file f =
       let lang =
         if Filename.check_suffix f ".why" ||
           Filename.check_suffix f ".mlw"
-        then why_lang else any_lang f
+        then why_lang
+        else if gconfig.highlight_acsl
+             && (Filename.check_suffix f ".c" ||
+                 Filename.check_suffix f ".h")
+        then acsl_lang
+        else any_lang f
       in
       source_view#source_buffer#set_language lang;
       source_view#source_buffer#set_text (file_contents f');

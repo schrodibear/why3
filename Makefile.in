@@ -322,6 +322,8 @@ install_no_local:: clean_old_install
 	$(INSTALL_DATA) share/vim/ftdetect/why3.vim $(DATADIR)/why3/vim/ftdetect/why3.vim
 	$(INSTALL_DATA) share/vim/syntax/why3.vim $(DATADIR)/why3/vim/syntax/why3.vim
 	$(INSTALL_DATA) share/lang/why3.lang $(DATADIR)/why3/lang/why3.lang
+	$(INSTALL_DATA) share/lang/acsl.lang $(DATADIR)/why3/lang/acsl.lang
+	$(INSTALL_DATA) share/lang/def.lang $(DATADIR)/why3/lang/def.lang
 
 install_no_local_lib::
 	$(MKDIR_P) $(OCAMLINSTALLLIB)/why3

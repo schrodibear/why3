@@ -43,7 +43,8 @@ type t =
       mutable session_cntexample : bool;
       mutable use_watchers : bool;
       mutable watcher_command : string;
-      mutable show_preprocessed_c : bool
+      mutable show_preprocessed_c : bool;
+      mutable highlight_acsl : bool
     }
 
 val load_config : Whyconf.config -> Whyconf.config -> Why3.Env.env -> unit

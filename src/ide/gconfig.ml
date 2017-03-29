@@ -64,7 +64,8 @@ type t =
       mutable session_cntexample : bool;
       mutable use_watchers : bool;
       mutable watcher_command : string;
-      mutable show_preprocessed_c : bool
+      mutable show_preprocessed_c : bool;
+      mutable highlight_acsl : bool
     }
 
 
@@ -92,7 +93,8 @@ type ide = {
   ide_hidden_provers : string list;
   ide_use_watchers : bool;
   ide_watcher_command : string;
-  ide_show_preprocessed_c : bool
+  ide_show_preprocessed_c : bool;
+  ide_highlight_acsl : bool
 }
 
 let default_ide =
@@ -120,7 +122,8 @@ let default_ide =
     ide_hidden_provers = [];
     ide_use_watchers = true;
     ide_watcher_command = "inotifywait -q -m -e close_write --format \"%e\"";
-    ide_show_preprocessed_c = true
+    ide_show_preprocessed_c = true;
+    ide_highlight_acsl = true
   }
 
 let load_ide section =
@@ -177,7 +180,9 @@ let load_ide section =
     ide_watcher_command =
       get_string ~default:default_ide.ide_watcher_command section "watcher_command";
     ide_show_preprocessed_c =
-      get_bool ~default:default_ide.ide_show_preprocessed_c section "show_preprocessed_c"
+      get_bool ~default:default_ide.ide_show_preprocessed_c section "show_preprocessed_c";
+    ide_highlight_acsl =
+      get_bool ~default:default_ide.ide_highlight_acsl section "highlight_acsl"
   }
 
 
@@ -228,7 +233,8 @@ let load_config config original_config env =
     session_cntexample = Whyconf.cntexample main;
     use_watchers = ide.ide_use_watchers;
     watcher_command = ide.ide_watcher_command;
-    show_preprocessed_c = ide.ide_show_preprocessed_c
+    show_preprocessed_c = ide.ide_show_preprocessed_c;
+    highlight_acsl = ide.ide_highlight_acsl
 }
 
 let save_config t =
@@ -273,6 +279,7 @@ let save_config t =
   let ide = set_bool ide "use_watchers" t.use_watchers in
   let ide = set_string ide "watcher_command" t.watcher_command in
   let ide = set_bool ide "show_preprocessed_c" t.show_preprocessed_c in
+  let ide = set_bool ide "highlight_acsl" t.highlight_acsl in
   let config = Whyconf.set_section config "ide" ide in
   Whyconf.save_config config
 
@@ -1105,6 +1112,20 @@ let frontend_page (c : t) (notebook : GPack.notebook) =
   let (_ : GtkSignal.id) =
     show_preprocessed_check#connect#toggled
       ~callback:(fun () -> c.show_preprocessed_c <- show_preprocessed_check#active)
+  in
+  (* Highlight ACSL annotations in C files *)
+  let highlight_acsl_check =
+    GButton.check_button
+      ~label:"_Highlight ACSL annotations in source view"
+      ~use_mnemonic:true
+      ~packing:cfb#add ()
+      ~active:c.highlight_acsl
+  in
+  highlight_acsl_check#misc#set_tooltip_markup
+    "Use a special ACSL `<tt>*.lang</tt>' file for `<tt>*.[c/h][.pp]</tt>' files in source view";
+  let (_ : GtkSignal.id) =
+    highlight_acsl_check#connect#toggled
+      ~callback:(fun () -> c.highlight_acsl <- highlight_acsl_check#active)
   in
   ()
 
