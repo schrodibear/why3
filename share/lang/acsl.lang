@@ -377,12 +377,13 @@
     </context>
 
     <context id="acsl-bskeywords" style-ref="bskeyword">
-      <match>(\\allocation|\\allocable|\\automatic|\\at|\\base_addr|\\block_length|\\dynamic|\\empty|\\exists|\\false|\\forall|\\freeable| \\fresh|\\from|\\initialized|\\dangling|\\inter|\\lambda|\\let|\\nothing|\\null|\\offset|\\offset_max|\\offset_min|\\old|\\register|\\result|\\separated|\\static|\\true|\\type|\\typeof|\\unallocated|\\union|\\valid_read|\\valid_index|\\valid_range|\\valid_function|\\valid|\\with)[^a-zA-Z0-9_]</match>
+      <match>(\\allocation|\\allocable|\\automatic|\\at|\\base_addr|\\block_length|\\dynamic|\\empty|\\exists|\\false|\\forall|\\freeable| \\fresh|\\from|\\initialized|\\dangling|\\inter|\\lambda|\\let|\\nothing|\\null|\\offset|\\offset_max|\\offset_min|\\old|\\register|\\result|\\separated|\\static|\\true|\\type|\\typeof|\\unallocated|\\union|\\valid_read|\\valid_index|\\valid_range|\\valid_function|\\valid|\\with)\b</match>
     </context>
 
     <context id="in-c-in-spec">
       <include>
         <context ref="acsl-bskeywords"/>
+        <context ref="def:c-like-comment" style-ref="comment"/>
         <context ref="string"/>
         <context ref="char"/>
         <context ref="float"/>
@@ -403,7 +404,7 @@
     </context>
 
     <context id="c-in-spec" extend-parent="false">
-      <start>=|assert|assigns|assumes|(axiom|lemma)[ \t]+(?'id'\%{id}):|breaks|continues|decreases|ensures|exits|frees|invariant|pragma|reads|requires|returns|terminates|variant|writes</start>
+      <start>=|assert|assigns|assumes|(axiom|lemma)\s+(?'id'\%{id}):|breaks|continues|decreases|ensures|exits|frees|invariant|pragma|reads|requires|returns|terminates|variant|writes</start>
       <end>;</end>
       <include>
         <context id="start" where="start" sub-pattern="id" style-ref="identifier"/>
@@ -422,7 +423,7 @@
     </context>
 
     <context id="logic-name">
-      <match>(\%{id})[ \t]*\(</match>
+      <match>(\%{id})\s*\(</match>
       <include>
         <context id="id" sub-pattern="1" style-ref="identifier"/>
         <context id="id" sub-pattern="1" style-ref="acsl-keyword"/>
@@ -430,7 +431,7 @@
     </context>
 
     <context id="identifier">
-      <match>(axiomatic|behavior|invariant|type|inductive)[ \t]+(\%{id})</match>
+      <match>(axiomatic|behavior|invariant|type|inductive)\s+(\%{id})</match>
       <include>
         <context id="keyword" sub-pattern="1" style-ref="acsl-keyword"/>
         <context id="id" sub-pattern="2" style-ref="identifier"/>
@@ -441,6 +442,7 @@
     <context id="in-spec">
       <include>
         <context ref="c-in-spec"/>
+        <context ref="def:c-like-comment" style-ref="comment"/>
         <context ref="logic-name"/>
         <context ref="identifier"/>
         <context ref="acsl-keywords"/>
@@ -458,7 +460,7 @@
     </context>
 
     <context id="acsl-ghost-oneline" end-at-line-end="true">
-      <start>//@[ \t]+(ghost)</start>
+      <start>//@\s+(ghost)</start>
       <include>
         <context id="start" where="start" sub-pattern="1" style-ref="acsl-keyword"/>
         <context id="start" where="start" sub-pattern="0" style-ref="comment"/>
@@ -483,7 +485,7 @@
     </context>
 
     <context id="acsl-ghost-multiline">
-      <start>/\*@[ \t]+(ghost)</start>
+      <start>/\*@\s+(ghost)</start>
       <end>\*/</end>
       <include>
         <context id="start" where="start" sub-pattern="1" style-ref="acsl-keyword"/>
@@ -499,7 +501,7 @@
     <!-- Special highlighting for function names -->
     <define-regex id="c-type">_Bool|_Complex|_Imaginary|bool|char|char(16|32)_t|double|float|int|(u)?int(_least|_fast)?(8|16|32|64)_t|(u)?intmax_t|(u)?intptr_t|long|ptrdiff_t|off(64)?_t|short|signed|size_t|ssize_t|unsigned|void|wchar_t|wint_t|(_A|a)lignas|_Atomic|(_N|n)oreturn|(_T|t)hread_local|auto|const|extern|inline|register|restrict|static|volatile</define-regex>
     <context id="function" >
-      <match>(((?'type'\%{c-type})|(?'kw1'struct)[ \t]+\%{id}|(?'kw2'union)[ \t]+\%{id}|(?'kw3'enum)[ \t]+\%{id}|\%{id}_(t|T)|[*]+|(\[\])+)[ \t]+)(?'id'\%{id})\(</match>
+      <match>(((?'type'\%{c-type})|(?'kw1'struct)\s+\%{id}|(?'kw2'union)\s+\%{id}|(?'kw3'enum)\s+\%{id}|\%{id}_(t|T)|[*]+|(\[[^\]]*\])+)\s+)(?'id'\%{id})\(</match>
       <include>
         <context id="c-type" sub-pattern="type" style-ref="type"/>
         <context id="kw1" sub-pattern="kw1" style-ref="keyword"/>
