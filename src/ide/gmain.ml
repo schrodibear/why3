@@ -926,44 +926,46 @@ let notify any =
         tr.S.transf_key,tr.S.transf_expanded
       | S.Metas m -> m.S.metas_key,m.S.metas_expanded
   in
-  (* name is set by notify since upgrade policy may update the prover name *)
-  goals_model#set ~row:row#iter ~column:name_column
-    (match any with
-      | S.Goal g -> S.goal_expl g
-      | S.Theory th ->
-        (match Termcode.(concat_expls @@ collect_expls th.S.theory_name.Ident.id_label) with
-         | Some s -> s
-         | None -> th.S.theory_name.Ident.id_string)
-      | S.File f -> Filename.(remove_extension @@ basename f.S.file_name)
-      | S.Proof_attempt a ->
-        let p = a.S.proof_prover in
-        Pp.string_of_wnl C.print_prover p
-      | S.Transf tr -> tr.S.transf_name
-      | S.Metas _m -> "Metas..."
-   );
-  let ind = goals_model#get ~row:row#iter ~column:index_column in
-  begin
-    match !current_selected_row with
+  if row#valid then begin
+    (* name is set by notify since upgrade policy may update the prover name *)
+    goals_model#set ~row:row#iter ~column:name_column
+      (match any with
+       | S.Goal g -> S.goal_expl g
+       | S.Theory th ->
+         (match Termcode.(concat_expls @@ collect_expls th.S.theory_name.Ident.id_label) with
+          | Some s -> s
+          | None -> th.S.theory_name.Ident.id_string)
+       | S.File f -> Filename.(remove_extension @@ basename f.S.file_name)
+       | S.Proof_attempt a ->
+         let p = a.S.proof_prover in
+         Pp.string_of_wnl C.print_prover p
+       | S.Transf tr -> tr.S.transf_name
+       | S.Metas _m -> "Metas..."
+      );
+    let ind = goals_model#get ~row:row#iter ~column:index_column in
+    begin
+      match !current_selected_row with
       | Some r when r == ind ->
         update_tabs any
       | _ -> ()
-  end;
-  if_visible row @@ fun _ path ->
-  if expanded then goals_view#expand_to_path path else
-    goals_view#collapse_row path;
-  match any with
+    end;
+    if_visible row @@ fun _ path ->
+    if expanded then goals_view#expand_to_path path else
+      goals_view#collapse_row path;
+    match any with
     | S.Goal g ->
-        set_row_status row g.S.goal_verified
+      set_row_status row g.S.goal_verified
     | S.Theory th ->
-        set_row_status row th.S.theory_verified
+      set_row_status row th.S.theory_verified
     | S.File file ->
-        set_row_status row file.S.file_verified
+      set_row_status row file.S.file_verified
     | S.Proof_attempt a ->
-        set_proof_state a
+      set_proof_state a
     | S.Transf tr ->
-        set_row_status row tr.S.transf_verified
+      set_row_status row tr.S.transf_verified
     | S.Metas m ->
-        set_row_status row m.S.metas_verified
+      set_row_status row m.S.metas_verified
+  end
 
 let init =
   let cpt = ref (-1) in
