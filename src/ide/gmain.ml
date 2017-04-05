@@ -1119,8 +1119,8 @@ let display_warnings () =
       let msg =
         Format.flush_str_formatter ()
       in
-  (* file_info#set_text msg; *)
-      info_window `WARNING msg
+      file_info#set_text msg;
+      (* info_window `WARNING msg *)
     end
 
 (* check if provers are present *)
