@@ -2337,6 +2337,13 @@ let (_ : GMenu.image_menu_item) =
 (* source view *)
 (***************)
 
+let word_wrap_check =
+  GButton.check_button
+    ~label:"_Word wrap"
+    ~use_mnemonic:true
+    ~packing:(fun w -> source_tab#pack w)
+    ()
+
 let scrolled_source_view = GBin.scrolled_window
   ~hpolicy: `AUTOMATIC ~vpolicy: `AUTOMATIC
   ~packing:source_tab#add ~shadow_type:`ETCHED_OUT
@@ -2350,13 +2357,14 @@ let source_view =
     ~insert_spaces_instead_of_tabs:true ~tab_width:2
     ~show_line_numbers:true
     ~right_margin_position:100 ~show_right_margin:true
-    ~wrap_mode:`WORD
     (* ~smart_home_end:true *)
     ~editable:allow_editing
     ~packing:scrolled_source_view#add
     ()
 
-
+let (_ : GtkSignal.id) =
+  word_wrap_check#connect#toggled
+    ~callback:(fun () -> source_view#set_wrap_mode (if word_wrap_check#active then `WORD else `NONE))
 
 (*
   source_view#misc#modify_font_by_name font_name;
