@@ -2349,7 +2349,8 @@ let source_view =
     ~auto_indent:true
     ~insert_spaces_instead_of_tabs:true ~tab_width:2
     ~show_line_numbers:true
-    ~right_margin_position:80 ~show_right_margin:true
+    ~right_margin_position:100 ~show_right_margin:true
+    ~wrap_mode:`WORD
     (* ~smart_home_end:true *)
     ~editable:allow_editing
     ~packing:scrolled_source_view#add
