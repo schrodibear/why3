@@ -39,6 +39,7 @@ why3.conf
 /why3regtests.err
 /why3regtests.out
 /.merlin
+debug
 
 # /bench/
 /bench/programs/good/booleans/
