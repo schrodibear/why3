@@ -501,7 +501,7 @@
     <!-- Special highlighting for function names -->
     <define-regex id="c-type">_Bool|_Complex|_Imaginary|bool|char|char(16|32)_t|double|float|int|(u)?int(_least|_fast)?(8|16|32|64)_t|(u)?intmax_t|(u)?intptr_t|long|ptrdiff_t|off(64)?_t|short|signed|size_t|ssize_t|unsigned|void|wchar_t|wint_t|(_A|a)lignas|_Atomic|(_N|n)oreturn|(_T|t)hread_local|auto|const|extern|inline|register|restrict|static|volatile</define-regex>
     <context id="function" >
-      <match>(((?'type'\%{c-type})|(?'kw1'struct)\s+\%{id}|(?'kw2'union)\s+\%{id}|(?'kw3'enum)\s+\%{id}|\%{id}_(t|T)|[*]+|(\[[^\]]*\])+)\s+)(?'id'\%{id})\(</match>
+      <match>(((?'type'\%{c-type})|(?'kw1'struct)\s+\%{id}|(?'kw2'union)\s+\%{id}|(?'kw3'enum)\s+\%{id}|\%{id}_(t|T)|[*]+)[*]*\s+)\**(?'id'\%{id})(\[[^\]]*\])*\(</match>
       <include>
         <context id="c-type" sub-pattern="type" style-ref="type"/>
         <context id="kw1" sub-pattern="kw1" style-ref="keyword"/>

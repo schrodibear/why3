@@ -3,7 +3,7 @@
 --langmap=acsl:.c
 --langmap=acsl:+.h
 --regex-acsl=/^\s*#define\s*([a-zA-Z_][a-zA-Z0-9_]*)/\1/d,define,defines/
---regex-acsl=/^\s*(\/\*|\/\/|)[ \t@]*logic\s+(((_Bool|_Complex|_Imaginary|bool|boolean|char|double|float|real|int|integer|long|ptrdiff_t|short|signed|size_t|ssize_t|unsigned|void|wchar_t|wint_t|_Atomic|auto|const|extern|inline|register|restrict|static|volatile)|struct\s+[a-zA-Z_][a-zA-Z0-9_]*|union\s+[a-zA-Z_][a-zA-Z0-9_]*|enum\s+[a-zA-Z_][a-zA-Z0-9_]*|[a-zA-Z_][a-zA-Z0-9_]*_t|[*]+|(\[[^\]]*\])+)\s+)+([a-zA-Z_][a-zA-Z0-9_]*)\(/\6/l,logic,logics/
+--regex-acsl=/^\s*(\/\*|\/\/|)[ \t@]*logic\s+(([a-zA-Z_][a-zA-Z0-9_]*|[*]+)[*]*\s+)+\**([a-zA-Z_][a-zA-Z0-9_]*)(\[[^\]]*\])*\(/\4/l,logic,logics/
 --regex-acsl=/^\s*(\/\*|\/\/|)[ \t@]*predicate\s+([a-zA-Z_][a-zA-Z0-9_]*)\(/\2/p,predicate,predicates/
 --regex-acsl=/^\s*(\/\*|\/\/|)[ \t@]*axiom\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*:/\2/a,axiom,axioms/
 --regex-acsl=/^\s*(\/\*|\/\/|)[ \t@]*lemma\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*:/\2/m,lemma,lemmas/
@@ -12,4 +12,4 @@
 --regex-acsl=/^\s*(\/\*|\/\/|)[ \t@]*inductive\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\{/\2/i,inductive,inductives/
 --regex-acsl=/^\s*(\/\*|\/\/|)[ \t@]*axiomatic\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\{/\2/x,axiomatic,axiomatics/
 --regex-acsl=/^[ \t]*(((_Bool|_Complex|_Imaginary|bool|char|double|float|int|long|ptrdiff_t|short|signed|size_t|ssize_t|unsigned|void|wchar_t|wint_t|_Atomic|auto|const|extern|inline|register|restrict|static|volatile)|struct\s+[a-zA-Z_][a-zA-Z0-9_]*|union\s+[a-zA-Z_][a-zA-Z0-9_]*|enum\s+[a-zA-Z_][a-zA-Z0-9_]*|[a-zA-Z_][a-zA-Z0-9_]*_t|[*]+|(\[[^\]]*\])+)\s+)+([a-zA-Z_][a-zA-Z0-9_]*)\(/\5/f,function,functions/
---regex-acsl=/^\s*(\/\*|\/\/|)\s*@\s*(((_Bool|_Complex|_Imaginary|bool|char|double|float|int|long|ptrdiff_t|short|signed|size_t|ssize_t|unsigned|void|wchar_t|wint_t|_Atomic|auto|const|extern|inline|register|restrict|static|volatile)|struct\s+[a-zA-Z_][a-zA-Z0-9_]*|union\s+[a-zA-Z_][a-zA-Z0-9_]*|enum\s+[a-zA-Z_][a-zA-Z0-9_]*|[a-zA-Z_][a-zA-Z0-9_]*_t|[*]+|(\[[^\]]*\])+)\s+)+([a-zA-Z_][a-zA-Z0-9_]*)\(/\6/g,ghost,ghosts/
+--regex-acsl=/^\s*(\/\*|\/\/|)\s*@\s*(((_Bool|_Complex|_Imaginary|bool|char|double|float|int|long|ptrdiff_t|short|signed|size_t|ssize_t|unsigned|void|wchar_t|wint_t|_Atomic|auto|const|extern|inline|register|restrict|static|volatile)|struct\s+[a-zA-Z_][a-zA-Z0-9_]*|union\s+[a-zA-Z_][a-zA-Z0-9_]*|enum\s+[a-zA-Z_][a-zA-Z0-9_]*|[a-zA-Z_][a-zA-Z0-9_]*_t|[*]+)[*]*\s+)+\**([a-zA-Z_][a-zA-Z0-9_]*)(\[[^\]]*\])*\(/\5/g,ghost,ghosts/
