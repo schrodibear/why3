@@ -2797,9 +2797,55 @@ let confirm_remove_selection () =
         info_window `INFO "Please select exactly one item to remove"
 *)
 
-let clean_selection () =
-  List.iter (fun r -> M.clean (get_any_from_row_reference r))
-    (get_selected_row_references ())
+let clean_selection =
+  let rec handle_any a =
+    let any_success = ref false in
+    let update r = if r then any_success := true in
+    let unless_successful f ~perform =
+      any_success := false;
+      f ();
+      if not @@ !any_success then perform ();
+      !any_success
+    in
+    let rec_ a = update @@ handle_any a in
+    let rec_pa pa = rec_ @@ S.Proof_attempt pa in
+    let rec_tr tr = rec_ @@ S.Transf tr in
+    let rec_me me = rec_ @@ S.Metas me in
+    let rec_gl gl = rec_ @@ S.Goal gl in
+    let rec_th th = rec_ @@ S.Theory th in
+    let select key () = if_visible key @@ Util.const goals_view#selection#select_path in
+    match a with
+    | S.Goal g when g.S.goal_verified = None ->
+      unless_successful (fun () -> S.iter_goal rec_pa rec_tr rec_me g) ~perform:(select g.S.goal_key)
+    | S.Theory th when th.S.theory_verified = None ->
+      unless_successful (fun () -> S.iter_theory rec_gl th) ~perform:(select th.S.theory_key)
+    | S.File f when f.S.file_verified = None ->
+      unless_successful (fun () -> S.iter_file rec_th f) ~perform:(select f.S.file_key)
+    | S.Proof_attempt pa ->
+      let maybe_success =
+        match[@warning "-33"] pa.S.proof_state with
+        | S.Interrupted -> false
+        | S.InternalFailure _ -> false
+        | S.Done Call_provers.{ pr_answer = Valid | Invalid } -> true
+        | S.Done _ -> false
+        | _ -> true
+      in
+      if not maybe_success then M.remove_proof_attempt pa;
+      maybe_success
+    | S.Transf tr when tr.S.transf_verified = None ->
+      unless_successful (fun () -> S.iter_transf rec_gl tr) ~perform:(fun () -> M.remove_transformation tr)
+    | S.Metas m when m.S.metas_verified = None ->
+      unless_successful (fun () -> S.iter_metas rec_gl m) ~perform:(fun () -> M.remove_metas m)
+    | _ -> true
+  in
+  fun () ->
+    List.iter
+      (fun r ->
+         let any = get_any_from_row_reference r in
+         M.clean any;
+         ignore @@ handle_any any;
+         if_visible r @@ Util.const goals_view#selection#unselect_path)
+      (get_selected_row_references ())
 
 let () =
   add_tool_separator ();
