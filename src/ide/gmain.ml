@@ -1080,7 +1080,7 @@ let info_window ?(callback=(fun () -> ())) mt s =
                    if mt <> `QUESTION || x = `OK then callback ())
   in ()
 
-let file_info = GMisc.label ~text:""
+let file_info = GMisc.label ~text:"<Select a proof goal to show source>"
   ~packing:(source_tab#pack ~fill:true ?from:None ?expand:None ?padding:None) ()
 
 let warnings = Queue.create ()
@@ -2339,34 +2339,79 @@ let (_ : GMenu.image_menu_item) =
 (* source view *)
 (***************)
 
-let word_wrap_check =
-  GButton.check_button
-    ~label:"_Word wrap"
-    ~use_mnemonic:true
-    ~packing:(fun w -> source_tab#pack w)
-    ()
-
-let scrolled_source_view = GBin.scrolled_window
-  ~hpolicy: `AUTOMATIC ~vpolicy: `AUTOMATIC
-  ~packing:source_tab#add ~shadow_type:`ETCHED_OUT
-  ()
-
 let allow_editing = false (* not reliable enough yet *)
 
 let source_view =
-  GSourceView2.source_view
-    ~auto_indent:true
-    ~insert_spaces_instead_of_tabs:true ~tab_width:2
-    ~show_line_numbers:true
-    ~right_margin_position:100 ~show_right_margin:true
-    (* ~smart_home_end:true *)
-    ~editable:allow_editing
-    ~packing:scrolled_source_view#add
-    ()
-
-let (_ : GtkSignal.id) =
-  word_wrap_check#connect#toggled
-    ~callback:(fun () -> source_view#set_wrap_mode (if word_wrap_check#active then `WORD else `NONE))
+  let source_config_box = GPack.hbox ~packing:(fun w -> source_tab#pack w) () in
+  let word_wrap_check =
+    GButton.check_button
+      ~label:"_Word wrap"
+      ~use_mnemonic:true
+      ~packing:(fun w -> source_config_box#pack w)
+      ()
+  in
+  let tab_width_scale =
+    GRange.scale
+      `HORIZONTAL
+      ~adjustment:(GData.adjustment ~value:8.0 ~lower:2.0 ~step_incr:2.0 ~page_incr:2.0 ())
+      ~digits:0
+      ~draw_value:true
+      ~value_pos:`LEFT
+      ~update_policy:`CONTINUOUS
+      ~packing:(fun w -> source_config_box#pack ~from:`END w)
+      ()
+  in
+  let tab_width_label =
+    GMisc.label
+      ~markup:"Ta_b width:"
+      ~use_underline:true
+      ~selectable:false
+      ~packing:(fun w -> source_config_box#pack ~from:`END w)
+      ()
+  in
+  tab_width_scale#adjustment#set_upper 18.0;
+  tab_width_scale#coerce#misc#set_size_request ~width:200 ();
+  tab_width_label#set_mnemonic_widget (Some tab_width_scale#coerce);
+  let scrolled_source_view = GBin.scrolled_window
+      ~hpolicy:`AUTOMATIC ~vpolicy:`AUTOMATIC
+      ~packing:source_tab#add ~shadow_type:`ETCHED_OUT
+      ()
+  in
+  let source_view =
+    GSourceView2.source_view
+      ~auto_indent:true
+      ~insert_spaces_instead_of_tabs:true ~tab_width:(int_of_float tab_width_scale#adjustment#value)
+      ~show_line_numbers:true
+      ~right_margin_position:100 ~show_right_margin:true
+      (* ~smart_home_end:true *)
+      ~editable:allow_editing
+      ~packing:scrolled_source_view#add
+      ()
+  in
+  let (_ : GtkSignal.id) =
+    word_wrap_check#connect#toggled
+      ~callback:(fun () -> source_view#set_wrap_mode @@ if word_wrap_check#active then `WORD else `NONE)
+  in
+  let (_ : GtkSignal.id) =
+    tab_width_scale#connect#value_changed
+      ~callback:(fun () ->
+          let v = tab_width_scale#adjustment#value in
+          let v' = floor @@ v +. 0.5 in
+          let v'1 = v' +. 1. and v'2 = v' -. 1. in
+          tab_width_scale#adjustment#set_value @@
+          if int_of_float v' mod 2 <> 0 then
+            if (v' -. v'1) *. (v' -. v'1) < (v' -. v'2) *. (v' -. v'2) then
+              v'1
+            else
+              v'2
+          else
+            v')
+  in
+  let (_ : GtkSignal.id) =
+    tab_width_scale#connect#value_changed
+      ~callback:(fun () -> source_view#set_tab_width @@ int_of_float tab_width_scale#adjustment#value)
+  in
+  source_view
 
 (*
   source_view#misc#modify_font_by_name font_name;
