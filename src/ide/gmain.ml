@@ -220,9 +220,18 @@ let tools_frame =
   GBin.frame ~label:"Tools" ~shadow_type:`ETCHED_OUT
     ~packing:tools_window_vbox_pack ()
 
-let tools_box =
-  GPack.button_box `VERTICAL ~border_width:5 ~spacing:5
-  ~packing:tools_frame#add ()
+let tools_alignment =
+  GBin.alignment ~xalign:0.5 ~xscale:0.25 ~packing:tools_frame#add ()
+
+let tools_table =
+  GPack.table
+    ~columns:2 ~rows:2
+    ~homogeneous:true
+    ~border_width:5
+    ~col_spacings:5
+    ~row_spacings:5
+    ~packing:tools_alignment#add
+    ()
 
 let monitor_frame =
   GBin.frame ~label:"Proof monitoring" ~shadow_type:`ETCHED_OUT
@@ -2702,9 +2711,9 @@ let () =
   add_tool_item "Remove from archive" (set_archive_proofs false)
 
 let () =
-  let b = GButton.button ~packing:tools_box#add ~label:"Edit" () in
+  let b = GButton.button ~packing:(fun w -> tools_table#attach ~left:0 ~top:0 w) ~label:"Edit" () in
   b#misc#set_tooltip_markup
-    "Edit the <b>selected proof</b> with the appropriate editor";
+    "Edit the <b>selected proof</b> with the appropriate editor (shortcut: <b>e</b>)";
 
   let i = GMisc.image ~pixbuf:(!image_editor) () in
   let () = b#set_image i#coerce in
@@ -2713,9 +2722,9 @@ let () =
   in ()
 
 let () =
-  let b = GButton.button ~packing:tools_box#add ~label:"Replay" () in
+  let b = GButton.button ~packing:(fun w -> tools_table#attach ~left:1 ~top:0 w) ~label:"Replay" () in
   b#misc#set_tooltip_markup
-    "Replay <b>obsolete</b> proofs below the current selection";
+    "Replay <b>obsolete</b> proofs below the current selection (shortcut: <b>r</b>)";
 
   let i = GMisc.image ~pixbuf:(!image_replay) () in
   let () = b#set_image i#coerce in
@@ -2837,9 +2846,9 @@ let () =
   add_tool_item "Clean selection" clean_selection
 
 let () =
-  let b = GButton.button ~packing:tools_box#add ~label:"Remove" () in
+  let b = GButton.button ~packing:(fun w -> tools_table#attach ~left:0 ~top:1 w) ~label:"Remove" () in
   b#misc#set_tooltip_markup "Remove selected <b>proof attempts</b> and \
-<b>transformations</b>";
+                             <b>transformations</b> (shortcut: <b>x</b> or <b>Del</b>)";
   let i = GMisc.image ~pixbuf:(!image_remove) () in
   let () = b#set_image i#coerce in
   let (_ : GtkSignal.id) =
@@ -2847,9 +2856,9 @@ let () =
   in ()
 
 let () =
-  let b = GButton.button ~packing:tools_box#add ~label:"Clean" () in
+  let b = GButton.button ~packing:(fun w -> tools_table#attach ~left:1 ~top:1 w) ~label:"Clean" () in
   b#misc#set_tooltip_markup "Remove unsuccessful <b>proof attempts</b> \
-associated to proved goals";
+                             associated to proved goals (shortcut: <b>c</b>)";
   let i = GMisc.image ~pixbuf:(!image_cleaning) () in
   let () = b#set_image i#coerce in
   let (_ : GtkSignal.id) =
