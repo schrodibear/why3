@@ -101,6 +101,12 @@ let all = t ~use_meta:true ~in_goal:false
 let goal = t ~use_meta:true ~in_goal:true
   ~notdeft:Util.ffalse ~notdeff:Util.ffalse ~notls:Util.ffalse
 
+let all_nometa = t ~use_meta:false ~in_goal:false
+  ~notdeft:Util.ffalse ~notdeff:Util.ffalse ~notls:Util.ffalse
+
+let goal_nometa = t ~use_meta:false ~in_goal:true
+  ~notdeft:Util.ffalse ~notdeff:Util.ffalse ~notls:Util.ffalse
+
 (* inline_trivial *)
 
 let trivial tl =
@@ -128,5 +134,9 @@ let () =
     ~desc:"Inline@ non-recursive@ definitions.";
   Trans.register_transform "inline_goal" goal
     ~desc:"Same@ as@ 'inline_all', but@ only@ inline in@ goals.";
+  Trans.register_transform "inline_all_nometa" all_nometa
+    ~desc:"Inline@ non-recursive@ definitions.@ Don't@ take@ metas@ into@ account.";
+  Trans.register_transform "inline_goal_nometa" goal_nometa
+    ~desc:"Same@ as@ 'inline_all', but@ only@ inline@ in@ goals.@ Don't@ take@ metas@ into@ account.";
   Trans.register_transform "inline_trivial" trivial
     ~desc:"Inline@ trivial@ definitions@ like@ @[f(x,y) = g(y,x,0)@]."
