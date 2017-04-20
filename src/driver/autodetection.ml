@@ -337,16 +337,25 @@ let generate_auto_strategies config =
       strategy_shortcut = "s";
       strategy_code = code }
   in
-  (* Inline *)
-  let code = "t introduce_premises next next: t inline_goal exit" in
+  (* Introduce premises *)
+  let code = "t introduce_premises exit" in
+  let premises = {
+      strategy_name = "Intro premises";
+      strategy_desc = "Introduce@ universal@ quantification@ and@ hypotheses@ \
+                       in@ the@ goal@ into@ constant@ symbols@ and@ axioms";
+      strategy_shortcut = "p";
+      strategy_code = code }
+  in
+  (* Inline goal *)
+  let code = "t inline_goal exit" in
   let inline = {
       strategy_name = "Inline";
-      strategy_desc = "Inline@ definitions@ in@ the@ conclusion@ of@ the@ goal";
+      strategy_desc = "Inline@ definitions@ in@ the@ goal";
       strategy_shortcut = "i";
       strategy_code = code }
   in
   (* Inline all *)
-  let code = "t inline_all next next: t remove_triggers exit" in
+  let code = "t inline_all exit" in
   let inline_all = {
       strategy_name = "Inline all";
       strategy_desc = "Inline@ all@ definitions@ in@ the@ task";
@@ -370,8 +379,7 @@ let generate_auto_strategies config =
   fprintf str_formatter "t introduce_premises next1@\n";
   fprintf str_formatter "next1:@\n";
   fprintf str_formatter "t inline_goal start@\n";
-  fprintf str_formatter "t inline_all next2@\n";
-  fprintf str_formatter "next2:@\n";
+  fprintf str_formatter "t inline_all start@\n";
   fprintf str_formatter "t remove_triggers start@\n";
   List.iter (fun s -> fprintf str_formatter "c %s 5 4000@\n" s) provers_level1;
   let code = flush_str_formatter () in
@@ -416,7 +424,9 @@ let generate_auto_strategies config =
   add_strategy
     (add_strategy
        (add_strategy
-          (add_strategy config
+          (add_strategy
+             (add_strategy config
+                premises)
              split)
           inline)
        inline_all)

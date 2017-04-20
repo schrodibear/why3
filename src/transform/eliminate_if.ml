@@ -46,7 +46,24 @@ let rec elim_t contT t =
 and elim_f contF f = match f.t_node with
   | Tapp _ | Tlet _ | Tcase _ ->
       contF (TermTF.t_map_cont elim_t elim_f (fun f -> f) f)
-  | _ -> TermTF.t_map_cont elim_tr elim_f contF f
+  | _ ->
+      let f = match f.t_node with
+        | Tquant (q, qt) ->
+            let vs, ts, t = t_open_quant qt in
+            let pats_of_if =
+              List.map
+                (fun ts ->
+                   List.flatten @@
+                   List.map
+                     (fun t -> match t.t_node with Tif (c, t1, t2) -> [c; t1; t2] | _ -> [t])
+                     ts)
+            in
+            let rec fix f l = let r = f l in if List.(length r = length l) then r else fix f r in
+            let ts = fix pats_of_if ts in
+            t_quant q (t_close_quant vs ts t)
+        | _ -> f
+      in
+      TermTF.t_map_cont elim_tr elim_f contF f
 
 (* the only terms we still can meet are the terms in triggers *)
 and elim_tr contT t = match t.t_node with
