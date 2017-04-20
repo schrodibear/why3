@@ -2007,39 +2007,23 @@ let strategies () :
 
 let loaded_strategies = ref []
 
-let load_shortcut s =
-  if String.length s <> 1 then None else
-  try
-    let key = match String.get s 0 with
-      | 'a' -> GdkKeysyms._a
-      | 'b' -> GdkKeysyms._b
-      | 'c' -> GdkKeysyms._c
-      | 'd' -> GdkKeysyms._d
-      | 'e' -> GdkKeysyms._e
-      | 'f' -> GdkKeysyms._f
-      | 'g' -> GdkKeysyms._g
-      | 'h' -> GdkKeysyms._h
-      | 'i' -> GdkKeysyms._i
-      | 'j' -> GdkKeysyms._j
-      | 'k' -> GdkKeysyms._k
-      | 'l' -> GdkKeysyms._l
-      | 'm' -> GdkKeysyms._m
-      | 'n' -> GdkKeysyms._n
-      | 'o' -> GdkKeysyms._o
-      | 'p' -> GdkKeysyms._p
-      | 'q' -> GdkKeysyms._q
-      | 'r' -> GdkKeysyms._r
-      | 's' -> GdkKeysyms._s
-      | 't' -> GdkKeysyms._t
-      | 'u' -> GdkKeysyms._u
-      | 'v' -> GdkKeysyms._v
-      | 'w' -> GdkKeysyms._w
-      | 'x' -> GdkKeysyms._x
-      | 'y' -> GdkKeysyms._y
-      | 'z' -> GdkKeysyms._z
-      | _ -> raise Not_found
-    in Some(s,key)
-  with Not_found -> None
+let load_shortcut =
+  let key_assoc =
+    let h = Hstr.create 36 in
+    List.iter
+      (fun (k, k') -> Hstr.add h (Char.escaped k) k')
+      GdkKeysyms.
+        ['a', _a; 'b',  _b; 'c', _c; 'd', _d; 'e', _e; 'f', _f;
+         'g', _g; 'h', _h;  'i', _i; 'j', _j; 'k', _k; 'l', _l;
+         'm', _m; 'n', _n;  'o', _o; 'p', _p; 'q', _q; 'r', _r;
+         's', _s; 't', _t;  'u', _u; 'v', _v; 'w', _w; 'x', _x;
+         'y', _y; 'z', _z;  '1', _1; '2', _2; '3', _3; '4', _4;
+         '5', _5; '6', _6;  '7', _7; '8', _8; '9', _9; '0', _0];
+    h
+  in
+  fun s ->
+    if String.length s <> 1 then None
+    else Opt.map (fun key -> s, key) @@ Hstr.find_opt key_assoc @@ String.sub s 0 1
 
 let strategies () =
   match !loaded_strategies with
@@ -2957,6 +2941,7 @@ let () =
     prover_on_selected_goals pr.prover in
   let callback ev =
     let key = GdkEvent.Key.keyval ev in
+    if key = GdkKeysyms._Delete then begin confirm_remove_selection (); true end else
     if key = GdkKeysyms._c then begin clean_selection (); true end else
     if key = GdkKeysyms._e then begin edit_current_proof (); true end else
     if key = GdkKeysyms._o then begin cancel_proofs (); true end else
