@@ -15,33 +15,39 @@ open Decl
 
 (** Eliminate if-then-else in terms *)
 
+let no_elim_if_l = Ident.create_label "eliminate_if : no"
+
+let no_elim_if t = Slab.mem no_elim_if_l t.t_label
+
 let rec has_if t = match t.t_node with
-  | Tif _ -> true
+  | Tif _ when not (no_elim_if t) -> true
   | _ -> TermTF.t_any has_if Util.ffalse t
 
 let rec elim_t contT t =
-  let contTl e = contT (t_label_copy t e) in
-  match t.t_node with
-  | Tlet (t1,tb) ->
-      let u,t2,close = t_open_bound_cb tb in
-      let cont_in t1 t2 = contTl (t_let t1 (close u t2)) in
-      let cont_let_t t1 = elim_t (cont_in t1) t2 in
-      let cont_let_f t1 = t_let_close u t1 (elim_t contT t2) in
-      elim_t (if has_if t2 then cont_let_f else cont_let_t) t1
-  | Tif (f,t1,t2) ->
-      let f = elim_f (fun f -> f) f in
-      t_if f (elim_t contT t1) (elim_t contT t2)
-  | Tcase (t1, bl) ->
-      let bl = List.rev_map t_open_branch_cb bl in
-      let fi = List.exists (fun (_,t,_) -> has_if t) bl in
-      let fnB ctB (p,t,cl) = elim_t (fun t -> ctB (cl p t)) t in
-      let cont_with t1 bl = contTl (t_case t1 (List.rev bl)) in
-      let cont_case_t t1 = list_map_cont fnB (cont_with t1) bl in
-      let close (p,t,_) = t_close_branch p (elim_t contT t) in
-      let cont_case_f t1 = t_case t1 (List.rev_map close bl) in
-      elim_t (if fi then cont_case_f else cont_case_t) t1
-  | _ ->
-      TermTF.t_map_cont elim_t elim_f contT t
+  if no_elim_if t then contT t
+  else
+    let contTl e = contT (t_label_copy t e) in
+    match t.t_node with
+    | Tlet (t1,tb) ->
+        let u,t2,close = t_open_bound_cb tb in
+        let cont_in t1 t2 = contTl (t_let t1 (close u t2)) in
+        let cont_let_t t1 = elim_t (cont_in t1) t2 in
+        let cont_let_f t1 = t_let_close u t1 (elim_t contT t2) in
+        elim_t (if has_if t2 then cont_let_f else cont_let_t) t1
+    | Tif (f,t1,t2) ->
+        let f = elim_f (fun f -> f) f in
+        t_if f (elim_t contT t1) (elim_t contT t2)
+    | Tcase (t1, bl) ->
+        let bl = List.rev_map t_open_branch_cb bl in
+        let fi = List.exists (fun (_,t,_) -> has_if t) bl in
+        let fnB ctB (p,t,cl) = elim_t (fun t -> ctB (cl p t)) t in
+        let cont_with t1 bl = contTl (t_case t1 (List.rev bl)) in
+        let cont_case_t t1 = list_map_cont fnB (cont_with t1) bl in
+        let close (p,t,_) = t_close_branch p (elim_t contT t) in
+        let cont_case_f t1 = t_case t1 (List.rev_map close bl) in
+        elim_t (if fi then cont_case_f else cont_case_t) t1
+    | _ ->
+        TermTF.t_map_cont elim_t elim_f contT t
 
 and elim_f contF f = match f.t_node with
   | Tapp _ | Tlet _ | Tcase _ ->
@@ -67,9 +73,9 @@ and elim_f contF f = match f.t_node with
 
 (* the only terms we still can meet are the terms in triggers *)
 and elim_tr contT t = match t.t_node with
-  | Tif _ ->
+  | Tif _ when not (no_elim_if t) ->
       Printer.unsupportedTerm t
-        "cannot eliminate 'if-then-else' in trigger terms"
+        "cannot eliminate a deep 'if-then-else' in trigger term"
   | _ -> TermTF.t_map_cont elim_tr elim_f contT t
 
 let elim_f f = elim_f (fun f -> f) f
