@@ -380,6 +380,8 @@ let generate_auto_strategies config =
   fprintf str_formatter "next1:@\n";
   fprintf str_formatter "t inline_goal start@\n";
   fprintf str_formatter "t inline_all start@\n";
+  fprintf str_formatter "t eliminate_if next2@\n";
+  fprintf str_formatter "next2:@\n";
   fprintf str_formatter "t remove_triggers start@\n";
   List.iter (fun s -> fprintf str_formatter "c %s 5 4000@\n" s) provers_level1;
   let code = flush_str_formatter () in
