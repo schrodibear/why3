@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2016   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2017   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -723,7 +723,7 @@ let get_selected_row_references () = List.map row goals_view#selection#get_selec
 let row_expanded b iter _path =
   session_needs_saving := true;
   let expand_if_visible row = if_visible row @@ fun _ path -> goals_view#expand_row path in
-  let expand_g g = expand_if_visible g.S.goal_key in
+  let expand_g g = expand_if_visible (S.goal_key g) in
   let expand_tr _ tr = expand_if_visible tr.S.transf_key in
   let expand_m _ m = expand_if_visible m.S.metas_key in
   match get_any_from_iter @@ goals_filter#convert_iter_to_child_iter iter with
@@ -734,8 +734,8 @@ let row_expanded b iter _path =
     | S.Goal g ->
         S.set_goal_expanded g b;
         if b then begin
-          Session.PHstr.iter expand_tr g.S.goal_transformations;
-          Session.Mmetas_args.iter expand_m g.S.goal_metas
+          Session.PHstr.iter expand_tr (S.goal_transformations g);
+          Session.Mmetas_args.iter expand_m (S.goal_metas g)
         end
     | S.Transf tr ->
         S.set_transf_expanded tr b;
@@ -775,9 +775,10 @@ let goal_task_text g =
     task_text (S.goal_task g)
 
 let file_contents f =
-  try
-    Sysutil.file_contents f
-  with Invalid_argument s -> s
+  let s = try Sysutil.file_contents f
+          with Invalid_argument s -> s
+  in try_convert s
+
 
 let update_tabs a =
   let task_text =
@@ -929,7 +930,7 @@ let notify any =
   session_needs_saving := true;
   let row,expanded =
     match any with
-      | S.Goal g -> g.S.goal_key, g.S.goal_expanded
+      | S.Goal g -> S.goal_key g, S.goal_expanded g
       | S.Theory t -> t.S.theory_key, t.S.theory_expanded
       | S.File f -> f.S.file_key, f.S.file_expanded
       | S.Proof_attempt a -> a.S.proof_key,false
@@ -941,7 +942,7 @@ let notify any =
     (* name is set by notify since upgrade policy may update the prover name *)
     goals_model#set ~row:row#iter ~column:name_column
       (match any with
-       | S.Goal g -> S.goal_expl g
+       | S.Goal g -> S.goal_user_name g
        | S.Theory th ->
          (match Termcode.(concat_expls @@ collect_expls th.S.theory_name.Ident.id_label) with
           | Some s -> s
@@ -965,7 +966,7 @@ let notify any =
       goals_view#collapse_row path;
     match any with
     | S.Goal g ->
-      set_row_status row g.S.goal_verified
+      set_row_status row (S.goal_verified g)
     | S.Theory th ->
       set_row_status row th.S.theory_verified
     | S.File file ->
@@ -1658,8 +1659,8 @@ let (_ : GMenu.image_menu_item) =
 let rec collapse_verified =
   let collapse_if_visible row = if_visible row @@ fun _ path -> goals_view#collapse_row path in
   function
-  | S.Goal g when Opt.inhabited g.S.goal_verified ->
-    let row = g.S.goal_key in
+  | S.Goal g when Opt.inhabited (S.goal_verified g) ->
+    let row = S.goal_key g in
     collapse_if_visible row
   | S.Theory th when Opt.inhabited th.S.theory_verified ->
     let row = th.S.theory_key in
@@ -2808,8 +2809,8 @@ let clean_selection =
     let rec_th th = rec_ @@ S.Theory th in
     let select key () = if_visible key @@ Util.const goals_view#selection#select_path in
     match a with
-    | S.Goal g when g.S.goal_verified = None ->
-      unless_successful (fun () -> S.iter_goal rec_pa rec_tr rec_me g) ~perform:(select g.S.goal_key)
+    | S.Goal g when S.goal_verified g = None ->
+      unless_successful (fun () -> S.iter_goal rec_pa rec_tr rec_me g) ~perform:(select @@ S.goal_key g)
     | S.Theory th when th.S.theory_verified = None ->
       unless_successful (fun () -> S.iter_theory rec_gl th) ~perform:(select th.S.theory_key)
     | S.File f when f.S.file_verified = None ->

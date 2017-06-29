@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2016   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2017   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -26,7 +26,7 @@ type itysymbol = private {
   its_arg_frz : bool list;      (** irreplaceable type parameters *)
   its_reg_vis : bool list;      (** non-ghost shareable components *)
   its_reg_frz : bool list;      (** irreplaceable shareable components *)
-  its_def     : ity option;     (** type alias *)
+  its_def     : ity type_def;   (** type definition *)
 }
 
 and ity = private {

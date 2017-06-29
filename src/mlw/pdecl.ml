@@ -1,7 +1,7 @@
 (********************************************************************)
 (*                                                                  *)
 (*  The Why3 Verification Platform   /   The Why3 Development Team  *)
-(*  Copyright 2010-2016   --   INRIA - CNRS - Paris-Sud University  *)
+(*  Copyright 2010-2017   --   INRIA - CNRS - Paris-Sud University  *)
 (*                                                                  *)
 (*  This software is distributed under the terms of the GNU Lesser  *)
 (*  General Public License version 2.1, with the special exception  *)
@@ -57,7 +57,7 @@ let check_pure_its s = not s.its_privmut &&
   List.for_all (fun x -> x) s.its_arg_vis &&
   List.for_all (fun x -> x) s.its_arg_frz &&
   s.its_reg_vis = [] && s.its_reg_frz = [] &&
-  s.its_def = None
+  s.its_def = NoDef
 
 let create_semi_constructor id s fl pjl invl =
   let ity = ity_app s (List.map ity_var s.its_ts.ts_args) s.its_regions in
@@ -272,7 +272,7 @@ let get_syms node pure =
   | PDtype dl ->
       let syms_itd syms d =
         (* the syms of the invariants are already in [pure] *)
-        let syms = Opt.fold syms_ity syms d.itd_its.its_def in
+        let syms = type_def_fold syms_ity syms d.itd_its.its_def in
         let add_fd syms s = syms_ity syms s.rs_cty.cty_result in
         let add_cs syms s = List.fold_left syms_pv syms s.rs_cty.cty_args in
         let syms = List.fold_left add_fd syms d.itd_fields in
