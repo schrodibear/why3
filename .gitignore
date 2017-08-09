@@ -82,6 +82,9 @@ debug
 /bin/why3replay.byte
 /bin/why3replay.opt
 /bin/why3replay
+/bin/why3sprove.byte
+/bin/why3sprove.opt
+/bin/why3sprove
 /bin/why3session.opt
 /bin/why3session.byte
 /bin/why3session
