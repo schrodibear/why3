@@ -267,6 +267,7 @@ end
 module M = Session_scheduler.Make(O)
 
 let clean session =
+  printf "Cleaning session...\n";
   let rec handle_any a =
     let any_success = ref false in
     let update r = if r then any_success := true in
@@ -347,9 +348,7 @@ let print_statistics files =
 
 let register_report env_session = report := (fun () ->
     let session = env_session.S.session in
-    if !opt_clean
-    then
-      clean session;
+    if !opt_clean then clean session;
     Debug.dprintf debug "@.";
     let files,n,m =
       S.PHstr.fold file_statistics
