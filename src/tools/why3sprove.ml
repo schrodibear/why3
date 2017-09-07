@@ -237,8 +237,8 @@ module O = struct
         let p = a.S.proof_prover in
         if a.S.proof_state <> S.Scheduled && a.S.proof_state <> S.Running
         then
-          printf "Proof with '%s %s' gives %s@."
-            p.prover_name p.prover_version
+          printf "Proof with '%s,%s,%s' gives %s@."
+            p.prover_name p.prover_version p.prover_altern
             (print_proof_state a)
     | S.Transf tr ->
         printf "Transformation '%s' proved: %b@."
