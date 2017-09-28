@@ -225,7 +225,7 @@ let tools_alignment =
 
 let tools_table =
   GPack.table
-    ~columns:2 ~rows:2
+    ~columns:2 ~rows:3
     ~homogeneous:true
     ~border_width:5
     ~col_spacings:5
@@ -2865,6 +2865,16 @@ let () =
   let (_ : GtkSignal.id) =
     b#connect#pressed ~callback:clean_selection
   in ()
+
+let () =
+  let b = GButton.button ~packing:(fun w -> tools_table#attach ~left:0 ~top:2 w) ~label:"Save" () in
+  b#misc#set_tooltip_markup "Save session";
+  let i = GMisc.image ~pixbuf:(!image_editor) () in
+  let () = b#set_image i#coerce in
+  let (_ : GtkSignal.id) =
+    b#connect#pressed ~callback:save_session
+  in ()
+
 
 let () =
   let b = GButton.button ~packing:monitor_box#add ~label:"Interrupt" () in
