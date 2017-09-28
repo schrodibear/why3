@@ -189,11 +189,10 @@ let prover_answer_tostr a = match a with
   | Call_provers.Failure _         -> "Failure"
   | Call_provers.HighFailure       -> "HighFailure"
 
-let print_proof_state a = match a.S.proof_state with
+let print_proof_state st lt lm = match st with
   | S.Done { Call_provers.pr_time = time; Call_provers.pr_steps = steps; Call_provers.pr_answer = answer; } ->
      let s =
-       Format.sprintf "%s %.2f [%d.0]" (prover_answer_tostr answer) time
-         (a.S.proof_limit.Call_provers.limit_time)
+       Format.sprintf "%s %.2f [%d.0]" (prover_answer_tostr answer) time lt
      in
      if steps >= 0 then
        Format.sprintf "%s (steps: %d)" s steps
@@ -204,12 +203,13 @@ let print_proof_state a = match a.S.proof_state with
   | S.InternalFailure _     -> "(internal failure)"
   | S.Interrupted           -> "(interrupted)"
   | S.Scheduled | S.Running ->
-      Format.sprintf "sheduled/running with [limit=%d sec., %d M]"
-        (a.S.proof_limit.Call_provers.limit_time)
-        (a.S.proof_limit.Call_provers.limit_mem)
+      Format.sprintf "sheduled/running with [limit=%d sec., %d M]" lt lm
 
 
 let report = ref (fun () -> (assert false : unit))
+let ref_save_session = ref (fun () -> ())
+let session_init = ref false
+let session_proof_attempts_cnt = ref 0
 
 module O = struct
   type key = int
@@ -225,27 +225,49 @@ module O = struct
 
   let init = fun _row _any -> ()
 
-  let notify i = match i with
-    | S.Goal g ->
+  let notify i =
+    begin
+      (match i with
+      | S.Goal g ->
         printf "Goal '%s' proved: %b@." (S.goal_name g).Ident.id_string (Opt.inhabited (S.goal_verified g))
-    | S.Theory th ->
+      | S.Theory th ->
         printf "Theory '%s' verified: %b@." th.S.theory_name.Ident.id_string (Opt.inhabited th.S.theory_verified)
-    | S.File file ->
+      | S.File file ->
         printf "File '%s' verified: %b@." (Filename.basename file.S.file_name)
           (Opt.inhabited file.S.file_verified)
-    | S.Proof_attempt a ->
-        let p = a.S.proof_prover in
-        if a.S.proof_state <> S.Scheduled && a.S.proof_state <> S.Running
-        then
-          printf "Proof with '%s,%s,%s' gives %s@."
-            p.prover_name p.prover_version p.prover_altern
-            (print_proof_state a)
-    | S.Transf tr ->
+      | S.Proof_attempt a ->
+        begin
+          let p = a.S.proof_prover in
+          let st = a.S.proof_state in
+          if not !session_init then
+            (match st with
+             | S.Done _
+             | S.InternalFailure _
+             | S.JustEdited -> incr session_proof_attempts_cnt
+             | _ -> ());
+          if st <> S.Scheduled && st <> S.Running
+          then
+            printf "Proof with '%s,%s,%s' gives %s@."
+              p.prover_name p.prover_version p.prover_altern
+              (print_proof_state st
+                 (a.S.proof_limit.Call_provers.limit_time)
+                 (a.S.proof_limit.Call_provers.limit_mem))
+        end
+      | S.Transf tr ->
         printf "Transformation '%s' proved: %b@."
           tr.S.transf_name (Opt.inhabited tr.S.transf_verified)
-    | S.Metas m ->
+      | S.Metas m ->
         printf "Metas proved: %b@."
-          (Opt.inhabited m.S.metas_verified)
+          (Opt.inhabited m.S.metas_verified));
+      let session_autosave = Whyconf.autosave @@ get_main config in
+      if session_autosave > 0 && !session_proof_attempts_cnt == session_autosave
+      then
+        begin
+          session_proof_attempts_cnt := 0;
+          !ref_save_session ();
+        end
+    end
+
 
   let uninstalled_prover _eS unknown =
     try
@@ -346,6 +368,18 @@ let print_statistics files =
   in
   List.iter print_file (List.rev files)
 
+let save_session config session =
+  begin
+    Debug.dprintf debug "Saving session...@?";
+    S.save_session config session;
+    Debug.dprintf debug " done@.";
+  end
+
+let register_save_session config session =
+  ref_save_session := (fun () ->
+      save_session config session;
+  )
+
 let register_report env_session = report := (fun () ->
     let session = env_session.S.session in
     if !opt_clean then clean session;
@@ -356,9 +390,7 @@ let register_report env_session = report := (fun () ->
     in
     printf " %d/%d " n m;
     if n<m then print_statistics files;
-    Debug.dprintf debug "Saving session...@?";
-    S.save_session config session;
-    Debug.dprintf debug " done@.";
+    save_session config session
   )
 
 let open_file env_session f =
@@ -386,6 +418,7 @@ let () =
 
 let sched, env_session =
   try
+    session_init := true;
     Debug.dprintf debug "@[<hov 2>[SPROVE session] Opening session...@\n";
     let session,use_shapes =
       if Sys.file_exists project_dir then
@@ -401,6 +434,7 @@ let sched, env_session =
     let sched = M.init (Whyconf.running_provers_max (Whyconf.get_main config))
     in
     Debug.dprintf debug "@]@\n[SPROVE session] Opening session: done@.";
+    session_init := false;
     sched, env_session
   with e when not (Debug.test_flag Debug.stack_trace) ->
     eprintf "@[Error while opening session:@ %a@.@]"
@@ -415,6 +449,7 @@ let strategy =
 
 let () = try
   register_report env_session;
+  register_save_session config env_session.S.session;
   Queue.iter (fun f -> open_file env_session f) files;
   let run_strategy goal = M.run_strategy env_session sched
       ~context_unproved_goals_only:true (snd strategy) goal in
