@@ -76,8 +76,10 @@ val timelimit: main -> int
 val memlimit: main -> int
 val running_provers_max: main -> int
 val cntexample: main -> bool
+val autosave: main -> int
 val set_limits: main -> int -> int -> int -> main
 val set_cntexample: main -> bool -> main
+val set_autosave: main -> int -> main
 
 val plugins : main -> string list
 val pluginsdir : main -> string

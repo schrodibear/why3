@@ -41,6 +41,7 @@ type t =
       mutable session_mem_limit : int;
       mutable session_nb_processes : int;
       mutable session_cntexample : bool;
+      mutable session_autosave : int;
       mutable use_watchers : bool;
       mutable watcher_command : string;
       mutable show_preprocessed_c : bool;

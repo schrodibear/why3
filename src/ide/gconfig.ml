@@ -62,6 +62,7 @@ type t =
       mutable session_mem_limit : int;
       mutable session_nb_processes : int;
       mutable session_cntexample : bool;
+      mutable session_autosave : int;
       mutable use_watchers : bool;
       mutable watcher_command : string;
       mutable show_preprocessed_c : bool;
@@ -231,6 +232,7 @@ let load_config config original_config env =
     session_mem_limit = Whyconf.memlimit main;
     session_nb_processes = Whyconf.running_provers_max main;
     session_cntexample = Whyconf.cntexample main;
+    session_autosave = Whyconf.autosave main;
     use_watchers = ide.ide_use_watchers;
     watcher_command = ide.ide_watcher_command;
     show_preprocessed_c = ide.ide_show_preprocessed_c;
@@ -250,6 +252,8 @@ let save_config t =
   let new_main = Whyconf.get_main t.config in
   let cntexample = Whyconf.cntexample new_main in
   let config = set_main config (set_cntexample (get_main config) cntexample) in
+  let autosave = Whyconf.autosave new_main in
+  let config = set_main config (set_autosave (get_main config) autosave) in
   (* copy also provers section since it may have changed (the editor
      can be set via the preferences dialog) *)
   let config = set_provers config (get_provers t.config) in
@@ -666,6 +670,20 @@ let general_settings (c : t) (notebook:GPack.notebook) =
   let (_ : GtkSignal.id) =
     nb_processes_spin#connect#value_changed ~callback:
       (fun () -> c.session_nb_processes <- nb_processes_spin#value_as_int)
+  in
+  (* auto-saving after number of proof attempts *)
+  let hb = GPack.hbox ~homogeneous:false ~packing:vb#add () in
+  let hb_pack = hb#pack ~expand:false ?from:None ?fill:None ?padding:None in
+  let _ = GMisc.label ~text:"Auto-save after number of proof attempts: " ~width ~xalign
+    ~packing:hb_pack () in
+  let autosave_spin = GEdit.spin_button ~digits:0 ~packing:hb#add () in
+  autosave_spin#adjustment#set_bounds
+    ~lower:0. ~upper:100. ~step_incr:10. ();
+  autosave_spin#adjustment#set_value
+    (float_of_int c.session_autosave);
+  let (_ : GtkSignal.id) =
+    autosave_spin#connect#value_changed ~callback:
+      (fun () -> c.session_autosave <- autosave_spin#value_as_int)
   in
   (* counter-example *)
   let cntexample_check = GButton.check_button ~label:"get counter-example"
@@ -1177,6 +1195,9 @@ let preferences (c : t) =
       c.config <- Whyconf.set_main c.config
 	(Whyconf.set_cntexample (Whyconf.get_main c.config)
 	   c.session_cntexample);
+      c.config <- Whyconf.set_main c.config
+	(Whyconf.set_autosave (Whyconf.get_main c.config)
+	   c.session_autosave);
       save_config ()
     | `CLOSE | `DELETE_EVENT -> ()
   end;

@@ -659,6 +659,7 @@ let fan n =
 module S = Session
 
 let session_needs_saving = ref false
+let session_proof_attempts_cnt = ref 0
 
 let set_row_status row b =
   match b with
@@ -870,6 +871,7 @@ let update_tabs a =
       Filename.check_suffix !current_file ".mlw"
     then why_lang else any_lang !current_file
   in
+  begin
   counterexample_view#source_buffer#set_language lang;
 
   task_view#source_buffer#set_text task_text;
@@ -879,8 +881,11 @@ let update_tabs a =
   output_view#source_buffer#set_text output_text;
   counterexample_view#source_buffer#set_text counterexample_text;
   counterexample_view#scroll_to_mark `INSERT;
+  end
 
 
+let ref_save_session = ref (fun () -> ())
+let session_init = ref false
 
 module MA = struct
      type key = Model.row
@@ -933,7 +938,16 @@ let notify any =
       | S.Goal g -> S.goal_key g, S.goal_expanded g
       | S.Theory t -> t.S.theory_key, t.S.theory_expanded
       | S.File f -> f.S.file_key, f.S.file_expanded
-      | S.Proof_attempt a -> a.S.proof_key,false
+      | S.Proof_attempt a ->
+        begin
+          if not !session_init then
+            (match a.S.proof_state with
+            | S.Done _
+            | S.InternalFailure _
+            | S.JustEdited -> incr session_proof_attempts_cnt
+            | _ -> ());
+          a.S.proof_key,false
+        end
       | S.Transf tr ->
         tr.S.transf_key,tr.S.transf_expanded
       | S.Metas m -> m.S.metas_key,m.S.metas_expanded
@@ -977,7 +991,14 @@ let notify any =
       set_row_status row tr.S.transf_verified
     | S.Metas m ->
       set_row_status row m.S.metas_verified
-  end
+  end;
+  let session_autosave = (Gconfig.config ()).session_autosave in
+  if session_autosave > 0 && !session_proof_attempts_cnt == session_autosave
+  then
+    begin
+      session_proof_attempts_cnt := 0;
+      !ref_save_session ();
+    end
 
 let init =
   let cpt = ref (-1) in
@@ -1149,6 +1170,7 @@ let () =
 let sched =
   try
     Debug.dprintf debug "@[<hov 2>[GUI session] Opening session...@\n";
+    session_init := true;
     let session,use_shapes =
       if Sys.file_exists project_dir then
         S.read_session project_dir
@@ -1163,6 +1185,7 @@ let sched =
     let sched = M.init (gconfig.session_nb_processes)
     in
     Debug.dprintf debug "@]@\n[GUI session] Opening session: done@.";
+    session_init := false;
     session_needs_saving := false;
     current_env_session := Some env;
     sched
@@ -1585,11 +1608,18 @@ let save_session () =
     session_needs_saving := false;
   end
 
+let () = ref_save_session := save_session
 
 let exit_function ~destroy () =
   uninstall_all_watchers ();
   (* do not save automatically anymore Gconfig.save_config (); *)
   if not !session_needs_saving then GMain.quit () else
+  if (Gconfig.config ()).session_autosave > 0 then
+    begin
+      save_session ();
+      GMain.quit()
+    end
+  else
   match (Gconfig.config ()).saving_policy with
     | 0 -> save_session (); GMain.quit ()
     | 1 -> GMain.quit ()
@@ -2592,6 +2622,7 @@ let reload () =
        (in order to reload the files which are "use") *)
     gconfig.env <- Env.create_env (Env.get_loadpath gconfig.env);
     (* reload the session *)
+    session_init := true;
     let old_session = (env_session()).S.session in
     let new_env_session,(_:bool),(_:bool) =
       (* use_shapes is true since session is in memory *)
@@ -2600,6 +2631,7 @@ let reload () =
     in
     current_env_session := Some new_env_session;
     handle_all_empty_things hide_empty_item#active;
+    session_init := false;
     display_warnings ()
   with
     | e ->

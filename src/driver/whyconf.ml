@@ -189,6 +189,8 @@ type main = {
   (* plugins to load, without extension, relative to [libdir]/plugins *)
   cntexample : bool;
   (* true provers should be asked for counter-example model *)
+  autosave: int;
+  (*save session after number of attempts (0 disable)*)
 }
 
 let libdir m =
@@ -218,6 +220,7 @@ let timelimit m = m.timelimit
 let memlimit m = m.memlimit
 let running_provers_max m = m.running_provers_max
 let cntexample m = m.cntexample
+let autosave m = m.autosave
 
 exception StepsCommandNotSpecified of string
 
@@ -236,6 +239,9 @@ let set_limits m time mem running =
 
 let set_cntexample m cntexample =
   { m with cntexample = cntexample }
+
+let set_autosave m autosave =
+  { m with autosave = autosave }
 
 let plugins m = m.plugins
 let set_plugins m pl =
@@ -277,6 +283,7 @@ let empty_main =
     running_provers_max = 2; (* two provers run in parallel *)
     plugins = [];
     cntexample = false;  (* no counter-examples by default *)
+    autosave = 0;  (* disable autosave by default *)
   }
 
 let default_main =
@@ -296,6 +303,7 @@ let set_main rc main =
     set_int section "running_provers_max" main.running_provers_max in
   let section = set_stringl section "plugin" main.plugins in
   let section = set_bool section "cntexample" main.cntexample in
+  let section = set_int section "autosave" main.autosave in
   set_section rc "main" section
 
 exception NonUniqueId
@@ -529,7 +537,8 @@ let load_main dirname section =
     running_provers_max = get_int ~default:default_main.running_provers_max
       section "running_provers_max";
     plugins = get_stringl ~default:[] section "plugin";
-    cntexample = get_bool ~default:default_main.cntexample section "cntexample"
+    cntexample = get_bool ~default:default_main.cntexample section "cntexample";
+    autosave = get_int ~default:default_main.autosave section "autosave"
   }
 
 let read_config_rc conf_file =
