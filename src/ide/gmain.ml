@@ -2871,7 +2871,73 @@ let clean_selection =
          M.clean any;
          ignore @@ handle_any any;
          if_visible r @@ Util.const goals_view#selection#unselect_path)
+      (get_selected_row_references ());;
+
+let filter_min_pa g =
+  let get_time p = match[@warning "-33"] p.S.proof_state with
+    | S.Done Call_provers.{ pr_time = time } -> time
+    | _ -> assert false
+  in
+  let valid_or_invalid p = match[@warning "-33"] p.S.proof_state with
+    | S.Done Call_provers.{ pr_answer = Valid | Invalid } -> true
+    | _ -> false
+  in
+  let get_first_el h =
+    begin
+      let f = ref None in
+      begin
+        try
+          S.PHprover.iter (fun _ v -> if valid_or_invalid v then f := Some v; raise Not_found) h
+        with
+          _ -> ()
+      end;
+      !f
+    end
+  in
+  begin
+    let ep = (S.goal_external_proofs g) in
+    let first = get_first_el ep in
+    if Opt.inhabited first
+    then
+      let min = S.PHprover.fold (fun _ v a ->
+          if valid_or_invalid v
+          then
+            if get_time v < get_time a
+            then
+              v
+            else
+              a
+          else
+            a
+        ) ep (Opt.get first)
+      in
+      S.PHprover.iter
+        (fun _ v -> if min != v then M.remove_proof_attempt v)
+        ep;
+  end
+
+let keep_min_pa =
+  let rec handle_any a =
+    let rec_ a = handle_any a in
+    let rec_tr tr = rec_ @@ S.Transf tr in
+    let rec_me me = rec_ @@ S.Metas me in
+    let rec_gl gl = rec_ @@ S.Goal gl in
+    let rec_th th = rec_ @@ S.Theory th in
+    match a with
+    | S.Goal g ->
+        filter_min_pa g;
+        S.iter_goal (fun _ -> ()) rec_tr rec_me g
+    | S.Theory th -> S.iter_theory rec_gl th
+    | S.File f -> S.iter_file rec_th f
+    | S.Transf tr -> S.iter_transf rec_gl tr
+    | S.Metas m -> S.iter_metas rec_gl m
+    | _ -> ()
+  in
+  fun () ->
+    List.iter
+      (fun r -> handle_any (get_any_from_row_reference r))
       (get_selected_row_references ())
+
 
 let () =
   add_tool_separator ();
@@ -2907,6 +2973,14 @@ let () =
     b#connect#pressed ~callback:save_session
   in ()
 
+let () =
+  let b = GButton.button ~packing:(fun w -> tools_table#attach ~left:1 ~top:2 w) ~label:"Fastest" () in
+  b#misc#set_tooltip_markup "Keep the fastest proof attempt.";
+  let i = GMisc.image ~pixbuf:(!image_cleaning) () in
+  let () = b#set_image i#coerce in
+  let (_ : GtkSignal.id) =
+    b#connect#pressed ~callback:keep_min_pa
+  in ()
 
 let () =
   let b = GButton.button ~packing:monitor_box#add ~label:"Interrupt" () in
