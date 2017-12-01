@@ -29,9 +29,9 @@ type in_channel
 
 val open_in: string -> in_channel
 
-val input: in_channel -> string -> int -> int -> int
+val input: in_channel -> bytes -> int -> int -> int
 
-val really_input: in_channel -> string -> int -> int -> unit
+val really_input: in_channel -> bytes -> int -> int -> unit
 
 val input_char: in_channel -> char
 
@@ -40,7 +40,12 @@ val close_in: in_channel -> unit
 end
 
 
-module Compress_none = Pervasives
+module Compress_none =
+struct
+ include Pervasives
+ let output ch s n l = output ch (Bytes.of_string s) n l
+ let output_string ch s = output ch s 0 (String.length s)
+end
 
 module Compress_z = struct
 
@@ -50,7 +55,7 @@ let open_out fn = Gzip.open_out ~level:6 fn
 
 let output_char = Gzip.output_char
 
-let output = Gzip.output
+let output ch s n l = Gzip.output ch (Bytes.of_string s) n l
 
 let output_string ch s = output ch s 0 (String.length s)
 

@@ -157,7 +157,7 @@ let simplify_max_int = BigInt.of_string "2147483646"
 
 let remove_minus e =
   if e.[0] = '-' then
-    (let e' = Strings.copy e in Strings.set e' 0 'm'; e')
+    (String.mapi (fun i c -> if i = 0 then 'm' else c) e)
   else e
 
 let print_dec_int support fmt i =

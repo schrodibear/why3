@@ -1561,7 +1561,7 @@ exception SessionFileError of string
 module ReadShapes (C:Compress.S) = struct
 
 let shape = Buffer.create 97
-let sum = Strings.create 32
+let sum = Bytes.create 32
 
 let read_sum_and_shape ch =
   let nsum = C.input ch sum 0 32 in
@@ -1574,7 +1574,7 @@ let read_sum_and_shape ch =
         raise
           (ShapesFileError
              ("shapes files corrupted (checksum '" ^
-                 (String.sub sum 0 nsum) ^
+                 (Bytes.sub_string sum 0 nsum) ^
                  "' too short), ignored"))
     end;
   if try C.input_char ch <> ' ' with End_of_file -> true then
@@ -1590,7 +1590,7 @@ let read_sum_and_shape ch =
     with
       | End_of_file ->
         raise (ShapesFileError "shapes files corrupted (premature end of file), ignored");
-      | Exit -> Strings.copy sum, Buffer.contents shape
+      | Exit -> Bytes.to_string sum, Buffer.contents shape
 
 
   let use_shapes = ref true

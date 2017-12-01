@@ -43,11 +43,11 @@ let cmdline_split s =
     | '\\' -> cstate := Escape
     | c when is_blank c ->
         let n = Queue.length cur_arg in
-        let s = Strings.create n in
+        let s = Bytes.create n in
         for i = 0 to pred n do
-          Strings.set s i (Queue.take cur_arg)
+          String.set s i (Queue.take cur_arg)
         done;
-        argv := s :: !argv;
+        argv := Bytes.unsafe_to_string s :: !argv;
         cstate := Blank
     | c -> Queue.add c cur_arg
   in

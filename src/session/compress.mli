@@ -29,9 +29,9 @@ type in_channel
 
 val open_in: string -> in_channel
 
-val input: in_channel -> string -> int -> int -> int
+val input: in_channel -> bytes -> int -> int -> int
 
-val really_input: in_channel -> string -> int -> int -> unit
+val really_input: in_channel -> bytes -> int -> int -> unit
 
 val input_char: in_channel -> char
 

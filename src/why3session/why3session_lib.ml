@@ -249,7 +249,7 @@ let rec ask_yn () =
 
 let ask_yn_nonblock ~callback =
   let b = Buffer.create 3 in
-  let s = Strings.create 1 in
+  let s = Bytes.create 1 in
   Format.printf "(y/n)@.";
   fun () ->
     match Unix.select [Unix.stdin] [] [] 0. with
@@ -258,8 +258,8 @@ let ask_yn_nonblock ~callback =
       if Unix.read Unix.stdin s 1 0 = 0 then
         begin (* EndOfFile *) callback false; false end
       else begin
-        if s.[0] <> '\n'
-        then (Buffer.add_char b s.[0]; true)
+        if Bytes.get s 0 <> '\n'
+        then (Buffer.add_char b (Bytes.get s 0); true)
         else
           match Buffer.contents b with
           | "y" -> callback true; false
