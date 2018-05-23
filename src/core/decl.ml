@@ -480,7 +480,7 @@ let create_logic_decl ldl =
     syms_term syms e, news_id news ls.ls_name
   in
   let (syms,news) = List.fold_left check_decl (Sid.empty,Sid.empty) ldl in
-  let ldl = check_termination ldl in
+  let ldl = try check_termination ldl with NoTerminationProof _ -> ldl in
   mk_decl (Dlogic ldl) syms news
 
 exception InvalidIndDecl of lsymbol * prsymbol
