@@ -383,6 +383,12 @@ fi
 
 if test "$USEOCAMLFIND" = yes; then
    NUMINCLUDE=$(ocamlfind query num)
+   if test -n "$NUMINCLUDE"; then
+      echo "ocamlfind found num in $NUMINCLUDE"
+      NUMINCLUDE="-I $NUMINCLUDE"
+   else
+      NUMINCLUDE="-I +num"
+   fi
 else
    NUMINCLUDE=
 fi
