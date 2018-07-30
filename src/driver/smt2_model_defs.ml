@@ -1,4 +1,4 @@
-open Stdlib
+open Wstdlib
 
 type variable = string
 

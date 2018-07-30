@@ -861,11 +861,11 @@ and decompose_definition dep env evd c =
       | Some b ->
           let tvs = List.fold_left Ty.ty_freevars Stv.empty
             (Ty.oty_cons ls.ls_args ls.ls_value) in
-          let add tv tvm = Stdlib.Mstr.add tv.tv_name.Ident.id_string tv tvm in
-          let tvm = Stv.fold add tvs Stdlib.Mstr.empty in
+          let add tv tvm = Wstdlib.Mstr.add tv.tv_name.Ident.id_string tv tvm in
+          let tvm = Stv.fold add tvs Wstdlib.Mstr.empty in
           let ty = type_of_global r in
           let (_, vars), env, _ = decomp_type_quantifiers env ty in
-          let conv tv = Stdlib.Mstr.find tv.tv_name.Ident.id_string tvm in
+          let conv tv = Wstdlib.Mstr.find tv.tv_name.Ident.id_string tvm in
           let vars = List.map conv vars in
           let tvm, env, b = decomp_type_lambdas Idmap.empty env vars b in
           let (bv, vsl), env, b =
