@@ -13,7 +13,6 @@ prelude "(set-logic AUFBVFPDTNIRA)"
 *)
 
 import "smt-libv2.drv"
-printer "smtv2.6"
 import "smt-libv2-bv.gen"
 import "cvc4_bv.gen"
 import "smt-libv2-floats.gen"
