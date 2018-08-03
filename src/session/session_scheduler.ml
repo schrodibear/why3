@@ -375,25 +375,27 @@ let find_prover eS a =
 let adapt_limits ~interactive ~use_steps a =
   let timelimit = (a.proof_limit.Call_provers.limit_time) in
   let memlimit = (a.proof_limit.Call_provers.limit_mem) in
+  let stepslimit = (a.proof_limit.Call_provers.limit_steps) in
   match a.proof_state with
   | Done { Call_provers.pr_answer = r;
            Call_provers.pr_time = t;
            Call_provers.pr_steps = s } ->
     (* increased time limit is 1 + twice the previous running time,
-       but enforced to remain inside the interval [l,2l] where l is
+       but enforced to remain inside the interval [l,3l] where l is
        the previous time limit *)
-    let t = truncate (1.0 +. 2.0 *. t) in
+    let t = truncate (1.0 +. 3.0 *. t) in
     let increased_time = if interactive then t
-      else max timelimit (min t (2 * timelimit)) in
+      else max timelimit (min t (3 * timelimit)) in
     (* increased mem limit is just 1.5 times the previous mem limit *)
     let increased_mem = if interactive then 0 else 3 * memlimit / 2 in
+    let increased_steps = if interactive || s = 0 then s else max stepslimit (s + 1) in
     begin
       match r with
       | Call_provers.OutOfMemory -> increased_time, memlimit, 0
       | Call_provers.Timeout -> timelimit, increased_mem, 0
       | Call_provers.Valid ->
         let steplimit =
-          if use_steps && not a.proof_obsolete then s else 0
+          if use_steps && not a.proof_obsolete then increased_steps else 0
         in
         increased_time, increased_mem, steplimit
       | Call_provers.Unknown _
@@ -528,7 +530,7 @@ let run_external_proof eS eT ?(cntexample=false) ?callback a =
       | MissingFile _ -> c a a.proof_state
       | StatusChange s -> c a s
   in
-  run_external_proof_v2 ~use_steps:false eS eT a ~cntexample callback
+  run_external_proof_v2 ~use_steps:true eS eT a ~cntexample callback
 
 let prover_on_goal eS eT ?callback ?(cntexample=false) ~limit p g =
   let a =
