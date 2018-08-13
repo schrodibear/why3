@@ -26,8 +26,8 @@
   <metadata>
     <property name="mimetypes">text/x-c;text/x-csrc;image/x-xpixmap</property>
     <property name="globs">*.c</property>
-    <property name="line-comment-start">//[^@]</property>
-    <property name="block-comment-start">/*[^@]</property>
+    <property name="line-comment-start">// </property>
+    <property name="block-comment-start">/* </property>
     <property name="block-comment-end">*/</property>
   </metadata>
 
