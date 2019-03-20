@@ -491,8 +491,8 @@ let print_constructor_decl info fmt (ls,args) =
      fprintf fmt ")@]"
 
 let print_data_decl info fmt (ts,cl) =
-  fprintf fmt "@[(%a@ %a)@]"
-    (print_ident info) ts.ts_name
+  fprintf fmt "@[((%a %d))@ ((%a))@]"
+    (print_ident info) ts.ts_name (List.length ts.ts_args)
     (print_list space (print_constructor_decl info)) cl
 
 let print_decl vc_loc cntexample args info fmt d =
@@ -501,7 +501,7 @@ let print_decl vc_loc cntexample args info fmt d =
       print_type_decl info fmt ts
   | Ddata [(ts,_)] when query_syntax info.info_syn ts.ts_name <> None -> ()
   | Ddata dl ->
-      fprintf fmt "@[(declare-datatypes ()@ (%a))@]@\n"
+      fprintf fmt "@[(declare-datatypes %a)@]@\n"
         (print_list space (print_data_decl info)) dl
   | Dparam ls ->
       collect_model_ls info ls;
