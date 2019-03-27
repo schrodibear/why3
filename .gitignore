@@ -153,6 +153,7 @@ debug
 /src/coq-tactic/.why3-vo-*
 
 # Coq
+/lib/coq/version
 
 # PVS
 .pvscontext
