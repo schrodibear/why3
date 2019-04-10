@@ -171,40 +171,14 @@ let session_all_subgoals session =
                    if goal_allow goal_name
                    then
                      begin
-                       printf "sheduling strategy on goal: %s (%s)@." goal_name (S.goal_user_name a);
+                       if not (Opt.inhabited @@ S.goal_verified a) then
+                         printf "sheduling strategy on goal: %s (%s)@." goal_name (S.goal_user_name a);
                        List.cons (S.Goal a) acc
                      end
                    else
                      acc
                  ) !res t) f) session;
   !res
-
-let prover_answer_tostr a = match a with
-  | Call_provers.Valid             -> "Valid"
-  | Call_provers.Invalid           -> "Invalid"
-  | Call_provers.Timeout           -> "Timeout"
-  | Call_provers.OutOfMemory       -> "OutOfMemory"
-  | Call_provers.StepLimitExceeded -> "StepLimitExceeded"
-  | Call_provers.Unknown _         -> "Unknown"
-  | Call_provers.Failure _         -> "Failure"
-  | Call_provers.HighFailure       -> "HighFailure"
-
-let print_proof_state st lt lm = match st with
-  | S.Done { Call_provers.pr_time = time; Call_provers.pr_steps = steps; Call_provers.pr_answer = answer; } ->
-     let s =
-       Format.sprintf "%s %.2f [%d.0]" (prover_answer_tostr answer) time lt
-     in
-     if steps >= 0 then
-       Format.sprintf "%s (steps: %d)" s steps
-     else
-       s
-  | S.Unedited              -> "(not yet edited)"
-  | S.JustEdited            -> "(edited)"
-  | S.InternalFailure _     -> "(internal failure)"
-  | S.Interrupted           -> "(interrupted)"
-  | S.Scheduled | S.Running ->
-      Format.sprintf "sheduled/running with [limit=%d sec., %d M]" lt lm
-
 
 let report = ref (fun () -> (assert false : unit))
 let ref_save_session = ref (fun () -> ())
@@ -227,38 +201,6 @@ module O = struct
 
   let notify i =
     begin
-      (match i with
-      | S.Goal g ->
-        printf "Goal '%s' proved: %b@." (S.goal_name g).Ident.id_string (Opt.inhabited (S.goal_verified g))
-      | S.Theory th ->
-        printf "Theory '%s' verified: %b@." th.S.theory_name.Ident.id_string (Opt.inhabited th.S.theory_verified)
-      | S.File file ->
-        printf "File '%s' verified: %b@." (Filename.basename file.S.file_name)
-          (Opt.inhabited file.S.file_verified)
-      | S.Proof_attempt a ->
-        begin
-          let p = a.S.proof_prover in
-          let st = a.S.proof_state in
-          if not !session_init then
-            (match st with
-             | S.Done _
-             | S.InternalFailure _
-             | S.JustEdited -> incr session_proof_attempts_cnt
-             | _ -> ());
-          if st <> S.Scheduled && st <> S.Running
-          then
-            printf "Proof with '%s,%s,%s' gives %s@."
-              p.prover_name p.prover_version p.prover_altern
-              (print_proof_state st
-                 (a.S.proof_limit.Call_provers.limit_time)
-                 (a.S.proof_limit.Call_provers.limit_mem))
-        end
-      | S.Transf tr ->
-        printf "Transformation '%s' proved: %b@."
-          tr.S.transf_name (Opt.inhabited tr.S.transf_verified)
-      | S.Metas m ->
-        printf "Metas proved: %b@."
-          (Opt.inhabited m.S.metas_verified));
       let session_autosave = Whyconf.autosave @@ get_main config in
       if session_autosave > 0 && !session_proof_attempts_cnt == session_autosave
       then
@@ -278,6 +220,8 @@ module O = struct
 
   include Scheduler
   let notify_timer_state tw spt rpt =
+    if Unix.(isatty stdout) then
+      printf "%!\rCurrent status (waiting/scheduled/running): %03d/%03d/%03d%!" tw spt rpt;
     if tw = 0 && spt = 0 && rpt = 0
     then
       begin
@@ -349,7 +293,7 @@ let file_statistics _ f (files,n,m) =
     List.fold_left theory_statistics ([],0,0) f.S.file_theories in
   ((f,ths,n1,m1)::files,n+n1,m+m1)
 
-let print_statistics files =
+let print_statistics files session =
   let print_goal g =
       printf "         +--goal %s not proved@." (S.goal_name g).Ident.id_string
   in
@@ -366,6 +310,42 @@ let print_statistics files =
       List.iter print_theory (List.rev ths)
     end
   in
+  let h = Whyconf.Hprover.create 128 in
+  S.session_iter_proof_attempt
+    (fun pa ->
+      let (nsucc, nfail, mint, maxt, sumt) as v =
+        Whyconf.Hprover.find_def h (0,0,0.,0.,0.) pa.proof_prover
+      in
+      let v =
+        match pa.S.proof_state with
+        | S.Done Call_provers.{ pr_answer = Valid; pr_time = t; _ } ->
+          let mint = min mint t and maxt = max maxt t and sumt = sumt +. t in
+          (nsucc + 1, nfail, mint, maxt, sumt)
+        | S.Done  _ -> (nsucc, nfail +  1, mint, maxt, sumt)
+        | _ -> v
+      in
+      Whyconf.Hprover.replace h pa.proof_prover v)
+   session;
+   let m = Whyconf.(Hprover.fold Mprover.add h Mprover.empty) in
+   Whyconf.Mprover.iter
+     (fun p (nsucc, nfail, mint, maxt, sumt) ->
+        let ms t = truncate (t *. 1000.) in
+        printf "%-16s\t%d\t%s\t%s@\n%!"
+          (asprintf "  %s-%s%s:"
+            p.prover_name
+            p.prover_version
+            (if p.prover_altern <> "" then "(" ^ p.prover_altern ^ ")" else ""))
+          nsucc
+          (if maxt > 0.
+           then
+             asprintf "(%dms-%dms-%dms)"
+               (ms mint)
+               (ms (sumt /. float_of_int nsucc))
+               (ms maxt)
+           else
+             "")
+          (if nfail > 0 then "(interrupted: " ^ string_of_int nfail ^ ")" else ""))
+     m;
   List.iter print_file (List.rev files)
 
 let save_session config session =
@@ -388,8 +368,8 @@ let register_report env_session = report := (fun () ->
       S.PHstr.fold file_statistics
         session.S.session_files ([],0,0)
     in
-    printf " %d/%d " n m;
-    if n<m then print_statistics files;
+    printf "Proved goals: %d / %d \n" n m;
+    if n<m then print_statistics files session;
     save_session config session
   )
 
