@@ -335,10 +335,10 @@ let print_statistics files session =
      (fun p (nsucc, nfail, mint, maxt, sumt) ->
         let ms t = truncate (t *. 1000.) in
         printf "%-16s\t%d\t%s\t%s@\n%!"
-          (asprintf "  %s-%s%s:"
+          (asprintf "  %s (%s)%s:"
             p.prover_name
             p.prover_version
-            (if p.prover_altern <> "" then "(" ^ p.prover_altern ^ ")" else ""))
+            (if p.prover_altern <> "" then " (" ^ p.prover_altern ^ ")" else ""))
           nsucc
           (if maxt > 0.
            then
