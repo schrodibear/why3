@@ -369,7 +369,7 @@ let register_report env_session = report := (fun () ->
         session.S.session_files ([],0,0)
     in
     printf "Proved goals: %d / %d \n" n m;
-    if n<m then print_statistics files session;
+    print_statistics files session;
     save_session config session
   )
 
