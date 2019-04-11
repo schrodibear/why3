@@ -26,6 +26,7 @@ let () = Debug.set_flag debug
 
 let opt_strategy        = ref None
 let opt_clean           = ref false
+let opt_no_save_session = ref false
 
 let opt_file_filter     = ref []
 let opt_theory_filter   = ref []
@@ -48,6 +49,9 @@ let option_list = [
   ("--clean",
    Arg.Set opt_clean,
    " remove failed proof attempts before exit");
+  ("--no-save-session",
+   Arg.Set opt_no_save_session,
+   " don't save session at exit");
   ("--file-filter",
    Arg.String (fun s -> opt_file_filter := s :: !opt_file_filter),
    "<string> don't run strategy on files with id string (case insensitive)");
@@ -349,11 +353,12 @@ let print_statistics files session =
   List.iter print_file (List.rev files)
 
 let save_session config session =
-  begin
-    Debug.dprintf debug "Saving session...@?";
-    S.save_session config session;
-    Debug.dprintf debug " done@.";
-  end
+  if not !opt_no_save_session then
+    begin
+      Debug.dprintf debug "Saving session...@?";
+      S.save_session config session;
+      Debug.dprintf debug " done@.";
+    end
 
 let register_save_session config session =
   ref_save_session := (fun () ->
