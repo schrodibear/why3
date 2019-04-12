@@ -299,18 +299,18 @@ let file_statistics _ f (files,n,m) =
 
 let print_statistics files session =
   let print_goal g =
-      printf "         +--goal %s not proved@." (S.goal_name g).Ident.id_string
+      printf "     +--goal %s not proved@." (S.goal_name g).Ident.id_string
   in
   let print_theory (th,goals,n,m) =
     if n<m then begin
-      printf "      +--theory %s: %d/%d@."
+      printf "   +--theory %s: %d/%d@."
         th.S.theory_name.Ident.id_string n m;
       List.iter print_goal (List.rev goals)
     end
   in
   let print_file (f,ths,n,m) =
     if n<m then begin
-      printf "   +--file %s: %d/%d@." f.S.file_name n m;
+      printf " +--file %s: %d/%d@." f.S.file_name n m;
       List.iter print_theory (List.rev ths)
     end
   in
