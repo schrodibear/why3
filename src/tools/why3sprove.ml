@@ -233,7 +233,7 @@ end
 
 module M = Session_scheduler.Make(O)
 
-let clean ?(keep_unsuccessful_attempts=false) session =
+let clean session =
   printf "Cleaning session...\n";
   let filter_min_pa g =
     let get_time p =
@@ -251,9 +251,9 @@ let clean ?(keep_unsuccessful_attempts=false) session =
       (first, []) |>
       S.PHprover.fold
         (fun _ pa (best, rest as acc) ->
-           if valid_or_invalid pa && get_time pa <= get_time best
-           then pa, best :: rest
-           else acc)
+           if valid_or_invalid pa && get_time pa < get_time best              then pa, best :: rest
+           else if Whyconf.Prover.equal best.S.proof_prover pa.S.proof_prover then acc
+           else                                                                    best, pa :: rest)
         ep |>
       snd |>
       List.iter M.remove_proof_attempt
@@ -294,7 +294,7 @@ let clean ?(keep_unsuccessful_attempts=false) session =
         | S.Done _ -> false
         | _ -> true
       in
-      if not maybe_success && not keep_unsuccessful_attempts then M.remove_proof_attempt pa;
+      if not maybe_success then M.remove_proof_attempt pa;
       maybe_success
     | S.Transf tr ->
       unless_successful (fun () -> S.iter_transf rec_gl tr) ~perform:(fun () -> M.remove_transformation tr)
@@ -327,9 +327,9 @@ let file_statistics _ f (files,n,m) =
     List.fold_left theory_statistics ([],0,0) f.S.file_theories in
   ((f,ths,n1,m1)::files,n+n1,m+m1)
 
-let print_statistics files session =
+let print_statistics files session h =
   let print_goal g =
-      printf "     +--goal %s not proved@." (S.goal_name g).Ident.id_string
+      printf "     +--goal %s (%s) not proved@." (S.goal_name g).Ident.id_string (S.goal_user_name g)
   in
   let print_theory (th,goals,n,m) =
     if n<m then begin
@@ -344,18 +344,14 @@ let print_statistics files session =
       List.iter print_theory (List.rev ths)
     end
   in
-  let h = Whyconf.Hprover.create 128 in
   S.session_iter_proof_attempt
     (fun pa ->
-      let (nsucc, nfail, mint, maxt, sumt) as v =
-        Whyconf.Hprover.find_def h (0,0,infinity,0.,0.) pa.S.proof_prover
-      in
+      let (nsucc, nfail, mint, maxt, sumt) as v = Whyconf.Hprover.find h pa.S.proof_prover in
       let v =
         match pa.S.proof_state with
         | S.Done Call_provers.{ pr_answer = Valid; pr_time = t; _ } ->
           let mint = min mint t and maxt = max maxt t and sumt = sumt +. t in
           (nsucc + 1, nfail, mint, maxt, sumt)
-        | S.Done  _ -> (nsucc, nfail +  1, mint, maxt, sumt)
         | _ -> v
       in
       Whyconf.Hprover.replace h pa.S.proof_prover v)
@@ -397,14 +393,28 @@ let register_save_session config session =
 
 let register_report env_session = report := (fun () ->
     let session = env_session.S.session in
-    if !opt_clean then clean ~keep_unsuccessful_attempts:true session;
+    let h = Whyconf.Hprover.create 128 in
+    S.session_iter_proof_attempt
+      (fun pa ->
+         let (nsucc, nfail, mint, maxt, sumt) as v =
+           Whyconf.Hprover.find_def h (0,0,infinity,0.,0.) pa.S.proof_prover
+         in
+         let v =
+           match pa.S.proof_state with
+           | S.Done Call_provers.{ pr_answer = Valid; _ } -> v
+           | S.Done  _                                    -> (nsucc, 1 + nfail, mint, maxt, sumt)
+           | _                                            -> v
+         in
+         Whyconf.Hprover.replace h pa.S.proof_prover v)
+      session;
+    if !opt_clean then clean session;
     Debug.dprintf debug "@.";
     let files,n,m =
       S.PHstr.fold file_statistics
         session.S.session_files ([],0,0)
     in
     printf "Proved goals: %d / %d \n" n m;
-    print_statistics files session;
+    print_statistics files session h;
     save_session config session
   )
 
