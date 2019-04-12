@@ -18,6 +18,8 @@ sig
   val map : (key -> 'a -> 'b) -> 'a t -> 'b t
   val memo : int -> (key -> 'a) -> key -> 'a
   val is_empty : 'a t -> bool
+  val choose : 'a t -> key * 'a
+  val find_some : 'a t -> (key -> 'a -> bool) -> key * 'a
 end
 
 module type Private =
@@ -34,6 +36,8 @@ sig
   val mem : 'a t -> key -> bool
   val length : 'a t -> int
   val is_empty : 'a t -> bool
+  val choose : 'a t -> key * 'a
+  val find_some : 'a t -> (key -> 'a -> bool) -> key * 'a
 end
 
 let hash = Hashtbl.hash
@@ -63,4 +67,7 @@ struct
     h'
 
   let is_empty h = length h = 0
+  let get s = match s () with Seq.Cons (x, _) -> x | Seq.Nil -> raise Not_found
+  let choose h = get @@ to_seq h
+  let find_some h p = to_seq h |> Seq.filter (fun (a, b) -> p a b) |> get
 end

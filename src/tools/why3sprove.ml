@@ -25,7 +25,7 @@ let debug = Debug.register_info_flag
 let () = Debug.set_flag debug
 
 let opt_strategy        = ref None
-let opt_clean           = ref false
+let opt_clean           = ref true
 let opt_no_save_session = ref false
 
 let opt_file_filter     = ref []
@@ -46,9 +46,9 @@ let option_list = [
   ("--strategy",
    Arg.String (fun s -> opt_strategy := Some s),
    " same as -S");
-  ("--clean",
-   Arg.Set opt_clean,
-   " remove failed proof attempts before exit");
+  ("--no-clean",
+   Arg.Clear opt_clean,
+   " don't remove failed proof attempts before exit");
   ("--no-save-session",
    Arg.Set opt_no_save_session,
    " don't save session at exit");
@@ -203,15 +203,12 @@ module O = struct
 
   let init = fun _row _any -> ()
 
-  let notify i =
-    begin
-      let session_autosave = Whyconf.autosave @@ get_main config in
-      if session_autosave > 0 && !session_proof_attempts_cnt == session_autosave
-      then
-        begin
-          session_proof_attempts_cnt := 0;
-          !ref_save_session ();
-        end
+  let notify _ =
+    let session_autosave = Whyconf.autosave @@ get_main config in
+    if session_autosave > 0 && !session_proof_attempts_cnt == session_autosave
+    then begin
+      session_proof_attempts_cnt := 0;
+      !ref_save_session ();
     end
 
 
@@ -236,8 +233,32 @@ end
 
 module M = Session_scheduler.Make(O)
 
-let clean session =
+let clean ?(keep_unsuccessful_attempts=false) session =
   printf "Cleaning session...\n";
+  let filter_min_pa g =
+    let get_time p =
+      match[@warning "-33"] p.S.proof_state with
+      | S.Done Call_provers.{ pr_time = time; _ } -> time
+      | _                                         -> assert false
+    in
+    let valid_or_invalid p = match[@warning "-33"] p.S.proof_state with
+      | S.Done Call_provers.{ pr_answer = Valid | Invalid; _ } -> true
+      | _                                                      -> false
+    in
+    let ep = (S.goal_external_proofs g) in
+    match S.PHprover.find_some ep (fun _ pa -> valid_or_invalid pa) with
+    | _, first ->
+      (first, []) |>
+      S.PHprover.fold
+        (fun _ pa (best, rest as acc) ->
+           if valid_or_invalid pa && get_time pa <= get_time best
+           then pa, best :: rest
+           else acc)
+        ep |>
+      snd |>
+      List.iter M.remove_proof_attempt
+    | exception Not_found -> ()
+  in
   let rec handle_any a =
     let any_success = ref false in
     let update r = if r then any_success := true in
@@ -254,38 +275,47 @@ let clean session =
     let rec_gl gl = rec_ @@ S.Goal gl in
     let rec_th th = rec_ @@ S.Theory th in
     match a with
-    | S.Goal g when S.goal_verified g = None ->
-      unless_successful (fun () -> S.iter_goal rec_pa rec_tr rec_me g) ~perform:(ignore)
-    | S.Theory th when th.S.theory_verified = None ->
-      unless_successful (fun () -> S.iter_theory rec_gl th) ~perform:(ignore)
-    | S.File f when f.S.file_verified = None ->
-      unless_successful (fun () -> S.iter_file rec_th f) ~perform:(ignore)
+    | S.Goal g ->
+      if not @@ S.PHstr.is_empty @@ S.goal_transformations g then
+        S.PHprover.iter (fun _ pa -> M.remove_proof_attempt pa) @@ S.goal_external_proofs g;
+      let r = unless_successful (fun () -> S.iter_goal rec_pa rec_tr rec_me g) ~perform:ignore in
+      filter_min_pa g;
+      r
+    | S.Theory th ->
+      unless_successful (fun () -> S.iter_theory rec_gl th) ~perform:ignore
+    | S.File f ->
+      unless_successful (fun () -> S.iter_file rec_th f) ~perform:ignore
     | S.Proof_attempt pa ->
       let maybe_success =
         match[@warning "-33"] pa.S.proof_state with
         | S.Interrupted -> false
         | S.InternalFailure _ -> false
-        | S.Done Call_provers.{ pr_answer = Valid | Invalid } -> true
+        | S.Done Call_provers.{ pr_answer = Valid | Invalid; _ } -> true
         | S.Done _ -> false
         | _ -> true
       in
-      if not maybe_success then M.remove_proof_attempt pa;
+      if not maybe_success && not keep_unsuccessful_attempts then M.remove_proof_attempt pa;
       maybe_success
-    | S.Transf tr when tr.S.transf_verified = None ->
+    | S.Transf tr ->
       unless_successful (fun () -> S.iter_transf rec_gl tr) ~perform:(fun () -> M.remove_transformation tr)
-    | S.Metas m when m.S.metas_verified = None ->
+    | S.Metas m ->
       unless_successful (fun () -> S.iter_metas rec_gl m) ~perform:(fun () -> M.remove_metas m)
-    | _ -> true
   in
   S.iter_session
     (fun r ->
        let any = S.File r in
-       M.clean any;
        ignore @@ handle_any any)
   session
 
-let goal_statistics (goals,n,m) g =
-  if Opt.inhabited (S.goal_verified g) then (goals,n+1,m+1) else (g::goals,n,m+1)
+let goal_statistics acc g =
+  Session.fold_all_sub_goals_of_goal
+    (fun (goals,n,m as acc) g ->
+       let leaf = Session.PHstr.is_empty @@ S.goal_transformations g in
+       if leaf && Opt.inhabited (S.goal_verified g) then (goals,n+1,m+1)
+       else if leaf                                 then (g::goals,n,m+1)
+       else                                               acc)
+    acc
+    g
 
 let theory_statistics (ths,n,m) th =
   let goals,n1,m1 =
@@ -318,7 +348,7 @@ let print_statistics files session =
   S.session_iter_proof_attempt
     (fun pa ->
       let (nsucc, nfail, mint, maxt, sumt) as v =
-        Whyconf.Hprover.find_def h (0,0,0.,0.,0.) pa.proof_prover
+        Whyconf.Hprover.find_def h (0,0,infinity,0.,0.) pa.S.proof_prover
       in
       let v =
         match pa.S.proof_state with
@@ -328,7 +358,7 @@ let print_statistics files session =
         | S.Done  _ -> (nsucc, nfail +  1, mint, maxt, sumt)
         | _ -> v
       in
-      Whyconf.Hprover.replace h pa.proof_prover v)
+      Whyconf.Hprover.replace h pa.S.proof_prover v)
    session;
    let m = Whyconf.(Hprover.fold Mprover.add h Mprover.empty) in
    Whyconf.Mprover.iter
@@ -367,7 +397,7 @@ let register_save_session config session =
 
 let register_report env_session = report := (fun () ->
     let session = env_session.S.session in
-    if !opt_clean then clean session;
+    if !opt_clean then clean ~keep_unsuccessful_attempts:true session;
     Debug.dprintf debug "@.";
     let files,n,m =
       S.PHstr.fold file_statistics
@@ -391,7 +421,6 @@ let open_file env_session f =
       eprintf "@[Error while reading file@ '%s':@ %a@]@." f
         Exn_printer.exn_printer e;
       exit 1
-
 
 let () =
   if not (Sys.file_exists project_dir) then

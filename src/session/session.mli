@@ -530,6 +530,8 @@ val goal_iter_leaf_goal :
 (** iter all the goals which are a leaf
     (no transformations are applied on it) *)
 
+val fold_all_sub_goals_of_goal : ('a -> 'key goal -> 'a) -> 'a -> 'key goal -> 'a
+
 val fold_all_sub_goals_of_theory :
   ('a -> 'key goal -> 'a) -> 'a -> 'key theory -> 'a
 

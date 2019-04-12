@@ -2874,47 +2874,28 @@ let clean_selection =
       (get_selected_row_references ());;
 
 let filter_min_pa g =
-  let get_time p = match[@warning "-33"] p.S.proof_state with
-    | S.Done Call_provers.{ pr_time = time } -> time
-    | _ -> assert false
+  let get_time p =
+    match[@warning "-33"] p.S.proof_state with
+    | S.Done Call_provers.{ pr_time = time; _ } -> time
+    | _                                         -> assert false
   in
   let valid_or_invalid p = match[@warning "-33"] p.S.proof_state with
-    | S.Done Call_provers.{ pr_answer = Valid | Invalid } -> true
-    | _ -> false
+    | S.Done Call_provers.{ pr_answer = Valid | Invalid; _ } -> true
+    | _                                                      -> false
   in
-  let get_first_el h =
-    begin
-      let f = ref None in
-      begin
-        try
-          S.PHprover.iter (fun _ v -> if valid_or_invalid v then f := Some v; raise Not_found) h
-        with
-          _ -> ()
-      end;
-      !f
-    end
-  in
-  begin
-    let ep = (S.goal_external_proofs g) in
-    let first = get_first_el ep in
-    if Opt.inhabited first
-    then
-      let min = S.PHprover.fold (fun _ v a ->
-          if valid_or_invalid v
-          then
-            if get_time v < get_time a
-            then
-              v
-            else
-              a
-          else
-            a
-        ) ep (Opt.get first)
-      in
-      S.PHprover.iter
-        (fun _ v -> if min != v then M.remove_proof_attempt v)
-        ep;
-  end
+  let ep = (S.goal_external_proofs g) in
+  match S.PHprover.find_some ep (fun _ pa -> valid_or_invalid pa) with
+  | _, first ->
+    (first, []) |>
+    S.PHprover.fold
+      (fun _ pa (best, rest as acc) ->
+         if valid_or_invalid pa && get_time pa < get_time best
+         then pa, best :: rest
+         else acc)
+      ep |>
+    snd |>
+    List.iter M.remove_proof_attempt
+  | exception Not_found -> ()
 
 let keep_min_pa =
   let rec handle_any a =

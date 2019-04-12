@@ -35,6 +35,13 @@ sig
 
   val is_empty : 'a t -> bool
   (** test if the hashtbl is empty *)
+
+  val choose : 'a t -> key * 'a
+  (** [choose h] returns some arbitrary binding from [h] or raises [Not_found] if [h] is empty *)
+
+  val find_some : 'a t -> (key -> 'a -> bool) -> key * 'a
+  (** [find_some h p] returns some arbitrary binding [(k, v)] from [h] satisfying [p k v]
+      or raises [Not_found], if no such binding exists in [h] *)
 end
 
 module type Private =
@@ -72,6 +79,13 @@ sig
 
   val is_empty : 'a t -> bool
   (** test if the hashtbl is empty *)
+
+  val choose : 'a t -> key * 'a
+  (** [choose h] returns some arbitrary binding from [h] or raises [Not_found] if [h] is empty *)
+
+  val find_some : 'a t -> (key -> 'a -> bool) -> key * 'a
+  (** [find_some h p] returns some arbitrary binding [(k, v)] from [h] satisfying [p k v]
+      or raises [Not_found], if no such binding exists in [h] *)
 end
 
 module Make (X:Hashtbl.HashedType) : S with type key = X.t
