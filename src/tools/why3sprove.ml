@@ -25,6 +25,7 @@ let debug = Debug.register_info_flag
 let () = Debug.set_flag debug
 
 let opt_strategy        = ref None
+let opt_session         = ref None
 let opt_clean           = ref true
 let opt_no_save_session = ref false
 
@@ -49,6 +50,9 @@ let option_list = [
   ("--no-clean",
    Arg.Clear opt_clean,
    " don't remove failed proof attempts before exit");
+  ("--session",
+   Arg.String (fun s -> opt_session := Some s),
+   " custom path for session directory");
   ("--no-save-session",
    Arg.Set opt_no_save_session,
    " don't save session at exit");
@@ -84,7 +88,10 @@ let () =
 
 
 let project_dir =
-  let fname = Queue.pop files in
+  let fname = match !opt_session with
+              | Some s -> s
+              | None   -> Queue.pop files
+  in
   (* The remaining files in [files] are going to be open *)
   if Sys.file_exists fname then
     begin
