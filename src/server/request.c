@@ -121,7 +121,7 @@ prequest parse_request(char* str_req, int len, int key) {
 void print_request(prequest r) {
   int i;
   if (r) {
-    printf("%s %d %d %s", r->id, r->timeout, r->memlimit, r->cmd);
+    printf("%s %u %u %s", r->id, r->timeout, r->memlimit, r->cmd);
     for (i = 0; i < r->numargs; i++) {
        printf(" %s", r->args[i]);
     }

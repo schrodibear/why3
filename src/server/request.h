@@ -17,8 +17,8 @@
 typedef struct {
   int key;
   char* id;
-  int timeout;
-  int memlimit;
+  unsigned int timeout;
+  unsigned int memlimit;
   bool usestdin;
   char* cmd;   // the command to execute
   int numargs; // the length of the following array

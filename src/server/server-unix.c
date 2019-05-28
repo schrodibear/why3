@@ -254,8 +254,8 @@ pid_t create_process(char* cmd,
                      char** argv,
                      bool usestdin,
                      int outfile,
-                     int timelimit,
-                     int memlimit) {
+                     rlim_t timelimit,
+                     rlim_t memlimit) {
   struct rlimit res;
   int i;
   char** unix_argv;
